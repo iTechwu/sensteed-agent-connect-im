@@ -11,11 +11,11 @@ export const UPDATE_RPC_CHANNEL = '/dsh-im';
 const ACTIVE_STATES = new Set(['installing', 'verifying']);
 const BLOCKED_REASONS = Object.freeze({
   'source-install': '当前是源码或链接安装，只能检查版本；请手动更新源码，或迁移到 npm 安装。',
-  'unknown-profile': '无法确认当前 profile，请在对应的 Harness 环境中手动更新。',
+  'unknown-profile': '无法确认当前 profile，请在对应的 哪吒 Agent 环境中手动更新。',
   'unsupported-runtime': '当前运行环境不支持按钮安装，请手动更新插件。',
   'registry-conflict': '当前 npm 源配置与官方源不一致，请先检查 registry 配置。',
   'incompatible-node': '当前 Host 的 Node.js 版本不满足新版要求，请先更新运行环境。',
-  'pending-restart': '新版本已安装，请在方便时手动重启当前 Harness 或 Desktop。',
+  'pending-restart': '新版本已安装，请在方便时手动重启当前 哪吒 Agent 或 Desktop。',
   'recovery-required': '上次安装结果无法确认，请先检查此 profile 的插件安装状态。',
 });
 const ERROR_MESSAGES = Object.freeze({
@@ -112,7 +112,7 @@ function manualUpdateCommand(snapshot) {
     ? [...targets, snapshot.runningVersion, snapshot.installedVersion]
       .filter(validVersion).sort(compareVersionsDescending)[0]
     : 'latest';
-  return `dsh plugin --profile ${profileArgument} add -w @xmanrui/dsh-im@${version}`;
+  return `dsh plugin --profile ${profileArgument} add -w sensteed-im@${version}`;
 }
 
 function ManualUpdateCommand({ command, disabled, sourceInstall, desktop }) {
@@ -170,11 +170,11 @@ function ManualUpdateCommand({ command, disabled, sourceInstall, desktop }) {
           : h(React.Fragment, null,
               h('rect', { x: 7, y: 7, width: 10, height: 11, rx: 1.5 }),
               h('path', { d: 'M5 13H3.5A1.5 1.5 0 0 1 2 11.5v-8A1.5 1.5 0 0 1 3.5 2h8A1.5 1.5 0 0 1 13 3.5V5' }))))),
-      command.endsWith('@xmanrui/dsh-im@latest') ? h('p', { className: 'dim-updateManualHint' },
+      command.endsWith('sensteed-im@latest') ? h('p', { className: 'dim-updateManualHint' },
         '尚未确认目标版本，此命令安装执行时 npm 的 latest 版本。') : null,
       h('p', { className: 'dim-updateManualHint' }, desktop
         ? '请在当前 Desktop 的内置终端执行，完成后手动重启。'
-        : '请在运行当前 Harness 的同一环境执行，保持 DSH_HOME 一致，完成后手动重启。'),
+        : '请在运行当前 哪吒 Agent 的同一环境执行，保持 DSH_HOME 一致，完成后手动重启。'),
       disabled ? h('p', { className: 'dim-updateManualHint' },
         '请等待当前操作结束，确认没有安装进程运行后再执行命令。') : null,
       copyState === 'failed' || copyState === 'copied' ? h('p', {
@@ -230,9 +230,9 @@ function UpdateDialog({ children, onClose }) {
       }
     },
   },
-  h('h3', { id: titleId }, 'DSH-IM 更新'),
+  h('h3', { id: titleId }, 'sensteed-im 更新'),
   h('p', { id: descriptionId, className: 'dim-updateDescription' },
-    '仅更新 DSH-IM。安装完成后需手动重启后台；本功能不会自动重启或主动刷新页面。'),
+    '仅更新 sensteed-im。安装完成后需手动重启后台；本功能不会自动重启或主动刷新页面。'),
   children));
   return typeof document !== 'undefined' && document.body
     ? createPortal(content, document.body)
@@ -464,16 +464,16 @@ export function UpdatePanel({ rpcCall, clientVersion, onStatus }) {
             BLOCKED_REASONS[jobMessage] ?? ERROR_MESSAGES[jobMessage] ?? jobMessage) : null),
         error ? h('p', { className: 'dim-updateError', role: 'alert' }, error) : null,
         blocked && !restartRequired ? h('p', { className: 'dim-updateHint' }, blocked) : null,
-        versionsDiffer && !restartRequired ? h('p', { className: 'dim-updateHint' }, '页面版本与运行版本不同，请手动刷新页面；若仍不一致，请手动重启 Harness 或 Desktop。') : null,
+        versionsDiffer && !restartRequired ? h('p', { className: 'dim-updateHint' }, '页面版本与运行版本不同，请手动刷新页面；若仍不一致，请手动重启 哪吒 Agent 或 Desktop。') : null,
         canConfirm ? h('p', { className: 'dim-updateHint' },
           '请在机器人空闲时安装；安装会修改当前 profile 的依赖，完成后需手动重启。') : null,
-        h('aside', { className: 'dim-updateHint', 'aria-label': 'DSH 版本兼容说明' },
-          h('strong', null, 'DSH 版本兼容说明'),
-          h('p', { className: 'dim-updateManualHint' }, 'dsh-im 4.25.0 支持到 DSH v0.1.6-alpha.2。'),
-          h('p', { className: 'dim-updateManualHint' }, 'dsh-im 4.26.0 仅支持 DSH v0.1.7-alpha.1。'),
-          h('p', { className: 'dim-updateManualHint' }, 'dsh-im 4.27.0 仅支持 DSH v0.1.7-alpha.1 及更新版本。'),
+        h('aside', { className: 'dim-updateHint', 'aria-label': '哪吒 Agent 版本兼容说明' },
+          h('strong', null, '哪吒 Agent 版本兼容说明'),
+          h('p', { className: 'dim-updateManualHint' }, 'sensteed-im 4.25.0 支持到 哪吒 Agent v0.1.6-alpha.2。'),
+          h('p', { className: 'dim-updateManualHint' }, 'sensteed-im 4.26.0 仅支持 哪吒 Agent v0.1.7-alpha.1。'),
+          h('p', { className: 'dim-updateManualHint' }, 'sensteed-im 4.27.0 仅支持 哪吒 Agent v0.1.7-alpha.1 及更新版本。'),
           h('p', { className: 'dim-updateManualHint' },
-            '升级到 dsh-im 4.26.0 前，请先将 DSH 升级到 v0.1.7-alpha.1；使用旧版 DSH 请保留 dsh-im 4.25.0。')),
+            '升级到 sensteed-im 4.26.0 前，请先将 哪吒 Agent 升级到 v0.1.7-alpha.1；使用旧版 哪吒 Agent 请保留 sensteed-im 4.25.0。')),
         h(ManualUpdateCommand, {
           key: manualCommand ?? 'unavailable', command: manualCommand,
           disabled: busyAction || activeJob || uncertainInstall,

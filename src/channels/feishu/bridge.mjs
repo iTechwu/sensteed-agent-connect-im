@@ -302,7 +302,7 @@ function operationArguments(toolCall) {
   }
   if (typeof source !== 'string') return null;
   const raw = printableText(source);
-  // Harness treats an empty tool argument string as an empty object.
+  // 哪吒 Agent treats an empty tool argument string as an empty object.
   if (!raw) return source === '' ? '{}' : null;
   try {
     return JSON.stringify(JSON.parse(raw), null, 2);
@@ -1830,7 +1830,7 @@ export class FeishuHarnessBridge {
         return;
       }
       await this.#state.clearSession(key);
-      await this.#send(event.message.chat_id, t('已开启全新 Harness 会话。'), { replyTo: event.message.message_id });
+      await this.#send(event.message.chat_id, t('已开启全新 哪吒 Agent 会话。'), { replyTo: event.message.message_id });
       await this.#sendMenuCard(key, event.message.chat_id, { replyTo: event.message.message_id });
       return;
     }
@@ -2819,7 +2819,7 @@ export class FeishuHarnessBridge {
         return;
       }
       await this.#state.clearSession(key);
-      await reply(t('已开启全新 Harness 会话。'));
+      await reply(t('已开启全新 哪吒 Agent 会话。'));
       await this.#sendMenuCard(key, chatId, { updateMessageId: messageId, replyTo: messageId });
       return;
     }
@@ -3002,7 +3002,7 @@ export class FeishuHarnessBridge {
     }
     await finish('success');
     // A receipt delivery failure must not turn a completed reset into a retry.
-    await this.#send(chatId, t('已开启全新 Harness 会话。'), { replyTo: messageId })
+    await this.#send(chatId, t('已开启全新 哪吒 Agent 会话。'), { replyTo: messageId })
       .catch((error) => this.#logger.warn?.('[dsh-feishu] new session receipt failed:', error?.message));
   }
 
@@ -4382,7 +4382,7 @@ export class FeishuHarnessBridge {
       || typeof event !== 'object'
       || !validEventSeq(event.seq)) return;
 
-    // Session-sync mirror: turns opened OUTSIDE the IM (DSH Web / CLI) are
+    // Session-sync mirror: turns opened OUTSIDE the IM (哪吒 Agent Web / CLI) are
     // rendered into the synced DM with the same #stepCards ladder as IM
     // turns. The mirror consumes EVERY event type (turn/start opens the
     // card, tool/call and assistant/message feed it, turn/end seals it);
@@ -6183,7 +6183,7 @@ export class FeishuHarnessBridge {
       pending.answers.pop();
       pending.index -= 1;
       this.#status.lastError = '回答提交失败。';
-      this.#logger.error?.('[dsh-feishu] failed to answer a Harness interaction');
+      this.#logger.error?.('[dsh-feishu] failed to answer a 哪吒 Agent interaction');
       if (chatId) {
         await this.#send(chatId, t('回答提交失败，请重新发送当前问题的答案。'))
           .catch(() => undefined);
@@ -6271,7 +6271,7 @@ export class FeishuHarnessBridge {
       || !Array.isArray(questions)
       || questions.length === 0
       || questions.some((question) => !validHarnessQuestion(question))) {
-      this.#logger.warn?.('[dsh-feishu] ignored an invalid Harness question interaction');
+      this.#logger.warn?.('[dsh-feishu] ignored an invalid 哪吒 Agent question interaction');
       return;
     }
 
@@ -6478,7 +6478,7 @@ export class FeishuHarnessBridge {
       }, { signal: AbortSignal.timeout(5_000) });
     } catch (error) {
       if (error?.code !== 'interaction-not-pending') {
-        this.#logger.warn?.('[dsh-feishu] failed to cancel a pending Harness interaction');
+        this.#logger.warn?.('[dsh-feishu] failed to cancel a pending 哪吒 Agent interaction');
       }
     }
   }

@@ -43,7 +43,7 @@ export const CURRENT_DOCUMENT_VERSION = 3;
 const EMPTY_DOCUMENT = Object.freeze({ version: 1, workspaces: Object.freeze({}) });
 
 function invalidWorkspaceConfig(field, issue) {
-  throw configValidationError('dsh-im workspace config is invalid', field, issue);
+  throw configValidationError('sensteed-im workspace config is invalid', field, issue);
 }
 
 function workspaceSessionStale(message) {
@@ -1667,7 +1667,7 @@ export function createBotWorkspaceScope(
       // Resolve by id before comparing real paths so symlink pins remain valid.
       const listed = await harness.rpc('workspace.list', {}, 30_000);
       if (!Array.isArray(listed?.items)) {
-        throw new TypeError('Harness returned an invalid workspace list');
+        throw new TypeError('哪吒 Agent returned an invalid workspace list');
       }
       const owners = listed.items.filter((item) => Array.isArray(item?.sessionIds)
         && item.sessionIds.includes(sessionId));
@@ -1681,7 +1681,7 @@ export function createBotWorkspaceScope(
       // the read-only list, which also recognizes ungrouped default sessions.
       const listed = await harness.listWorkspaceSessions(await canonicalWorkspacePath(workspace));
       if (!Array.isArray(listed?.sessions)) {
-        throw new TypeError('Harness returned an invalid workspace session list');
+        throw new TypeError('哪吒 Agent returned an invalid workspace session list');
       }
       matches = listed.sessions.some((session) => session?.sessionId === sessionId);
     }
@@ -1870,7 +1870,7 @@ export function createBotWorkspaceScope(
             throw error;
           }
           if (typeof target.adoptWorkspaceSession !== 'function') {
-            throw new TypeError('Harness does not support adopting workspace sessions');
+            throw new TypeError('哪吒 Agent does not support adopting workspace sessions');
           }
           const expectedGeneration = workspaces.generationFor(botId);
           const expectedConversationGeneration = workspaces.conversationGenerationFor(botId, conversationKey);
@@ -1893,7 +1893,7 @@ export function createBotWorkspaceScope(
           }
           if (!adopted || typeof adopted !== 'object'
             || adopted.sessionId !== sessionId || typeof adopted.workspace !== 'string') {
-            throw new TypeError('Harness returned an invalid adopted workspace session');
+            throw new TypeError('哪吒 Agent returned an invalid adopted workspace session');
           }
           const bound = await workspaces.bindWorkspaceSession(botId, adopted.workspace, {
             conversationKey,
@@ -1970,7 +1970,7 @@ export function createBotWorkspaceScope(
           }
           if (model) {
             if (typeof target.selectSessionModel !== 'function') {
-              throw new TypeError('Harness does not support model selection');
+              throw new TypeError('哪吒 Agent does not support model selection');
             }
             const selected = await target.selectSessionModel(
               sessionId,
@@ -1978,7 +1978,7 @@ export function createBotWorkspaceScope(
               options.signal ? { signal: options.signal } : {},
             );
             if (!confirmsModelSelection(selected?.selected, model)) {
-              const error = new Error('Harness did not confirm the selected model');
+              const error = new Error('哪吒 Agent did not confirm the selected model');
               error.code = 'model-selection-mismatch';
               throw error;
             }
@@ -2406,7 +2406,7 @@ export function createWorkspaceAwareController(controller, {
           await state.clearSessions();
         } catch (error) {
           if (controller.diagnostics) cleanupWarning(error, 'state.cleanup');
-          else console.warn('[dsh-im] ignored session cleanup failure while deleting bot:', extractConnectionEvidence(error).details);
+          else console.warn('[sensteed-im] ignored session cleanup failure while deleting bot:', extractConnectionEvidence(error).details);
         }
       },
     });

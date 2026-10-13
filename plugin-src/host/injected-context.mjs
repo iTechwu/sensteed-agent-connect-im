@@ -104,7 +104,7 @@ export function installInjectedContext(ctx, { logger, registry = imSourceGuidanc
     } catch (error) {
       // A failed split must never cost the user their message: the blocks then
       // stay inline, which is the same fallback a Host without Agents uses.
-      logger?.warn?.('[dsh-im] unable to split the injected context blocks:', error?.message ?? error);
+      logger?.warn?.('[sensteed-im] unable to split the injected context blocks:', error?.message ?? error);
       return decision;
     }
   };

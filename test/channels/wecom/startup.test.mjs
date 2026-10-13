@@ -93,7 +93,7 @@ test('WeCom preserves malformed configuration and exposes safe failure guidance 
   assert.equal(await readFile(f.configPath, 'utf8'), contents);
   assert.throws(() => unwrapRpcResult(result), error => {
     assert.match(presentError(error).message, /config\.json.*workspaces\.json/);
-    assert.match(presentError(error).message, /重启 DSH/);
+    assert.match(presentError(error).message, /重启 哪吒 Agent/);
     return error.code === 'wecom-startup-config-invalid';
   });
   assert.ok(f.ctx.logger.buffer.some(message => message.args[0]?.includes(result.error.details.referenceId)));
@@ -133,7 +133,7 @@ test('WeCom startup guidance distinguishes invalid data and permissions without 
     assert.match(failure.message, /权限/);
     assert.doesNotMatch(JSON.stringify(failure), /private/);
   }
-  for (const message of ['dsh-im Enterprise WeChat config contains invalid bot data', 'dsh-im workspace config is invalid']) {
+  for (const message of ['sensteed-im Enterprise WeChat config contains invalid bot data', 'sensteed-im workspace config is invalid']) {
     assert.equal(publicChannelStartupError('wecom', new Error(message)).code, 'wecom-startup-config-invalid');
   }
   setImHostLanguage('en');

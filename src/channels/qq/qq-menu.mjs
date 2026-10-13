@@ -109,7 +109,7 @@ export async function qqMenuView(name, harness, state, key, { signal, busy = fal
     const model = catalog?.groups?.find((group) => group.id === catalog.current?.provider)
       ?.models?.find((item) => item.id === catalog.current?.model);
     const detail = [
-      name === 'status' ? t('QQ 机器人与 DeepSeek Harness 连接正常。') : '',
+      name === 'status' ? t('QQ 机器人与 哪吒 Agent 连接正常。') : '',
       t('工作区：{workspace}', { workspace: clean(workspace) || t('未设置') }),
       t('当前会话：{session}', { session: clean(bound?.title || sessionId) || t('新会话') }),
       t('模式／预设：{preset}', { preset: clean(preset?.label || presetId) || t('跟随 Host 默认') }),
@@ -201,7 +201,7 @@ export async function sendQqMenu(bot, target, view, token, { logger = console } 
       // A timeout may have delivered already. Only a definite provider rejection
       // permits another send, so a network fault never creates duplicate menus.
       if (!(error instanceof ApiError) || error.httpStatus < 400 || error.httpStatus >= 500 || error.httpStatus === 429) throw error;
-      logger.warn?.('[dsh-im:qq] menu rejected; using numbered text:', error.bizCode);
+      logger.warn?.('[sensteed-im:qq] menu rejected; using numbered text:', error.bizCode);
     }
   }
   return bot.sendText(target, qqMenuText(view, { fallback: true }));

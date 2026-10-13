@@ -57,7 +57,7 @@ export function initialSessionTitle({ text, content, files } = {}) {
   if (original) return truncateTitle(original);
 
   // Structured image prompts may only expose their default text through content.
-  // Strip only the leading blocks inserted by dsh-im; matching tags later in user
+  // Strip only the leading blocks inserted by sensteed-im; matching tags later in user
   // content remain ordinary user text.
   const visibleContent = cleanTitleText(
     contentText(content).replace(INJECTED_CONTEXT_PREFIX, ''),

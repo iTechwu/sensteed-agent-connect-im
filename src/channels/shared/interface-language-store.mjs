@@ -7,7 +7,7 @@ import { normalizeInterfaceLanguageTag } from './interface-language.mjs';
 const DOCUMENT_VERSION = 1;
 
 function invalidTagError() {
-  const error = new Error('Invalid DSH interface language tag.');
+  const error = new Error('Invalid 哪吒 Agent interface language tag.');
   error.code = 'interface-language-invalid';
   return error;
 }
@@ -32,7 +32,7 @@ async function writeSettingsDocument(path, document) {
 }
 
 /**
- * Durable mirror of the DSH interface language, so bot messages keep following
+ * Durable mirror of the 哪吒 Agent interface language, so bot messages keep following
  * it across Host restarts and before any browser has connected. Only the
  * lowest resolution layer lives here (see ./interface-language.mjs): an
  * unreadable document resolves to "nothing mirrored" rather than pinning a

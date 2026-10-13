@@ -373,7 +373,7 @@ test('AI Office settings renders connection fields and fixed hook preview', () =
   assert.match(markup, /Base URL 无效/);
 });
 
-test('AI Office Job executor claims, reports, approves, and returns one Harness result', async () => {
+test('AI Office Job executor claims, reports, approves, and returns one Nezha Agent result', async () => {
   const jobId = 'job-1234567890abcdef1234567890abcdef';
   const progress = [];
   const approvals = [];
@@ -531,7 +531,7 @@ test('AI Office Job continues when approval polling fails after a successful ren
   await executor.close();
 });
 
-test('AI Office Job safely cancels the Harness session when lease renewal fails', async () => {
+test('AI Office Job safely cancels the Nezha Agent session when lease renewal fails', async () => {
   const jobId = 'job-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
   const clock = controlledSleep();
   let sessionStarted = false;
@@ -584,7 +584,7 @@ test('AI Office Job safely cancels the Harness session when lease renewal fails'
   await executor.close();
 });
 
-test('AI Office job.cancel SSE event stops only the active Harness job', async () => {
+test('AI Office job.cancel SSE event stops only the active Nezha Agent job', async () => {
   const jobId = 'job-cccccccccccccccccccccccccccccccc';
   const clock = controlledSleep();
   let sessionStarted = false;

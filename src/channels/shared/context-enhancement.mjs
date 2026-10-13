@@ -317,7 +317,7 @@ function sourceBlock(snapshot, sourceFactory) {
         // read: say so once, because the omitted field is otherwise
         // indistinguishable from a channel that supplies none.
         warnedMissingSentAt = true;
-        console.warn('[dsh-im] a published sentAt was unusable and was omitted from the block');
+        console.warn('[sensteed-im] a published sentAt was unusable and was omitted from the block');
       }
       continue;
     }

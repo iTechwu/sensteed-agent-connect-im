@@ -13,9 +13,9 @@ const RETRY_DELAYS_MS = Object.freeze([1_000, 4_000, 15_000]);
 
 /**
  * Report the locale the settings UI is actually rendered in to the Host, so
- * bot chat messages and command menus follow the DSH interface language.
+ * bot chat messages and command menus follow the 哪吒 Agent interface language.
  *
- * DSH stores a locale preference only when the reader picks one in the
+ * 哪吒 Agent stores a locale preference only when the reader picks one in the
  * Language row: a locale derived from the browser's language list leaves the
  * Host user-settings document empty. This mirror closes that gap, and the Host
  * keeps an explicit selection ranked above it (see

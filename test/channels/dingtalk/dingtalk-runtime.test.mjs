@@ -188,7 +188,7 @@ test('runtime owns one DWClient, waits for socket OPEN, acknowledges first, and 
       createSession: async () => 'session-one',
       ask: async () => {
         order.push(['ask']);
-        return 'Harness 回答';
+        return '哪吒 Agent 回答';
       },
     },
     state,
@@ -287,7 +287,7 @@ test('runtime acknowledges a card callback before applying it and ignores callba
   assert.equal(updates.length, 1);
 });
 
-test('runtime sends visible-scope messages to Harness without local sender approval', async () => {
+test('runtime sends visible-scope messages to Nezha Agent without local sender approval', async () => {
   const state = stateFixture();
   const asked = [];
   const sent = [];
@@ -546,7 +546,7 @@ test('a callback from a stopped stream is not acknowledged or processed', async 
   assert.deepEqual(events, []);
 });
 
-test('stop aborts in-flight Harness work without waiting for the reply timeout', async () => {
+test('stop aborts in-flight Nezha Agent work without waiting for the reply timeout', async () => {
   let callback;
   let askStarted;
   const askStartedPromise = new Promise((resolve) => { askStarted = resolve; });
@@ -594,7 +594,7 @@ test('stop aborts in-flight Harness work without waiting for the reply timeout',
   await Promise.race([
     runtime.stop(),
     new Promise((_, reject) => setTimeout(
-      () => reject(new Error('runtime stop did not abort Harness work')),
+      () => reject(new Error('runtime stop did not abort Nezha Agent work')),
       100,
     )),
   ]);

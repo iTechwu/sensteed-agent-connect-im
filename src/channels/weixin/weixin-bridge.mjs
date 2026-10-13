@@ -88,7 +88,7 @@ const WEIXIN_REPLY_HISTORY_TIMEOUT_MS = 5_000;
 const WEIXIN_REPLY_HISTORY_MATCH_TOLERANCE_MS = 15_000;
 
 const HELP_TEXT = () => [
-  t('微信已连接 DeepSeek Harness。'),
+  t('微信已连接 哪吒 Agent。'),
   '',
   t('直接发送文字、图片、文件或带文字识别结果的语音即可继续当前会话。'),
   t('/new  开启一个全新会话'),
@@ -352,7 +352,7 @@ export class WeixinHarnessBridge {
   }) {
     if (!api || typeof api.sendText !== 'function') throw new TypeError('Weixin API is required');
     if (!baseUrl || !token || !ownerUserId) throw new TypeError('Weixin account credentials are required');
-    if (!harness || !state) throw new TypeError('Harness client and state store are required');
+    if (!harness || !state) throw new TypeError('哪吒 Agent client and state store are required');
     if (!Number.isFinite(typingKeepaliveMs) || typingKeepaliveMs <= 0) {
       throw new TypeError('typingKeepaliveMs must be a positive number');
     }
@@ -814,7 +814,7 @@ export class WeixinHarnessBridge {
       }
       if (!hasImages && !hasFiles && command === '/status') {
         await this.#harness.ensureRunning({ signal: this.#signal });
-        await this.#send(sender, t('微信与 DeepSeek Harness 连接正常。'), contextToken, runId);
+        await this.#send(sender, t('微信与 哪吒 Agent 连接正常。'), contextToken, runId);
         await this.#state.markSeen(messageId);
         return;
       }
@@ -1112,7 +1112,7 @@ export class WeixinHarnessBridge {
       pending.answers.pop();
       pending.index -= 1;
       this.#status.lastError = t('回答提交失败。');
-      this.#logger.error?.('[dsh-weixin] failed to answer a Harness interaction');
+      this.#logger.error?.('[dsh-weixin] failed to answer a 哪吒 Agent interaction');
       await this.#send(
         pending.actor,
         t('回答提交失败，请重新发送当前问题的答案。'),
@@ -1152,7 +1152,7 @@ export class WeixinHarnessBridge {
       || !Array.isArray(questions)
       || questions.length === 0
       || questions.some((question) => !validHarnessQuestion(question))) {
-      this.#logger.warn?.('[dsh-weixin] ignored an invalid Harness question interaction');
+      this.#logger.warn?.('[dsh-weixin] ignored an invalid 哪吒 Agent question interaction');
       return;
     }
 
@@ -1286,7 +1286,7 @@ export class WeixinHarnessBridge {
       }, { signal: AbortSignal.timeout(5_000) });
     } catch (error) {
       if (error?.code !== 'interaction-not-pending') {
-        this.#logger.warn?.('[dsh-weixin] failed to cancel a pending Harness interaction');
+        this.#logger.warn?.('[dsh-weixin] failed to cancel a pending 哪吒 Agent interaction');
       }
     }
   }

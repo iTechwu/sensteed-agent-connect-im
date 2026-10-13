@@ -108,7 +108,7 @@ test('normalizeEmail keeps a reply inside the existing conversation', () => {
 
 test('a mailbox may be its own sender, but never answers an automatic reply', () => {
   // Honouring RFC 3834 instead of rejecting the mailbox's own address lets a
-  // user drive the Harness by writing to the bot mailbox from that same
+  // user drive the Nezha Agent by writing to the bot mailbox from that same
   // mailbox, which is a normal way to use it.
   const state = new EmailStateStore(join(tmpdir(), 'unused-email-state-3.json'));
   const selfSent = normalizeEmail(parsedMail({
@@ -329,7 +329,7 @@ test('polling only downloads mail from allowlisted senders', async () => {
 });
 
 test('changing the mailbox allowlist pushes the matching access policy', async () => {
-  // The mailbox allowlist and the Harness access policy are separate stores.
+  // The mailbox allowlist and the Nezha Agent access policy are separate stores.
   // Updating only the allowlist left the policy holding the old senders, so
   // the channel kept rejecting every new sender even though it was listed.
   const { EmailController } = await import('../../../src/channels/email/email-controller.mjs');
@@ -369,7 +369,7 @@ test('changing the mailbox allowlist pushes the matching access policy', async (
 
 test('mail routing follows sender binding, then account binding, then a new session', async () => {
   // Three levels of freedom: a per-sender pin, an account-wide pin, or nothing
-  // (each mail thread starts its own Harness session).
+  // (each mail thread starts its own Nezha Agent session).
   const state = new EmailStateStore(join(tmpdir(), 'unused-email-binding.json'));
   const mail = (address, id) => ({
     messageId: `<${id}@x>`,
@@ -1299,7 +1299,7 @@ test('the Agent mailbox needs no credential of its own', async () => {
 test('the runtime starts an Agent mailbox that carries no token', async () => {
   // agently-cli holds the credentials, so the runtime is handed an address
   // only. Requiring a token blocked the mailbox from ever starting — it
-  // reported "requires config, token, Harness, and state".
+  // reported "requires config, token, Nezha Agent, and state".
   const { EmailRuntime } = await import('../../../src/channels/email/email-runtime.mjs');
   const dir = await mkdtemp(join(tmpdir(), 'dsh-email-notoken-'));
   try {
@@ -1505,7 +1505,7 @@ test('an allowlisted sender may execute without a confirming reply', async () =>
       allowedSenders: ['boss@corp.com'],
     });
 
-    assert.ok(pushed, 'a policy is pushed to the Harness');
+    assert.ok(pushed, 'a policy is pushed to the Nezha Agent');
     const direct = pushed.direct ?? pushed;
     const users = direct.allowlist?.users ?? direct.users ?? [];
     const boss = users.find((u) => u.id === 'boss@corp.com');
@@ -1519,7 +1519,7 @@ test('an allowlisted sender may execute without a confirming reply', async () =>
 });
 
 test('a turn waiting on approval does not stop later mail being read', async () => {
-  // `accept` resolves only when the Harness turn ends, and a turn waiting for
+  // `accept` resolves only when the Nezha Agent turn ends, and a turn waiting for
   // an approval never ends until someone replies — so awaiting it in the poll
   // loop left every later message unread.
   const { EmailRuntime } = await import('../../../src/channels/email/email-runtime.mjs');
@@ -1938,10 +1938,10 @@ function inboundMail(n, overrides = {}) {
 }
 
 /**
- * Build a runtime over a stub transport and a stub Harness.
+ * Build a runtime over a stub transport and a stub Nezha Agent.
  *
- * The Harness counts `ask` calls, so "the mail was really executed" is an
- * assertion on the Harness rather than on a side effect of polling. `bridge`
+ * The Nezha Agent counts `ask` calls, so "the mail was really executed" is an
+ * assertion on the Nezha Agent rather than on a side effect of polling. `bridge`
  * is exposed by the runtime itself (see `get bridge`).
  */
 async function startDeliveryRuntime(t, {
@@ -1997,11 +1997,11 @@ async function waitFor(predicate, describe, { tries = 200, stepMs = 10 } = {}) {
   assert.fail(describe());
 }
 
-test('a normal mail reaches the Harness exactly once', async (t) => {
+test('a normal mail reaches the Nezha Agent exactly once', async (t) => {
   // The poll loop stopped awaiting `accept` so a parked turn cannot stall the
   // mailbox — but it still called `markSeen` right after, ahead of the bridge's
   // queue. By the time `#process` ran, `hasSeen` was already true and it
-  // returned immediately: nine polls, a moved cursor, and zero Harness calls.
+  // returned immediately: nine polls, a moved cursor, and zero Nezha Agent calls.
   const delivered = [];
   const { runtime, asks, state } = await startDeliveryRuntime(t, {
     mailbox: async () => (delivered.length === 0 ? [inboundMail(1)] : []),
@@ -2012,12 +2012,12 @@ test('a normal mail reaches the Harness exactly once', async (t) => {
   // A single poll is enough: the delivery no longer waits for `start()`.
   await waitFor(
     () => asks.length > 0,
-    () => 'the mail never reached the Harness (the poll marked it seen first)',
+    () => 'the mail never reached the Nezha Agent (the poll marked it seen first)',
   );
   // Give the loop room to poll again; a re-listing must not run the turn twice.
   await new Promise((resolve) => { setTimeout(resolve, 120); });
 
-  assert.equal(asks.length, 1, `the Harness ran ${asks.length} times, not exactly once`);
+  assert.equal(asks.length, 1, `the Nezha Agent ran ${asks.length} times, not exactly once`);
   assert.match(String(asks[0].content ?? asks[0].text), /body 1/, 'the mail body was delivered');
   assert.equal(state.hasSeen('<rfc-1@x>'), true, 'the delivery is recorded as handled');
   assert.equal(state.cursor(), 'msg_1', 'the cursor follows the delivered mail');
@@ -2147,7 +2147,7 @@ test('a mailbox bound for the first time syncs its policy and starts its runtime
     assert.ok(bot, 'the mailbox is persisted');
     assert.equal(status.bots.length, 1);
 
-    // 2. The policy actually reached the Harness, carrying the allowlist.
+    // 2. The policy actually reached the Nezha Agent, carrying the allowlist.
     const policy = workspaces.accessPolicyFor(bot.botId);
     assert.ok(policy, 'the access policy was synced into the workspace store');
     assert.equal(policy.direct.mode, 'allowlist');
@@ -2440,7 +2440,7 @@ test('the model receives the mail headers, the parser does not', async (t) => {
   await runtime.start();
   await waitFor(
     () => seen.length > 0,
-    () => 'the mail never reached the Harness',
+    () => 'the mail never reached the Nezha Agent',
   );
 
   // `ask` is called positionally, so the helper records the prompt as `text`.

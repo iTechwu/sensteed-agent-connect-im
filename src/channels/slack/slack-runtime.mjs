@@ -268,7 +268,7 @@ async function createSlackMessageStream({ api, target, signal, logger }) {
       inFlight = appendLatest(text)
         .catch((error) => {
           broken = true;
-          logger.warn?.('[dsh-im:slack] streaming append failed:', error);
+          logger.warn?.('[sensteed-im:slack] streaming append failed:', error);
         })
         .finally(() => {
           inFlight = null;
@@ -370,7 +370,7 @@ export class SlackBotClient {
         if (this.#signal?.aborted || Number(error?.status) >= 500
           || !['invalid_blocks', 'invalid_blocks_format', 'invalid_markdown']
             .includes(error?.providerCode)) throw error;
-        this.#logger?.warn?.('[dsh-im:slack] Markdown rejected; sending this chunk as text');
+        this.#logger?.warn?.('[sensteed-im:slack] Markdown rejected; sending this chunk as text');
         if (chunk.plain) {
           const result = await this.sendText(target, chunk.plain);
           providerMessageIds.push(...result.providerMessageIds);
@@ -473,7 +473,7 @@ export class SlackRuntime {
     createWebSocket = (url) => new WebSocket(url),
   }) {
     if (!config || !botToken || !appToken || !harness || !state) {
-      throw new TypeError('SlackRuntime requires config, both tokens, Harness, and state');
+      throw new TypeError('SlackRuntime requires config, both tokens, harness, and state');
     }
     if (typeof createWebSocket !== 'function') throw new TypeError('SlackRuntime requires WebSocket');
     this.#config = config;
@@ -639,7 +639,7 @@ export class SlackRuntime {
         try {
           packet = JSON.parse(raw);
         } catch {
-          this.#logger.warn?.('[dsh-im:slack] ignored malformed Socket Mode JSON');
+          this.#logger.warn?.('[sensteed-im:slack] ignored malformed Socket Mode JSON');
           return;
         }
         if (packet.type === 'hello') {
@@ -668,7 +668,7 @@ export class SlackRuntime {
           void bridge.accept(message).catch((error) => {
             if (generation !== this.#generation || this.#stopped) return;
             this.#logger.error?.(
-              `[dsh-im:slack] bot ${this.#config.botId} message handling failed:`,
+              `[sensteed-im:slack] bot ${this.#config.botId} message handling failed:`,
               extractConnectionEvidence(error).details,
             );
           });
@@ -712,7 +712,7 @@ export class SlackRuntime {
       this.#reconnectTimer = null;
       void this.#connect().catch((error) => {
         if (this.#stopped) return;
-        this.#logger.warn?.('[dsh-im:slack] Socket Mode reconnect failed:', extractConnectionEvidence(error).details);
+        this.#logger.warn?.('[sensteed-im:slack] Socket Mode reconnect failed:', extractConnectionEvidence(error).details);
         this.#scheduleReconnect();
       });
     }, delay);
@@ -735,7 +735,7 @@ export class SlackRuntime {
     try {
       if (socket && socket.readyState < 2) socket.close(1000, 'Plugin stopped');
     } catch (error) {
-      this.#logger.warn?.(`[dsh-im:slack] bot ${this.#config.botId} failed to close Socket Mode:`, extractConnectionEvidence(error).details);
+      this.#logger.warn?.(`[sensteed-im:slack] bot ${this.#config.botId} failed to close Socket Mode:`, extractConnectionEvidence(error).details);
     }
     await Promise.race([
       bridge?.waitForIdle() ?? Promise.resolve(),

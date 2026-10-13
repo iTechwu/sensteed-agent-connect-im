@@ -49,7 +49,7 @@ export function clearModelCatalogCache(apiProxy) {
   if (!entry) return;
   modelCatalogCaches.delete(apiProxy);
   invalidateModelCatalog(entry);
-  entry.controller.abort(new DOMException('Harness model catalog disposed', 'AbortError'));
+  entry.controller.abort(new DOMException('哪吒 Agent model catalog disposed', 'AbortError'));
 }
 
 function clientTimeZoneFields() {
@@ -157,7 +157,7 @@ function registerImInputOrigin(registry, rpcId) {
   return () => origins.delete(rpcId);
 }
 
-/** Consume a dsh-im prompt id while handling its durable user/message event. */
+/** Consume a sensteed-im prompt id while handling its durable user/message event. */
 export function consumeDshImInputOrigin(scope, rpcId) {
   if (!scope || !['object', 'function', 'string'].includes(typeof scope)
     || typeof rpcId !== 'string' || !rpcId) return false;
@@ -235,14 +235,14 @@ function validateModelCatalog(value, method, { session = false } = {}) {
   if (!value || typeof value !== 'object'
     || !Array.isArray(value.groups)
     || !Array.isArray(value.failures)) {
-    throw new Error(`Harness returned an invalid response for ${method}`);
+    throw new Error(`哪吒 Agent returned an invalid response for ${method}`);
   }
   for (const group of value.groups) {
     if (!group || typeof group !== 'object'
       || typeof group.id !== 'string' || !group.id
       || typeof group.name !== 'string' || !group.name
       || !Array.isArray(group.models)) {
-      throw new Error(`Harness returned an invalid response for ${method}`);
+      throw new Error(`哪吒 Agent returned an invalid response for ${method}`);
     }
     for (const model of group.models) {
       if (!model || typeof model !== 'object'
@@ -250,7 +250,7 @@ function validateModelCatalog(value, method, { session = false } = {}) {
         || typeof model.name !== 'string' || !model.name
         || (model.description !== undefined && typeof model.description !== 'string')
         || (model.reasoning !== undefined && !validModelReasoning(model.reasoning))) {
-        throw new Error(`Harness returned an invalid response for ${method}`);
+        throw new Error(`哪吒 Agent returned an invalid response for ${method}`);
       }
     }
   }
@@ -259,17 +259,17 @@ function validateModelCatalog(value, method, { session = false } = {}) {
       || typeof failure.id !== 'string' || !failure.id
       || typeof failure.name !== 'string' || !failure.name
       || (failure.message !== undefined && typeof failure.message !== 'string')) {
-      throw new Error(`Harness returned an invalid response for ${method}`);
+      throw new Error(`哪吒 Agent returned an invalid response for ${method}`);
     }
   }
   if (session && (!validModelSelection(value.current) || typeof value.routable !== 'boolean')) {
-    throw new Error(`Harness returned an invalid response for ${method}`);
+    throw new Error(`哪吒 Agent returned an invalid response for ${method}`);
   }
   return value;
 }
 
 function turnStoppedError() {
-  const error = new Error('Harness turn was stopped before producing a text reply');
+  const error = new Error('哪吒 Agent turn was stopped before producing a text reply');
   error.code = 'turn-stopped';
   return error;
 }
@@ -286,14 +286,14 @@ function workspaceEntries(value) {
 function workspaceFromList(workspacePath, workspaceList) {
   if (!Array.isArray(workspaceList?.items)
     || !Array.isArray(workspaceList?.archivedSessionIds)) {
-    throw new Error('Harness returned an invalid response for workspace.list');
+    throw new Error('哪吒 Agent returned an invalid response for workspace.list');
   }
 
   const workspace = workspaceList.items.find((item) => item?.path === workspacePath);
   if (!workspace) return null;
   if (!Array.isArray(workspace.sessionIds)
     || workspace.sessionIds.some((sessionId) => typeof sessionId !== 'string')) {
-    throw new Error('Harness returned invalid session IDs for workspace.list');
+    throw new Error('哪吒 Agent returned invalid session IDs for workspace.list');
   }
   return workspace;
 }
@@ -331,7 +331,7 @@ function sessionTimeMs(summary) {
 
 function workspaceSessions(workspace, archivedSessionIds, sessionList) {
   if (!Array.isArray(sessionList?.items)) {
-    throw new Error('Harness returned an invalid response for session.list');
+    throw new Error('哪吒 Agent returned an invalid response for session.list');
   }
 
   const archived = new Set(archivedSessionIds);
@@ -353,7 +353,7 @@ function workspaceSessions(workspace, archivedSessionIds, sessionList) {
       };
       const lastSeq = summary?.projections?.asOfSeq;
       // This is the projection's durable lower bound, not necessarily the live
-      // log tail for a cold session. Harness uses -1 as the legitimate bound
+      // log tail for a cold session. 哪吒 Agent uses -1 as the legitimate bound
       // for a session with no projected events yet.
       if (Number.isSafeInteger(lastSeq) && lastSeq >= -1) session.lastSeq = lastSeq;
       const time = sessionTimeMs(summary);
@@ -381,7 +381,7 @@ function sleep(ms, signal) {
   });
 }
 
-/** Join only visible text blocks from one Harness message payload. */
+/** Join only visible text blocks from one 哪吒 Agent message payload. */
 export function textFromHarnessContent(content) {
   return (Array.isArray(content) ? content : [])
     .filter((part) => part?.type === 'text' && typeof part.text === 'string')
@@ -390,7 +390,7 @@ export function textFromHarnessContent(content) {
     .trim();
 }
 
-/** Join only reasoning blocks from one Harness message payload. */
+/** Join only reasoning blocks from one 哪吒 Agent message payload. */
 export function reasoningFromHarnessContent(content) {
   return (Array.isArray(content) ? content : [])
     .filter((part) => part?.type === 'reasoning' && typeof part.text === 'string')
@@ -407,7 +407,7 @@ function assistantReasoningText(event) {
   return reasoningFromHarnessContent(event?.data?.message?.content);
 }
 
-/** Aggregate assistant text in stable step/index order for one Harness Turn. */
+/** Aggregate assistant text in stable step/index order for one 哪吒 Agent Turn. */
 export class AssistantTextAccumulator {
   #steps = new Map();
   #legacyText = '';
@@ -483,7 +483,7 @@ function toolResultErrorText(error) {
   return null;
 }
 
-/** Join the visible text carried by a Harness tool result. */
+/** Join the visible text carried by a 哪吒 Agent tool result. */
 function toolResultText(data) {
   const blocks = Array.isArray(data?.message?.content) ? data.message.content : [];
   const nested = blocks.flatMap((block) => (
@@ -544,8 +544,8 @@ function consumeInteractionOwnership(ownership, entries) {
 }
 
 /**
- * Decide whether the current Host has a live dsh-im interaction watcher for
- * this Session.  The modern Harness adapter uses the same ownership registry
+ * Decide whether the current Host has a live sensteed-im interaction watcher for
+ * this Session.  The modern 哪吒 Agent adapter uses the same ownership registry
  * as HarnessClient so it never steals a browser-owned question or approval.
  */
 export function activeHarnessInteractionOwner(scope, sessionId, entries = []) {
@@ -862,7 +862,7 @@ export function visibleProgressUpdates(updates, progressMode) {
 
 export class HarnessRpcError extends Error {
   constructor(method, error) {
-    super(`${method}: ${error?.message ?? 'unknown Harness RPC error'}`);
+    super(`${method}: ${error?.message ?? 'unknown 哪吒 Agent RPC error'}`);
     this.name = 'HarnessRpcError';
     this.method = method;
     this.code = error?.code ?? 'internal';
@@ -873,7 +873,7 @@ export class HarnessRpcError extends Error {
 export class HarnessTransportError extends Error {
   constructor(code, method, { cause, status } = {}) {
     const statusDetail = Number.isInteger(status) ? `, HTTP ${status}` : '';
-    super(`Harness ${method} transport failed (${code}${statusDetail})`, { cause });
+    super(`哪吒 Agent ${method} transport failed (${code}${statusDetail})`, { cause });
     this.name = 'HarnessTransportError';
     this.code = code;
     this.method = method;
@@ -883,7 +883,7 @@ export class HarnessTransportError extends Error {
 
 export class HarnessHealthError extends Error {
   constructor(cause) {
-    super('Harness health RPC was rejected', { cause });
+    super('哪吒 Agent health RPC was rejected', { cause });
     this.name = 'HarnessHealthError';
     this.code = 'harness-rpc-rejected';
     this.method = 'host.describe';
@@ -900,7 +900,7 @@ export class HarnessInteractionError extends Error {
 
 export class HarnessTurnError extends Error {
   constructor(code, { reason, providerCode } = {}) {
-    super(`Harness turn failed (${code})`);
+    super(`哪吒 Agent turn failed (${code})`);
     this.name = 'HarnessTurnError';
     this.code = code;
     this.promptAccepted = true;
@@ -979,7 +979,7 @@ export class HarnessClient {
     createWebSocket = (url) => new WebSocket(url),
     interactionReconnectDelayMs = 500,
     rpcIdPrefix = 'im',
-    logPrefix = 'dsh-im',
+    logPrefix = 'sensteed-im',
     commandExecutor,
     controlExecutor,
     sessionMaintenanceExecutor,
@@ -1087,7 +1087,7 @@ export class HarnessClient {
       }
     } catch (error) {
       // Preserve an explicit caller cancellation; it is control flow, not a
-      // Harness availability diagnosis.
+      // 哪吒 Agent availability diagnosis.
       if (options.signal?.aborted) throw error;
       if (error instanceof HarnessTransportError) throw withDiagnostics(error);
       throw withDiagnostics(new HarnessTransportError(
@@ -1098,12 +1098,12 @@ export class HarnessClient {
     }
     if (body?.type !== 'server-response' || body?.rpcId !== rpcId) {
       throw withDiagnostics(new HarnessTransportError('harness-response-invalid', method, {
-        cause: new Error(`Harness returned an invalid response for ${method}`),
+        cause: new Error(`哪吒 Agent returned an invalid response for ${method}`),
       }));
     }
     if (!body.result || typeof body.result !== 'object' || typeof body.result.ok !== 'boolean') {
       throw withDiagnostics(new HarnessTransportError('harness-response-invalid', method, {
-        cause: new Error(`Harness returned an invalid result for ${method}`),
+        cause: new Error(`哪吒 Agent returned an invalid result for ${method}`),
       }));
     }
     if (!body.result?.ok) throw withDiagnostics(new HarnessRpcError(method, body.result?.error));
@@ -1137,7 +1137,7 @@ export class HarnessClient {
         stdio: ['ignore', 'inherit', 'inherit'],
       });
       this.#managedProcess.on('error', (error) => {
-        console.error('[dsh-im] failed to start Harness:', this.#logPrefix, error.message);
+        console.error('[sensteed-im] failed to start 哪吒 Agent:', this.#logPrefix, error.message);
       });
     }
 
@@ -1171,14 +1171,14 @@ export class HarnessClient {
     if (await this.isUngroupedWorkspace(workspacePath)) {
       const sessionList = await this.rpc('session.list', {}, 30_000, options);
       if (!Array.isArray(sessionList?.items)) {
-        throw new Error('Harness returned an invalid response for session.list');
+        throw new Error('哪吒 Agent returned an invalid response for session.list');
       }
       const registered = new Set();
       const selected = new Set();
       for (const item of workspaceList.items) {
         if (!Array.isArray(item?.sessionIds)
           || item.sessionIds.some((id) => typeof id !== 'string' || !id)) {
-          throw new Error('Harness returned invalid session IDs for workspace.list');
+          throw new Error('哪吒 Agent returned invalid session IDs for workspace.list');
         }
         for (const id of item.sessionIds) registered.add(id);
         if (await sameWorkspacePath(item.path, workspacePath)) {
@@ -1187,7 +1187,7 @@ export class HarnessClient {
       }
       for (const item of sessionList.items) {
         if (typeof item?.sessionId !== 'string' || !item.sessionId) {
-          throw new Error('Harness returned an invalid response for session.list');
+          throw new Error('哪吒 Agent returned an invalid response for session.list');
         }
         // A matching cwd never overrides an explicit group assignment.
         if (!registered.has(item.sessionId) && await this.isUngroupedWorkspace(item.cwd)) {
@@ -1299,13 +1299,13 @@ export class HarnessClient {
     await this.ensureRunning(options);
     const value = await this.rpc('session.list', {}, 30_000, options);
     if (!value || typeof value !== 'object' || !Array.isArray(value.items)) {
-      throw new Error('Harness returned an invalid response for session.list');
+      throw new Error('哪吒 Agent returned an invalid response for session.list');
     }
     for (const item of value.items) {
       if (!item || typeof item !== 'object'
         || typeof item.sessionId !== 'string' || !item.sessionId
         || typeof item.running !== 'boolean') {
-        throw new Error('Harness returned an invalid response for session.list');
+        throw new Error('哪吒 Agent returned an invalid response for session.list');
       }
     }
     return value.items.find((item) => item.sessionId === sessionId)?.running ?? false;
@@ -1356,7 +1356,7 @@ export class HarnessClient {
     if (typeof sessionId !== 'string' || !sessionId) throw new TypeError('sessionId is required');
     if (typeof line !== 'string' || !line) throw new TypeError('command line is required');
     if (!this.#commandExecutor) {
-      const error = new Error('Harness command execution is unavailable');
+      const error = new Error('哪吒 Agent command execution is unavailable');
       error.code = 'commands-unavailable';
       throw error;
     }
@@ -1432,7 +1432,7 @@ export class HarnessClient {
   async respondInteraction(rpcId, result, options = {}) {
     if (typeof rpcId !== 'string' || !rpcId) throw new TypeError('rpcId is required');
     if (!result || typeof result !== 'object' || typeof result.ok !== 'boolean') {
-      throw new TypeError('A Harness RPC result is required');
+      throw new TypeError('A 哪吒 Agent RPC result is required');
     }
     const timeoutSignal = AbortSignal.timeout(options.timeoutMs ?? 30_000);
     const signal = options.signal
@@ -1450,19 +1450,19 @@ export class HarnessClient {
         signal,
       });
       if (!response.ok) {
-        throw new Error(`Harness transport respond failed: HTTP ${response.status}`);
+        throw new Error(`哪吒 Agent transport respond failed: HTTP ${response.status}`);
       }
       receipt = await response.json();
     }
     if (receipt?.accepted === true) return receipt;
     if (receipt?.accepted !== false
       || (receipt.reason !== 'bad-response' && receipt.reason !== 'not-pending')) {
-      throw new Error('Harness returned an invalid interaction response receipt');
+      throw new Error('哪吒 Agent returned an invalid interaction response receipt');
     }
     const reason = receipt.reason;
     throw new HarnessInteractionError(
       `interaction-${reason}`,
-      `Harness interaction response was rejected (${reason})`,
+      `哪吒 Agent interaction response was rejected (${reason})`,
     );
   }
 
@@ -1515,14 +1515,14 @@ export class HarnessClient {
         if (signal.aborted) return;
         lastFailureReason = extractConnectionEvidence(error).details.reason;
         report();
-        console.warn('[dsh-im] Harness interaction stream disconnected:', this.#logPrefix, error.message);
+        console.warn('[sensteed-im] 哪吒 Agent interaction stream disconnected:', this.#logPrefix, error.message);
       }
       if (signal.aborted) return;
       try {
         await sleep(this.#interactionReconnectDelayMs, signal);
       } catch {
         if (signal.aborted) return;
-        throw new Error('Harness interaction reconnect wait failed');
+        throw new Error('哪吒 Agent interaction reconnect wait failed');
       }
     }
   }
@@ -1761,7 +1761,7 @@ export class HarnessClient {
     if (!this.#fileIngressExecutor) {
       throw new InboundFileError(
         'inbound-file-ingress-unavailable',
-        'Harness file ingress is unavailable in this Host process.',
+        '哪吒 Agent file ingress is unavailable in this Host process.',
       );
     }
     const sessionList = await this.rpc(
@@ -1854,7 +1854,7 @@ export class HarnessClient {
           .then(() => onUpdate(update))
           .catch((error) => {
             console.warn(
-              '[dsh-im] ignored a progress update failure:',
+              '[sensteed-im] ignored a progress update failure:',
               this.#logPrefix,
               error.message,
             );
@@ -1913,7 +1913,7 @@ export class HarnessClient {
         } catch (error) {
           artifactHandoffError ??= error;
           outboundArtifactRegistry.release(artifact);
-          console.warn('[dsh-im] ignored an artifact handoff failure:', this.#logPrefix, error.message);
+          console.warn('[sensteed-im] ignored an artifact handoff failure:', this.#logPrefix, error.message);
         }
       }
       return deliveredArtifactCount;
@@ -1978,7 +1978,7 @@ export class HarnessClient {
           sleep(30_000, interactionSignal).then(() => {
             throw Object.assign(new HarnessInteractionError(
               'harness-interaction-timeout',
-              'Harness interaction stream did not open within 30 seconds',
+              '哪吒 Agent interaction stream did not open within 30 seconds',
             ), {
               transport: this.#apiProxy ? 'host-api' : 'websocket',
               durationMs: Math.round(performance.now() - startedAt),
@@ -1993,7 +1993,7 @@ export class HarnessClient {
         ? [{ type: 'text', text: prompt }]
         : prompt;
       if (!Array.isArray(content) || content.length === 0) {
-        throw new TypeError('Harness prompt content is required');
+        throw new TypeError('哪吒 Agent prompt content is required');
       }
       // Publish the guidance the channel's own captured settings produced, so
       // the Host materializes it once per Session as prompt context instead of
@@ -2033,7 +2033,7 @@ export class HarnessClient {
           } catch (stagingError) {
             if (signal?.aborted) throw signal.reason ?? stagingError;
             console.warn(
-              '[dsh-im] unable to restage rejected images as workspace files:',
+              '[sensteed-im] unable to restage rejected images as workspace files:',
               this.#logPrefix,
               stagingError?.message ?? String(stagingError),
             );
@@ -2083,7 +2083,7 @@ export class HarnessClient {
               }
               throw failure;
             }
-            // An accepted /stop revokes attachment delivery even when Harness
+            // An accepted /stop revokes attachment delivery even when 哪吒 Agent
             // preserved a useful partial text answer for the existing UX.
             const artifactCount = ownership?.stopRequested
               ? 0
@@ -2169,7 +2169,7 @@ export class HarnessClient {
           try {
             await staged?.cleanup?.();
           } catch (error) {
-            console.warn('[dsh-im] unable to clean inbound files:', this.#logPrefix, error.message);
+            console.warn('[sensteed-im] unable to clean inbound files:', this.#logPrefix, error.message);
           }
         }
       }
@@ -2179,7 +2179,7 @@ export class HarnessClient {
         this.#unregisterInteractionOwnership(sessionId, ownership);
       }
       if (tracker.turn !== null) outboundArtifactRegistry.discard(sessionId, tracker.turn);
-      interactionController?.abort(new DOMException('Harness turn finished', 'AbortError'));
+      interactionController?.abort(new DOMException('哪吒 Agent turn finished', 'AbortError'));
       if (interactionTask) await interactionTask.catch(() => undefined);
     }
   }
@@ -2204,7 +2204,7 @@ export class HarnessClient {
       try {
         onOpen?.();
       } catch (error) {
-        console.warn('[dsh-im] ignored an interaction open callback failure:', this.#logPrefix, error.message);
+        console.warn('[sensteed-im] ignored an interaction open callback failure:', this.#logPrefix, error.message);
       }
       if (ownership) {
         void this.#refreshInteractionOwnerships(sessionId, signal).then(() => {
@@ -2302,7 +2302,7 @@ export class HarnessClient {
         if (!ownershipReady) bufferedEnvelopes.push(envelope);
         else processEnvelope(envelope);
       } catch (error) {
-        console.warn('[dsh-im] ignored a malformed Harness interaction frame:', this.#logPrefix, error.message);
+        console.warn('[sensteed-im] ignored a malformed 哪吒 Agent interaction frame:', this.#logPrefix, error.message);
       }
     };
     try {
@@ -2316,7 +2316,7 @@ export class HarnessClient {
   }
 
   /**
-   * Watch the global Harness event mux (all sessions) until `signal`
+   * Watch the global 哪吒 Agent event mux (all sessions) until `signal`
    * aborts, reconnecting on drop. Both transports deliver the same envelopes;
    * only session/event payloads are forwarded. onReconnect fires after every
    * (re)connection so callers can compensate for events missed while offline.
@@ -2339,7 +2339,7 @@ export class HarnessClient {
             try {
               onReconnect?.();
             } catch (error) {
-              console.warn('[dsh-im] mux reconnect hook failed:', this.#logPrefix, error.message);
+              console.warn('[sensteed-im] mux reconnect hook failed:', this.#logPrefix, error.message);
             }
           },
           onEnvelope: (envelope) => {
@@ -2355,20 +2355,20 @@ export class HarnessClient {
                 || typeof payload.event !== 'object') return;
               onSessionEvent({ sessionId: payload.sessionId, event: payload.event });
             } catch (error) {
-              console.warn('[dsh-im] ignored a malformed global mux frame:', this.#logPrefix, error.message);
+              console.warn('[sensteed-im] ignored a malformed global mux frame:', this.#logPrefix, error.message);
             }
           },
         });
       } catch (error) {
         if (signal.aborted) return;
-        console.warn('[dsh-im] Harness event mux disconnected:', this.#logPrefix, error.message);
+        console.warn('[sensteed-im] 哪吒 Agent event mux disconnected:', this.#logPrefix, error.message);
       }
       if (signal.aborted) return;
       try {
         await sleep(this.#interactionReconnectDelayMs, signal);
       } catch {
         if (signal.aborted) return;
-        throw new Error('Harness event mux reconnect wait failed');
+        throw new Error('哪吒 Agent event mux reconnect wait failed');
       }
     }
   }
@@ -2381,7 +2381,7 @@ export class HarnessClient {
       rpcId: `${this.#rpcIdPrefix}-${randomUUID()}`,
       ...options,
       onMalformed: (error) => {
-        console.warn('[dsh-im] ignored a malformed Harness mux frame:', this.#logPrefix, error.message);
+        console.warn('[sensteed-im] ignored a malformed 哪吒 Agent mux frame:', this.#logPrefix, error.message);
       },
     });
   }

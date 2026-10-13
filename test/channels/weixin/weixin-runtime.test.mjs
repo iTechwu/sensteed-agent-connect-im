@@ -114,7 +114,7 @@ test('runtime preserves rapid batch command order when getUpdates returns newest
     token: 'bot-token',
     harness: {
       ensureRunning: async () => true,
-      ask: async () => assert.fail('cancelled batch content must not reach Harness'),
+      ask: async () => assert.fail('cancelled batch content must not reach Nezha Agent'),
     },
     state: {
       getUpdatesBuf: () => '',
@@ -185,7 +185,7 @@ test('runtime sends a connection test to the bound Weixin owner without reply co
   await runtime.stop();
 });
 
-test('proactive delivery reuses authorized inbound context after restart without requiring a Harness session', async () => {
+test('proactive delivery reuses authorized inbound context after restart without requiring a Nezha Agent session', async () => {
   const root = await mkdtemp(join(tmpdir(), 'dsh-weixin-proactive-context-'));
   const path = join(root, 'state.json');
   const sends = [];
@@ -533,7 +533,7 @@ test('runtime verifies the token, consumes getUpdates, replies, persists cursor,
   assert.equal(runtime.status.ready, false);
 });
 
-test('runtime keeps polling while a Harness interaction waits and consumes its answer in the open turn', async () => {
+test('runtime keeps polling while a Nezha Agent interaction waits and consumes its answer in the open turn', async () => {
   const questionPresented = deferred();
   const answerSubmitted = deferred();
   const sends = [];
@@ -648,7 +648,7 @@ test('runtime keeps polling while a Harness interaction waits and consumes its a
     await eventually(
       () => turnFinished && stateData.seen.size === 2
         && sends.some((request) => request.text === '你选择了：测试环境'),
-      'the answer should resolve the original Harness turn',
+      'the answer should resolve the original Nezha Agent turn',
     );
 
     assert.equal(secondPollStartedWhileTurnOpen, true);
@@ -685,10 +685,10 @@ test('runtime refuses to report ready when notifyStart rejects the stored token'
   assert.equal(runtime.status.weixinConnectionState, 'failed');
 });
 
-test('runtime uses an explicit unknown code for an unclassified Harness health failure', async () => {
+test('runtime uses an explicit unknown code for an unclassified Nezha Agent health failure', async () => {
   const runtime = new WeixinRuntime({
     api: {
-      notifyStart: async () => assert.fail('notifyStart must not run while Harness is unavailable'),
+      notifyStart: async () => assert.fail('notifyStart must not run while Nezha Agent is unavailable'),
       notifyStop: async () => {},
       sendText: async () => {},
       getUpdates: async () => ({ ret: 0, msgs: [] }),
@@ -710,7 +710,7 @@ test('runtime uses an explicit unknown code for an unclassified Harness health f
   assert.equal(runtime.status.weixinConnectionState, 'failed');
 });
 
-test('runtime preserves classified Harness health codes without exposing their causes', async () => {
+test('runtime preserves classified Nezha Agent health codes without exposing their causes', async () => {
   for (const code of [
     'harness-connect-failed',
     'harness-timeout',

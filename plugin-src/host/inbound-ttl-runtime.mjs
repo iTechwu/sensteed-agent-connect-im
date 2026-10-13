@@ -13,7 +13,7 @@ const runtimes = new Map();
  */
 export function inboundTtlSettingsPath(config = {}) {
   const dshHome = resolve(config.dshHome ?? process.env.DSH_HOME ?? join(homedir(), '.dsh'));
-  return resolve(dshHome, 'integrations', 'dsh-im', 'settings.json');
+  return resolve(dshHome, 'integrations', 'sensteed-im', 'settings.json');
 }
 
 /**
@@ -27,7 +27,7 @@ export function getInboundTtlRuntime(ctx, config = {}) {
   const existing = runtimes.get(settingsPath);
   if (existing) return existing.runtime;
   const logger = typeof ctx?.logger === 'function'
-    ? ctx.logger('dsh-im:inbound-ttl') : (ctx?.logger ?? console);
+    ? ctx.logger('sensteed-im:inbound-ttl') : (ctx?.logger ?? console);
   const store = new InboundTtlStore(settingsPath);
   const service = createInboundTtlService({ store, logger });
   const runtime = Object.freeze({ store, service });
@@ -38,14 +38,14 @@ export function getInboundTtlRuntime(ctx, config = {}) {
   // sweeping disabled rather than deleting files of unknown intent.
   void store.load().then(
     () => service.start(),
-    (error) => logger.error?.('[dsh-im] unable to load inbound attachment settings; sweeping stays disabled', error),
+    (error) => logger.error?.('[sensteed-im] unable to load inbound attachment settings; sweeping stays disabled', error),
   );
   if (typeof ctx?.effect === 'function') {
     ctx.effect(() => () => {
       if (runtimes.get(settingsPath) !== entry) return;
       runtimes.delete(settingsPath);
       service.stop();
-    }, 'dsh-im: stop inbound attachment TTL sweeper');
+    }, 'sensteed-im: stop inbound attachment TTL sweeper');
   }
   return runtime;
 }
@@ -79,7 +79,7 @@ export function registerInboundTtlWorkspaces(ctx, service, {
     return paths;
   });
   if (typeof ctx?.effect === 'function') {
-    ctx.effect(() => unregister, 'dsh-im: unregister inbound TTL workspaces');
+    ctx.effect(() => unregister, 'sensteed-im: unregister inbound TTL workspaces');
   }
   return unregister;
 }

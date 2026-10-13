@@ -72,7 +72,7 @@ const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const UNSUPPORTED_INBOUND_TEXT = () => t('企业微信应用目前支持文字和图片消息。');
 
 const HELP_TEXT = () => [
-  t('企业微信应用已连接 DeepSeek Harness，可在微信中直接使用。'),
+  t('企业微信应用已连接 哪吒 Agent，可在微信中直接使用。'),
   '',
   t('直接发送文字或图片即可继续当前会话。'),
   t('/new  开启一个全新会话'),
@@ -104,7 +104,7 @@ const HELP_TEXT = () => [
   t('/help  显示本帮助'),
 ].join('\n');
 
-const WELCOME_TEXT = () => t('企业微信应用已连接 DeepSeek Harness。直接发送文字或图片即可开始，发送 /help 查看可用命令。');
+const WELCOME_TEXT = () => t('企业微信应用已连接 哪吒 Agent。直接发送文字或图片即可开始，发送 /help 查看可用命令。');
 
 function conversationKey(userId) {
   return `p2p:${userId}`;
@@ -230,7 +230,7 @@ export class WecomAppBridge {
     maxChunkBytes = WECOM_APP_TEXT_MAX_BYTES,
   }) {
     if (!api || typeof api.sendText !== 'function') throw new TypeError('WecomAppBridge requires a WecomAppApi');
-    if (!harness || !state) throw new TypeError('WecomAppBridge requires Harness and state');
+    if (!harness || !state) throw new TypeError('WecomAppBridge requires 哪吒 Agent and state');
     this.#api = api;
     this.#harness = harness;
     this.#state = state;
@@ -263,7 +263,7 @@ export class WecomAppBridge {
     try {
       await this.#send(sender, WELCOME_TEXT());
     } catch (error) {
-      this.#logger.warn?.('[dsh-im:wecom-app] failed to send the welcome message:', error);
+      this.#logger.warn?.('[sensteed-im:wecom-app] failed to send the welcome message:', error);
     }
   }
 
@@ -330,7 +330,7 @@ export class WecomAppBridge {
           this.#status.lastError = error?.message ?? String(error);
           const failure = setLastMessageFailure(this.#status, error);
           this.#logger.error?.(
-            `[dsh-im:wecom-app] failed to process a command [${failure.referenceId}]:`,
+            `[sensteed-im:wecom-app] failed to process a command [${failure.referenceId}]:`,
             messageFailureDiagnostic(error, failure),
           );
           return this.#send(sender, messageFailureText(failure)).catch(() => undefined);
@@ -448,7 +448,7 @@ export class WecomAppBridge {
       this.#status.lastError = error?.message ?? String(error);
       const failure = setLastMessageFailure(this.#status, error);
       this.#logger.error?.(
-        `[dsh-im:wecom-app] failed to process a batch input message [${failure.referenceId}]:`,
+        `[sensteed-im:wecom-app] failed to process a batch input message [${failure.referenceId}]:`,
         messageFailureDiagnostic(error, failure),
       );
       await this.#send(sender, messageFailureText(failure)).catch(() => undefined);
@@ -479,7 +479,7 @@ export class WecomAppBridge {
     }).catch((error) => {
       if (this.#signal?.aborted) return;
       this.#status.lastError = error?.message ?? String(error);
-      this.#logger.error?.('[dsh-im:wecom-app] failed to apply inbound access policy:', error);
+      this.#logger.error?.('[sensteed-im:wecom-app] failed to apply inbound access policy:', error);
     }).finally(() => {
       this.#acceptedMessageIds.delete(messageId);
       this.#commandTasks.delete(task);
@@ -584,7 +584,7 @@ export class WecomAppBridge {
       }
       if (!hasImages && !hasFiles && command === '/status') {
         await this.#harness.ensureRunning({ signal: this.#signal });
-        await this.#send(sender, t('企业微信应用与 DeepSeek Harness 连接正常。'));
+        await this.#send(sender, t('企业微信应用与 哪吒 Agent 连接正常。'));
         await this.#state.markSeen(messageId);
         return;
       }
@@ -745,7 +745,7 @@ export class WecomAppBridge {
         reason: imageDiagnostic?.reason ?? undefined,
       });
       this.#logger.error?.(
-        `[dsh-im:wecom-app] failed to process an inbound message [${failure.referenceId}]:`,
+        `[sensteed-im:wecom-app] failed to process an inbound message [${failure.referenceId}]:`,
         messageFailureDiagnostic(error, failure),
       );
       try {
@@ -757,7 +757,7 @@ export class WecomAppBridge {
         );
         if (!promptRecorded) await this.#state.markSeen(messageId);
       } catch (sendError) {
-        this.#logger.error?.('[dsh-im:wecom-app] failed to send the safe error reply:', sendError);
+        this.#logger.error?.('[sensteed-im:wecom-app] failed to send the safe error reply:', sendError);
       }
     }
   }
@@ -814,7 +814,7 @@ export class WecomAppBridge {
         await this.#presentInteraction(pending);
       } catch {
         this.#status.lastError = t('企业微信应用交互问题发送失败。');
-        this.#logger.error?.('[dsh-im:wecom-app] failed to retry an interaction question');
+        this.#logger.error?.('[sensteed-im:wecom-app] failed to retry an interaction question');
         pending.interaction.reconnect?.();
         return;
       }
@@ -845,7 +845,7 @@ export class WecomAppBridge {
         await this.#presentInteraction(pending);
       } catch {
         this.#status.lastError = t('企业微信应用交互问题发送失败。');
-        this.#logger.error?.('[dsh-im:wecom-app] failed to send the next interaction question');
+        this.#logger.error?.('[sensteed-im:wecom-app] failed to send the next interaction question');
         pending.interaction.reconnect?.();
       }
       return;
@@ -874,7 +874,7 @@ export class WecomAppBridge {
       pending.answers.pop();
       pending.index -= 1;
       this.#status.lastError = t('回答提交失败。');
-      this.#logger.error?.('[dsh-im:wecom-app] failed to answer a Harness interaction');
+      this.#logger.error?.('[sensteed-im:wecom-app] failed to answer a 哪吒 Agent interaction');
       await this.#send(pending.actor, t('回答提交失败，请重新发送当前问题的答案。')).catch(() => undefined);
     }
   }
@@ -904,7 +904,7 @@ export class WecomAppBridge {
       || !Array.isArray(questions)
       || questions.length === 0
       || questions.some((question) => !validHarnessQuestion(question))) {
-      this.#logger.warn?.('[dsh-im:wecom-app] ignored an invalid Harness question interaction');
+      this.#logger.warn?.('[sensteed-im:wecom-app] ignored an invalid 哪吒 Agent question interaction');
       return;
     }
 
@@ -1027,7 +1027,7 @@ export class WecomAppBridge {
       }, { signal: AbortSignal.timeout(5_000) });
     } catch (error) {
       if (error?.code !== 'interaction-not-pending') {
-        this.#logger.warn?.('[dsh-im:wecom-app] failed to cancel a pending Harness interaction');
+        this.#logger.warn?.('[sensteed-im:wecom-app] failed to cancel a pending 哪吒 Agent interaction');
       }
     }
   }
@@ -1037,7 +1037,7 @@ export class WecomAppBridge {
     this.#status.lastError = error?.message ?? String(error);
     const failure = setLastMessageFailure(this.#status, error);
     this.#logger.error?.(
-      `[dsh-im:wecom-app] failed to process an interaction reply [${failure.referenceId}]:`,
+      `[sensteed-im:wecom-app] failed to process an interaction reply [${failure.referenceId}]:`,
       messageFailureDiagnostic(error, failure),
     );
     if (!this.#state.hasSeen(messageId)) {

@@ -1089,7 +1089,7 @@ export function createDingtalkApi({
           body: {
             robotCode: normalizedTarget.robotCode,
             msgKey: markdown ? 'sampleMarkdown' : 'sampleText',
-            msgParam: JSON.stringify(markdown ? { title: 'DSH', text: content } : { content }),
+            msgParam: JSON.stringify(markdown ? { title: '哪吒 Agent', text: content } : { content }),
             ...(normalizedTarget.type === 'group'
               ? { openConversationId: normalizedTarget.openConversationId }
               : { userIds: [normalizedTarget.userId] }),
@@ -1118,7 +1118,7 @@ export function createDingtalkApi({
           // retry auth/target failures, rate limits or ambiguous transport errors.
           if (signal?.aborted || error?.providerCode !== 'sendMessage.model.notMatch'
             || !(error.code === 'send-rejected' || error.status === 400)) throw error;
-          logger.warn?.('[dsh-im:dingtalk] Markdown rejected; sending this chunk as text');
+          logger.warn?.('[sensteed-im:dingtalk] Markdown rejected; sending this chunk as text');
           if (chunk.plain) result = await send(chunk.plain, false);
         }
       }

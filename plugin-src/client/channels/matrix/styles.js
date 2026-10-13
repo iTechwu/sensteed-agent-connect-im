@@ -1,11 +1,9 @@
-export const MATRIX_STYLE_ID = 'xmanrui-dsh-im-matrix-settings';
+export const MATRIX_STYLE_ID = 'sensteed-im-matrix-settings';
 
 const CSS = String.raw`
 .dmt-page { --ddt-accent: #1a8f6f; --ddt-accent-deep: #12654f; --ddt-accent-wash: #eef8f4; }
 .dmt-avatar { background: linear-gradient(145deg, #fff, #f6faf8); border: 1px solid #e2eae7; }
 .dmt-avatar svg { display: block; }
-.dim-logoMatrix { color: white; background: #0dbd8b; }
-.dim-logoMatrix svg { width: 22px; height: 22px; }
 .dmt-setup { display: grid; gap: 18px; }
 .dmt-guide { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 18px; padding: 16px; border: 1px solid color-mix(in srgb, #1a8f6f 18%, var(--dsw-alias-border-l2, #e5e6eb)); border-radius: 11px; background: color-mix(in srgb, #1a8f6f 4%, var(--dsw-alias-bg-layer-1, #fff)); }
 .dmt-guideCopy { min-width: 0; }
@@ -28,7 +26,7 @@ export function installMatrixStyles() {
   const existing = document.querySelector(`style[data-plugin-css="${MATRIX_STYLE_ID}"]`);
   if (existing) return () => {};
   const style = document.createElement('style');
-  style.dataset.plugin = '@xmanrui/dsh-im';
+  style.dataset.plugin = 'sensteed-im';
   style.dataset.pluginCss = MATRIX_STYLE_ID;
   style.textContent = CSS;
   document.head.appendChild(style);

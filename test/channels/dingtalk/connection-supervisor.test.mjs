@@ -25,7 +25,7 @@ function scheduler() {
   };
 }
 
-test('supervisor starts configured DingTalk runtimes after Harness is healthy', async () => {
+test('supervisor starts configured DingTalk runtimes after Nezha Agent is healthy', async () => {
   const timers = scheduler();
   let healthChecks = 0;
   let initializes = 0;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IM_LOCALE_NAMESPACE } from './i18n.js';
 
-export const IM_MAIN_PANEL_ID = 'xmanrui-dsh-im';
+export const IM_MAIN_PANEL_ID = 'sensteed-im';
 const h = React.createElement;
 
 function OpenImAction({ subject, packageName, onOpen, t }) {
@@ -22,7 +22,7 @@ function ImPluginPage({ renderPanel, onBack, t }) {
 }
 
 // Optional services and slots keep the existing settings entry working on
-// older DSH versions. Reuse the same panel through public navigation APIs.
+// older 哪吒 Agent versions. Reuse the same panel through public navigation APIs.
 export function installImPluginPage(ctx, { packageName, renderPanel }) {
   if (typeof ctx.inject !== 'function') return;
   ctx.inject(['layout', 'pluginNavigation'], (pageCtx) =>
@@ -36,7 +36,7 @@ export function installImPluginPage(ctx, { packageName, renderPanel }) {
       }, ImPluginPage);
       const stopActions = pageCtx.slots.inject('plugins.detail.actions', () =>
         pageCtx.slots.register({
-          name: 'plugins.detail.actions', id: 'xmanrui-dsh-im-open',
+          name: 'plugins.detail.actions', id: 'sensteed-im-open',
           order: 20, locale: IM_LOCALE_NAMESPACE,
           inject: () => ({
             packageName,

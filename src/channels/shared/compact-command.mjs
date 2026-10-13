@@ -37,7 +37,7 @@ function compactResultText(result) {
   if (!result || typeof result !== 'object'
     || !['success', 'error'].includes(result.kind)
     || (result.text !== undefined && typeof result.text !== 'string')) {
-    throw new TypeError('Harness returned an invalid /compact result');
+    throw new TypeError('哪吒 Agent returned an invalid /compact result');
   }
   const text = result.text?.trim() ?? '';
   const compacted = /^Compacted (\d+) history items \(~(\d+) tokens\)\.$/u.exec(text);
@@ -60,13 +60,13 @@ function compactErrorMessage(error) {
     return t('工作区或机器人状态已发生变化，请重试。');
   }
   if (code === 'commands-unavailable') {
-    return t('当前 Harness 暂不支持从机器人执行上下文压缩。');
+    return t('当前 哪吒 Agent 暂不支持从机器人执行上下文压缩。');
   }
   return t('上下文压缩失败，请稍后重试。');
 }
 
 /**
- * Execute the explicit Harness compaction command for an existing IM conversation Session.
+ * Execute the explicit 哪吒 Agent compaction command for an existing IM conversation Session.
  * Unknown input returns null so the caller may continue ordinary message routing.
  */
 export async function runCompactCommand(text, harness, state, conversationKey, options = {}) {
@@ -96,7 +96,7 @@ export async function runCompactCommand(text, harness, state, conversationKey, o
       execution = await harness.executeCommand(sessionId, '/compact', options);
     }
     if (execution === undefined) {
-      return commandResult(t('当前 Harness 未注册 /compact 命令，请确认上下文压缩组件已启用。'));
+      return commandResult(t('当前 哪吒 Agent 未注册 /compact 命令，请确认上下文压缩组件已启用。'));
     }
     return commandResult(compactResultText(execution?.result));
   } catch (error) {

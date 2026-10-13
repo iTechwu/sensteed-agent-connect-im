@@ -79,11 +79,11 @@ import {
 } from '../shared/inbound-access.mjs';
 import { t } from '../shared/i18n.mjs';
 
-const CARD_INITIAL_TEXT = '已连接 DeepSeek Harness，正在思考…';
+const CARD_INITIAL_TEXT = '已连接 哪吒 Agent，正在思考…';
 const INTERACTION_RESOLVED_TEXT = '这个问题已在其他客户端处理，无需再次回答。';
 
 const HELP_TEXT_LINES = [
-  '钉钉机器人已连接 DeepSeek Harness。',
+  '钉钉机器人已连接 哪吒 Agent。',
   '',
   '直接发送文字、图片或文件即可继续当前会话。',
   '/m 或 /menu  打开下拉操作菜单',
@@ -572,7 +572,7 @@ export class DingtalkHarnessBridge {
     if (!nonEmptyString(clientId) || !nonEmptyString(clientSecret)) {
       throw new TypeError('DingTalk app credentials are required');
     }
-    if (!harness || !state) throw new TypeError('Harness client and state store are required');
+    if (!harness || !state) throw new TypeError('哪吒 Agent client and state store are required');
     this.#api = api;
     this.#clientId = clientId.trim();
     this.#clientSecret = clientSecret.trim();
@@ -954,7 +954,7 @@ export class DingtalkHarnessBridge {
       result = { message: t('已开启新会话。请发送你的问题。') };
     } else if (command === '/status') {
       await this.#harness.ensureRunning({ signal: this.#signal });
-      result = { message: t('钉钉机器人与 DeepSeek Harness 连接正常。') };
+      result = { message: t('钉钉机器人与 哪吒 Agent 连接正常。') };
     } else if (command === '/help') {
       result = { message: helpText() };
     } else {
@@ -1332,7 +1332,7 @@ export class DingtalkHarnessBridge {
       }
       if (isPlainText && !hasImages && !hasFiles && command === '/status') {
         await this.#harness.ensureRunning({ signal: this.#signal });
-        await this.#send(sessionWebhook, t('钉钉机器人与 DeepSeek Harness 连接正常。'), this.#atUsersFor(message));
+        await this.#send(sessionWebhook, t('钉钉机器人与 哪吒 Agent 连接正常。'), this.#atUsersFor(message));
         return;
       }
       if (isPlainText && !hasImages && !hasFiles && command === '/new') {
@@ -1667,7 +1667,7 @@ export class DingtalkHarnessBridge {
       pending.answers.pop();
       pending.index -= 1;
       this.#status.lastError = t('回答提交失败。');
-      this.#logger.error?.('[dsh-dingtalk] failed to answer a Harness interaction');
+      this.#logger.error?.('[dsh-dingtalk] failed to answer a 哪吒 Agent interaction');
       try {
         await this.#send(sessionWebhook, t('回答提交失败，请重新发送当前问题的答案。'), this.#atUsersFor(message));
       } catch {
@@ -1707,7 +1707,7 @@ export class DingtalkHarnessBridge {
       || !Array.isArray(questions)
       || questions.length === 0
       || questions.some((question) => !validHarnessQuestion(question))) {
-      this.#logger.warn?.('[dsh-dingtalk] ignored an invalid Harness question interaction');
+      this.#logger.warn?.('[dsh-dingtalk] ignored an invalid 哪吒 Agent question interaction');
       return;
     }
 
@@ -1736,7 +1736,7 @@ export class DingtalkHarnessBridge {
     }
     if (this.#interactionKeys.has(interactionId)) return;
     if (existing) {
-      this.#logger.warn?.('[dsh-dingtalk] cancelled a second pending Harness question');
+      this.#logger.warn?.('[dsh-dingtalk] cancelled a second pending 哪吒 Agent question');
       await interaction.respond({
         ok: false,
         error: {
@@ -1840,7 +1840,7 @@ export class DingtalkHarnessBridge {
       }, { signal: AbortSignal.timeout(5_000) });
     } catch (error) {
       if (error?.code !== 'interaction-not-pending') {
-        this.#logger.warn?.('[dsh-dingtalk] failed to cancel a pending Harness interaction');
+        this.#logger.warn?.('[dsh-dingtalk] failed to cancel a pending 哪吒 Agent interaction');
       }
     }
   }

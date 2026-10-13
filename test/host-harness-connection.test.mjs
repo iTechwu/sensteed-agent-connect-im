@@ -28,7 +28,7 @@ test('Host connections use the modern gateway and share the current Cordis root'
   assert.throws(() => harnessConnection({ apiProxy: {} }), /requires the modern Host Typert gateway/);
 });
 
-test('an explicit Harness URL preserves HTTP transport and never reads the Host apiProxy', () => {
+test('an explicit Nezha Agent URL preserves HTTP transport and never reads the Host apiProxy', () => {
   const ctx = { get apiProxy() { throw new Error('must not read local apiProxy'); } };
   const connection = harnessConnection(ctx, { harnessBaseUrl: 'https://harness.example/base/' });
   assert.equal(connection.baseUrl.href, 'https://harness.example/base/');
@@ -133,7 +133,7 @@ for (const channel of [...IM_CHANNELS, 'office']) {
     assert.equal(options.autostart, false);
   });
 
-  test(`${channel} production preserves an explicitly configured Harness URL`, async () => {
+  test(`${channel} production preserves an explicitly configured Nezha Agent URL`, async () => {
     const options = await assembledHarness(channel, {
       credentials: {},
       get apiProxy() { throw new Error('explicit URL must not use local apiProxy'); },

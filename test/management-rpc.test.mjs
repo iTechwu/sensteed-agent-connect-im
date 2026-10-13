@@ -92,11 +92,11 @@ test('explicit loopback policy uses original Host headers instead of the interna
   assert.equal(calls, 5);
 });
 
-test('default and explicit trusted-host policies accept LAN requests already admitted by Harness', async () => {
+test('default and explicit trusted-host policies accept LAN requests already admitted by Nezha Agent', async () => {
   for (const authority of [undefined, 'trusted-host']) {
     let calls = 0;
     const route = fixture(async () => { calls += 1; return { ok: true, value: {} }; }, { authority });
-    // This fixture starts after Harness browser authentication and Host/Origin checks.
+    // This fixture starts after Nezha Agent browser authentication and Host/Origin checks.
     for (const host of ['localhost:3080', '192.168.1.100:3080', '10.0.0.10:3080', '[fd00::1]:3080', 'trusted.example']) {
       const response = await route.fetch(request({ headers: { host, origin: `http://${host}` } }));
       assert.equal(response.status, 200);

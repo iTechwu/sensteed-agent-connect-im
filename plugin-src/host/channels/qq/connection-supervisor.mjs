@@ -35,7 +35,7 @@ export class ConnectionSupervisor {
       throw new TypeError('ConnectionSupervisor requires a controller');
     }
     if (!harness || typeof harness.ensureRunning !== 'function') {
-      throw new TypeError('ConnectionSupervisor requires a Harness client');
+      throw new TypeError('ConnectionSupervisor requires a 哪吒 Agent client');
     }
     this.#controller = controller;
     this.#harness = harness;
@@ -103,7 +103,7 @@ export class ConnectionSupervisor {
       if (connected < configured) {
         const delay = this.#retryDelays[Math.min(this.#retryIndex, this.#retryDelays.length - 1)];
         this.#retryIndex += 1;
-        this.#logger.warn?.(`[dsh-im:qq] ${connected}/${configured} bots connected; retrying in ${delay}ms`);
+        this.#logger.warn?.(`[sensteed-im:qq] ${connected}/${configured} bots connected; retrying in ${delay}ms`);
         this.#schedule(delay);
         return;
       }
@@ -113,7 +113,7 @@ export class ConnectionSupervisor {
       if (this.#closed) return;
       const delay = this.#retryDelays[Math.min(this.#retryIndex, this.#retryDelays.length - 1)];
       this.#retryIndex += 1;
-      this.#logger.warn?.(`[dsh-im:qq] connection reconciliation failed; retrying in ${delay}ms`, error);
+      this.#logger.warn?.(`[sensteed-im:qq] connection reconciliation failed; retrying in ${delay}ms`, error);
       this.#schedule(delay);
     }
   }

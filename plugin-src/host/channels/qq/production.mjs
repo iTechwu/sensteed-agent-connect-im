@@ -44,7 +44,7 @@ function pluginPaths(config) {
 }
 
 export async function createProductionController(ctx, config = {}, internals = {}) {
-  if (!ctx?.credentials) throw new TypeError('dsh-im QQ requires ctx.credentials');
+  if (!ctx?.credentials) throw new TypeError('sensteed-im QQ requires ctx.credentials');
   const connection = harnessConnection(ctx, config, { competitiveApprovals: true });
 
   const ConfigStore = internals.ConfigStore ?? QqConfigStore;
@@ -54,7 +54,7 @@ export async function createProductionController(ctx, config = {}, internals = {
   const Runtime = internals.Runtime ?? QqRuntime;
   const QrAuth = internals.QrAuth ?? QqQrAuth;
   const createSupervisor = internals.createConnectionSupervisor ?? createConnectionSupervisor;
-  const logger = typeof ctx.logger === 'function' ? ctx.logger('dsh-im:qq') : (ctx.logger ?? console);
+  const logger = typeof ctx.logger === 'function' ? ctx.logger('sensteed-im:qq') : (ctx.logger ?? console);
   const agentPresetCatalog = () => listAgentPresetCatalog(ctx);
   const paths = pluginPaths(config);
   const configStore = await new ConfigStore(paths.config).load();

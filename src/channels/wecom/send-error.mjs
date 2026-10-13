@@ -1,6 +1,6 @@
 import { channelDeliveryFailure } from '../shared/message-failure.mjs';
 
-// Normalize only errors from SDK send calls, never Harness or menu-building errors.
+// Normalize only errors from SDK send calls, never 哪吒 Agent or menu-building errors.
 export function wecomSendError(error, operation) {
   if (error?.wecomOperation || error?.name === 'AbortError'
     || error instanceof TypeError || error instanceof ReferenceError || error instanceof SyntaxError) return error;

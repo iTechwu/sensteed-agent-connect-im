@@ -98,7 +98,7 @@ export class WhatsappController {
               ? t('WhatsApp 关联设备已失效，请移除后重新扫码。')
               : t('WhatsApp 连接未就绪，插件会自动重试。'),
           ));
-          this.#logger.warn?.(`[dsh-im:whatsapp] bot ${config.botId} failed to initialize`);
+          this.#logger.warn?.(`[sensteed-im:whatsapp] bot ${config.botId} failed to initialize`);
         } finally {
           this.#touch();
         }
@@ -389,7 +389,7 @@ export class WhatsappController {
         this.#errors.delete(botId);
       } catch (error) {
         this.#errors.set(botId, this.#failure(error, 'connection-failed', t('WhatsApp 已绑定，消息连接暂未就绪。')));
-        this.#logger.warn?.(`[dsh-im:whatsapp] bot ${botId} did not reconnect after QR binding`);
+        this.#logger.warn?.(`[sensteed-im:whatsapp] bot ${botId} did not reconnect after QR binding`);
       }
       if (previous?.authDirectory && previous.authDirectory !== config.authDirectory) {
         await this.#deleteAuth(previous.authDirectory).catch(() => undefined);
@@ -404,7 +404,7 @@ export class WhatsappController {
           const removed = await atConnectionStage('account.remove', () => this.#configStore.remove(botId), 'account-config').catch(() => null);
           if (removed) {
             await this.#deleteState({ botId, config }).catch((cleanupError) => {
-              this.#logger.warn?.('[dsh-im:whatsapp] cancelled bot state cleanup failed:', extractConnectionEvidence(cleanupError).details);
+              this.#logger.warn?.('[sensteed-im:whatsapp] cancelled bot state cleanup failed:', extractConnectionEvidence(cleanupError).details);
             });
           }
         }
@@ -416,7 +416,7 @@ export class WhatsappController {
         await this.#deleteAuth(record.authDirectory).catch(() => undefined);
         record.state = 'failed';
         record.error = this.#failure(error, 'activation-failed', t('WhatsApp 已扫码，但无法保存关联设备。'));
-        this.#logger.error?.('[dsh-im:whatsapp] unable to persist linked-device session');
+        this.#logger.error?.('[sensteed-im:whatsapp] unable to persist linked-device session');
       }
     } finally {
       if (this.#activeAttemptId === record.id) this.#activeAttemptId = null;

@@ -38,8 +38,8 @@ const root = createRoot(document.getElementById('app'));
 function render() {
   root.render(h('div', { className: 'preview' },
     h('aside', null,
-      h('header', null, h('strong', null, 'DeepSeek Harness'), h('small', null, '会话列表 · Logo 展示验证')),
-      h('div', { className: 'workspace' }, '⌄  dsh-im'),
+      h('header', null, h('strong', null, '哪吒 Agent'), h('small', null, '会话列表 · Logo 展示验证')),
+      h('div', { className: 'workspace' }, '⌄  sensteed-im'),
       h('div', { role: 'tree' }, expanded ? rows.map((row) => h('div', {
         key: row.id, id: `row-${row.id}`,
         className: `${unsupported ? 'future-unknown-row' : productionNames ? '_dsh_sessionRow' : '_sessionRow_dsh_104'} ${selected === row.id ? 'selected' : ''}`,
@@ -53,17 +53,17 @@ function render() {
       h('button', { 'aria-label': `会话操作 ${row.title}`, onClick: (event) => { event.stopPropagation(); menus += 1; } }, '⋯')))
         : null)),
     h('main', null,
-      h('div', { className: 'eyebrow' }, 'DSH-IM / BROWSER ADAPTER'),
+      h('div', { className: 'eyebrow' }, 'sensteed-im / BROWSER ADAPTER'),
       h('h1', null, '渠道，一眼可见'),
-      h('p', null, '复用现有渠道 Logo，保留 DSH 自动生成的标题。'),
+      h('p', null, '复用现有渠道 Logo，保留 哪吒 Agent 自动生成的标题。'),
       h('div', { className: 'message' }, h('strong', null, '聊天正文保持原样'),
         h('p', { id: 'chat-prefix' }, '微信 · 这是一条普通聊天消息'), h('div', { id: 'stream' })),
       h('section', { className: 'search' }, h('h2', null, '搜索结果'),
         h('button', { id: 'search-row', className: '_searchResultRow_dsh_25', role: 'treeitem', 'aria-selected': false },
           h('span', { className: '_searchResultHeading_dsh_305' },
             h('span', { id: 'search-title', className: '_searchResultTitle_dsh_313' }, '飞书 · 分析客户反馈')),
-          h('small', null, 'dsh-im · 找到一条相关会话'))),
-      h('p', { className: 'note' }, '测试页面，非运行中的 DSH 会话。'))));
+          h('small', null, 'sensteed-im · 找到一条相关会话'))),
+      h('p', { className: 'note' }, '测试页面，非运行中的 哪吒 Agent 会话。'))));
 }
 const title = (id) => document.getElementById(`title-${id}`);
 const mark = 'data-dsh-im-session-channel';

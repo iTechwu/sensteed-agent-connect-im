@@ -89,7 +89,7 @@ test('waits for a real title and preserves automatic source, citations, and orig
   const decorator = f.start();
   const session = f.add('host-generated-id', [message('weixin')]);
   await decorator.whenIdle();
-  assert.equal(session.writes.length, 0, 'must not seed a title before Harness generates it');
+  assert.equal(session.writes.length, 0, 'must not seed a title before Nezha Agent generates it');
   const original = titleEvent('自动标题');
   session.append(original.type, original.data);
   await decorator.whenIdle();

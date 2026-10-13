@@ -29,7 +29,7 @@ function clearErrorMessage(error) {
 }
 
 /**
- * Execute Host's argument-free /clear command without changing the dsh-im
+ * Execute Host's argument-free /clear command without changing the sensteed-im
  * Session binding. Hosts that do not register /clear return undefined and
  * are reported explicitly; the command never falls back to /new.
  */

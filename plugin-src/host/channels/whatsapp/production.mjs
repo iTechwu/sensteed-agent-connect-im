@@ -56,7 +56,7 @@ function pluginPaths(config) {
 export async function createProductionController(ctx, config = {}, internals = {}) {
   const connection = harnessConnection(ctx, config, { competitiveApprovals: true });
   const logger = typeof ctx.logger === 'function'
-    ? ctx.logger('dsh-im:whatsapp') : (ctx.logger ?? console);
+    ? ctx.logger('sensteed-im:whatsapp') : (ctx.logger ?? console);
   const agentPresetCatalog = () => listAgentPresetCatalog(ctx);
   const ConfigStore = internals.ConfigStore ?? WhatsappConfigStore;
   const StateStore = internals.StateStore ?? WhatsappStateStore;

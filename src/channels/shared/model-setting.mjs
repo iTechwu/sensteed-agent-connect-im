@@ -50,7 +50,7 @@ export function sameModelSelection(left, right) {
     && left?.reasoningEffort === right?.reasoningEffort;
 }
 
-// Harness may resolve an omitted effort to the model's default.
+// 哪吒 Agent may resolve an omitted effort to the model's default.
 export function confirmsModelSelection(actual, requested) {
   return actual?.provider === requested?.provider && actual?.model === requested?.model
     && (requested?.reasoningEffort === undefined

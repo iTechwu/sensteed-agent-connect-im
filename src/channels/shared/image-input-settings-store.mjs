@@ -51,10 +51,10 @@ export class ImageInputSettingsStore {
   }
 }
 
-/** One settings owner per DSH home, shared by the UI and channel Harness clients. */
+/** One settings owner per 哪吒 Agent home, shared by the UI and channel 哪吒 Agent clients. */
 export function getImageInputSettingsStore(config = {}) {
   const root = resolve(config.dshHome ?? process.env.DSH_HOME ?? join(homedir(), '.dsh'));
-  const path = join(root, 'integrations', 'dsh-im', 'image-input-settings.json');
+  const path = join(root, 'integrations', 'sensteed-im', 'image-input-settings.json');
   if (!stores.has(path)) stores.set(path, new ImageInputSettingsStore(path));
   return stores.get(path);
 }

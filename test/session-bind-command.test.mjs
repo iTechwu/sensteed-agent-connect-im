@@ -78,10 +78,10 @@ test('/session N maps position lookup failures to safe messages', async () => {
 
   const unavailable = await runWorkspaceCommand('/session 1', {
     currentWorkspace() { return process.cwd(); },
-    async listWorkspaceSessions() { throw new Error('private Harness detail'); },
+    async listWorkspaceSessions() { throw new Error('private Nezha Agent detail'); },
   }, 'direct:conversation-1');
   assert.match(unavailable.message, /暂时无法获取会话列表/);
-  assert.doesNotMatch(unavailable.message, /private Harness detail/);
+  assert.doesNotMatch(unavailable.message, /private Nezha Agent detail/);
 });
 
 test('/session strictly rejects missing, multiple, oversized, and unsafe IDs', async () => {

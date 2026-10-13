@@ -25,7 +25,7 @@ test('Telegram account card matches the unified compact card layout', () => {
       botId: 'telegram_test',
       connected: true,
       state: 'connected',
-      bot: { name: 'Harness Bot', username: 'harness_bot', idMasked: '123•••' },
+      bot: { name: 'Nezha Agent Bot', username: 'harness_bot', idMasked: '123•••' },
       health: { summary: 'Telegram Bot API 长轮询运行正常', lastCheckedAt: Date.now() },
       error: null,
     },

@@ -81,8 +81,8 @@ function EmptyView({ onStart, busy }) {
       h('div', { className: 'dim-emptyCopy' },
         h('div', { className: 'dxw-stateLabel dim-stateLabel' },
           h('span', { className: 'dxw-dot dim-stateDot' }), h('span', null, '尚未绑定微信')),
-        h('h3', null, '扫一次码，就能在微信里使用 Harness'),
-        h('p', null, '二维码由腾讯微信 iLink 服务签发。用手机微信扫描并确认后，账号凭据会直接写入 Harness Host，浏览器不会收到 bot_token。'),
+        h('h3', null, '扫一次码，就能在微信里使用 哪吒 Agent'),
+        h('p', null, '二维码由腾讯微信 iLink 服务签发。用手机微信扫描并确认后，账号凭据会直接写入 哪吒 Agent Host，浏览器不会收到 bot_token。'),
         h('div', { className: 'dxw-actions dim-viewActions' },
           h(Button, { kind: 'primary', onClick: onStart, disabled: busy },
             busy ? '正在生成二维码…' : '生成微信二维码')),
@@ -108,7 +108,7 @@ function QrPanel({ provision, now, busy, onRefresh, onCancel }) {
           source && !imageFailed
             ? h('img', {
                 src: source,
-                alt: '用于把微信机器人绑定到 DeepSeek Harness 的一次性二维码',
+                alt: '用于把微信机器人绑定到 哪吒 Agent 的一次性二维码',
                 onError: () => setImageFailed(true),
               })
             : h('div', { className: 'dxw-qrFallback dim-qrFallback' }, '二维码图片未就绪，请使用备用链接。'),
@@ -182,7 +182,7 @@ function ProgressPanel({ scanned, onCancel, busy }) {
   return h('div', { className: 'dxw-card dxw-loading dim-surfaceCard dim-loadingView', 'aria-busy': 'true' },
     h('div', { className: 'dxw-spinner dim-spinner' }),
     h('h3', null, scanned ? '微信已确认，正在启动消息连接' : '正在准备微信二维码'),
-    h('p', null, scanned ? '正在保存凭据并验证 Harness 与微信长轮询。' : '正在联系腾讯微信 iLink 服务。'),
+    h('p', null, scanned ? '正在保存凭据并验证 哪吒 Agent 与微信长轮询。' : '正在联系腾讯微信 iLink 服务。'),
     onCancel ? h('div', { className: 'dxw-actions dim-viewActions', style: { justifyContent: 'center', marginTop: 14 } },
       h(Button, { onClick: onCancel, disabled: busy }, '取消')) : null);
 }
@@ -299,7 +299,7 @@ export function AccountCard({
       ),
     ),
     removing ? h('div', { className: 'dxw-confirm dim-confirm', role: 'alertdialog' },
-      h('strong', null, '从此 Harness 移除这个微信账号？'),
+      h('strong', null, '从此 哪吒 Agent 移除这个微信账号？'),
       h('p', null, '这会停止消息连接，并删除本机保存的 bot_token、账号配置和会话映射。其他微信账号不受影响。'),
       h('div', { className: 'dxw-actions dim-viewActions' },
         h(Button, { onClick: onCancelRemove, disabled: busy === 'delete' }, '保留账号'),

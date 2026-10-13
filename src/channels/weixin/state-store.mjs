@@ -136,7 +136,7 @@ export class WeixinStateStore {
   patchDeferred(id, patch) { return this.#deferred.patch(id, patch); }
   removeDeferred(id) { return this.#deferred.remove(id); }
 
-  // Context belongs to this bot login, not to a Harness session or workspace.
+  // Context belongs to this bot login, not to a 哪吒 Agent session or workspace.
   async bindContextTokens(token) {
     const credentialHash = createHash('sha256').update(token).digest('hex');
     if (this.#state.contextTokens?.credentialHash === credentialHash) return;

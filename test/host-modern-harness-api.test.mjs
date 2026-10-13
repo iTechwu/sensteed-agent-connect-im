@@ -294,7 +294,7 @@ function sessionFixture(api, id = 'session') {
 function forEachSessionApi(interaction, run) {
   for (const sessionApi of ['snapshotEvents', 'events', 'both']) {
     test(
-      `modern adapter routes ${interaction} through ${sessionApi} only to the active dsh-im turn`,
+      `modern adapter routes ${interaction} through ${sessionApi} only to the active sensteed-im turn`,
       () => run(sessionApi),
     );
   }
@@ -503,7 +503,7 @@ test('modern adapter preserves gateway validation failures through message class
   });
 });
 
-test('modern adapter preserves Typert business failures as Harness RPC errors', async () => {
+test('modern adapter preserves Typert business failures as Nezha Agent RPC errors', async () => {
   const gateway = {
     async invoke() {
       const error = new Error('missing');
@@ -530,7 +530,7 @@ test('modern adapter preserves Typert business failures as Harness RPC errors', 
   );
 });
 
-test('modern adapter preserves direct DSH RemoteErrors through message classification', async () => {
+test('modern adapter preserves direct Nezha Agent RemoteErrors through message classification', async () => {
   const sourceError = Object.assign(new Error('preset "removed" not found'), {
     name: 'RemoteError',
     isDSHRemoteError: true,
@@ -564,7 +564,7 @@ test('modern adapter keeps unmarked internal errors internal', async () => {
   });
 });
 
-test('modern adapter retains safe transport evidence through Harness RPC and message classification', async () => {
+test('modern adapter retains safe transport evidence through Nezha Agent RPC and message classification', async () => {
   for (const [sourceError, expected] of [
     [new DOMException('private timeout detail', 'TimeoutError'), 'REQUEST_TIMEOUT'],
     [new TypeError('private URL and token', { cause: new AggregateError([
@@ -593,7 +593,7 @@ test('modern adapter retains safe transport evidence through Harness RPC and mes
   }
 });
 
-test('modern adapter exposes DSH v2 live assistant chunks through legacy history', async () => {
+test('modern adapter exposes Nezha Agent v2 live assistant chunks through legacy history', async () => {
   const records = [
     {
       type: 'event',

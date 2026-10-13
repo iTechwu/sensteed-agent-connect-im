@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Persistent local DSH-IM sidebar integration for Deepseek Harness Desktop",
+  "description": "Persistent local sensteed-im sidebar integration for Nezha Agent Desktop",
   "main": "./host.js",
   "exports": {
     ".": "./host.js",
@@ -17,7 +17,7 @@
     "client": {
       "platform": "web",
       "inject": [
-        "@xmanrui/dsh-im",
+        "sensteed-im",
         "dsh-tauri"
       ]
     }

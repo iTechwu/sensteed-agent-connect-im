@@ -2,9 +2,9 @@
 export default {
   // Bot chat replies and card text (dingtalk-bridge.mjs, dingtalk-card-stream.mjs,
   // dingtalk-api.mjs)
-  '已连接 DeepSeek Harness，正在思考…': 'Connected to DeepSeek Harness, thinking…',
+  '已连接 哪吒 Agent，正在思考…': 'Connected to Nezha Agent, thinking…',
 
-  '钉钉机器人已连接 DeepSeek Harness。': 'The DingTalk bot is connected to DeepSeek Harness.',
+  '钉钉机器人已连接 哪吒 Agent。': 'The DingTalk bot is connected to Nezha Agent.',
   '/m 或 /menu  打开下拉操作菜单': '/m or /menu  Open the dropdown action menu',
   '会话或工作区已变化，请重新发送 /m。': 'The session or workspace changed. Send /m again.',
   '会话或工作区已变化，菜单已刷新，请重新选择。': 'The session or workspace changed. The menu was refreshed; please select again.',
@@ -26,7 +26,7 @@ export default {
 
   '结果文件「{name}」已生成，但暂时未能通过钉钉发送，请稍后重试。': 'Result file "{name}" was generated but could not be sent via DingTalk right now. Please try again later.',
   '结果文件已生成。': 'The result file has been generated.',
-  '钉钉机器人与 DeepSeek Harness 连接正常。': 'The DingTalk bot is connected to DeepSeek Harness normally.',
+  '钉钉机器人与 哪吒 Agent 连接正常。': 'The DingTalk bot is connected to Nezha Agent normally.',
 
 
 
@@ -45,11 +45,11 @@ export default {
   '钉钉连接未就绪，请稍后重试。': 'The DingTalk connection is not ready. Please try again later.',
   '钉钉连接仍未就绪，请稍后重试。': 'The DingTalk connection is still not ready. Please try again later.',
   '钉钉 Stream 连接失败：检测到代理依赖 agent-base 6.0.0。': 'The DingTalk Stream connection failed because proxy dependency agent-base 6.0.0 was detected.',
-  '请将 DSH profile 中的 agent-base@6 固定为 6.0.2 后重新安装依赖，或升级 pnpm 后重新解析 lockfile。': 'Pin agent-base@6 to 6.0.2 in the DSH profile and reinstall dependencies, or upgrade pnpm and re-resolve the lockfile.',
-  '插件无法连接本机 Harness。': 'The plugin could not connect to the local Harness.',
+  '请将 哪吒 Agent profile 中的 agent-base@6 固定为 6.0.2 后重新安装依赖，或升级 pnpm 后重新解析 lockfile。': 'Pin agent-base@6 to 6.0.2 in the Nezha Agent profile and reinstall dependencies, or upgrade pnpm and re-resolve the lockfile.',
+  '插件无法连接本机 哪吒 Agent。': 'The plugin could not connect to the local Nezha Agent.',
   '请确认 dsh web 正常运行，并查看 dsh web 日志中相同参考号对应的诊断信息。': 'Make sure dsh web is running, then find the matching reference in the dsh web log.',
   '钉钉 Stream SDK 加载失败。': 'The DingTalk Stream SDK could not be loaded.',
-  '请重新安装当前 DSH profile 的插件依赖，并查看 dsh web 日志中相同参考号对应的诊断信息。': 'Reinstall plugin dependencies in the current DSH profile, then find the matching reference in the dsh web log.',
+  '请重新安装当前 哪吒 Agent profile 的插件依赖，并查看 dsh web 日志中相同参考号对应的诊断信息。': 'Reinstall plugin dependencies in the current Nezha Agent profile, then find the matching reference in the dsh web log.',
   '钉钉拒绝了当前应用凭据。': 'DingTalk rejected the current app credentials.',
   '请核对 Client ID、Client Secret 和机器人权限后重试。': 'Verify the app credentials and bot permissions, then try again.',
   '连接钉钉 Stream 超时。': 'The DingTalk Stream connection timed out.',
@@ -63,9 +63,9 @@ export default {
   '钉钉 Stream 消息连接建立失败。': 'The DingTalk Stream message connection could not be established.',
   '请检查网络和机器人配置；详细原因可在 dsh web 日志中按参考号查找。': 'Check the network and bot configuration. Find details in the dsh web log using the reference.',
   '钉钉 Stream 消息监听初始化失败。': 'DingTalk Stream message-listener initialization failed.',
-  '请确认 dsh-im 与 dingtalk-stream 版本兼容，并按参考号查看 dsh web 日志。': 'Make sure dsh-im and dingtalk-stream are compatible, then inspect the dsh web log using the reference.',
+  '请确认 sensteed-im 与 dingtalk-stream 版本兼容，并按参考号查看 dsh web 日志。': 'Make sure sensteed-im and dingtalk-stream are compatible, then inspect the dsh web log using the reference.',
   '钉钉机器人运行环境初始化失败。': 'The DingTalk bot runtime could not be initialized.',
-  '请检查 DSH 数据目录、工作区和插件依赖，并按参考号查看 dsh web 日志。': 'Check the DSH data directory, workspace, and plugin dependencies, then inspect the dsh web log using the reference.',
+  '请检查 哪吒 Agent 数据目录、工作区和插件依赖，并按参考号查看 dsh web 日志。': 'Check the Nezha Agent data directory, workspace, and plugin dependencies, then inspect the dsh web log using the reference.',
   '请在 dsh web 日志中查找相同参考号，以获取已脱敏的具体错误。': 'Find the matching reference in the dsh web log for the redacted error details.',
   '扫码接入已取消。': 'QR code setup has been cancelled.',
   '无法生成钉钉二维码，请稍后重试。': 'Could not generate the DingTalk QR code. Please try again later.',

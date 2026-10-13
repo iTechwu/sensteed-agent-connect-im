@@ -208,7 +208,7 @@ test('#65 activates a real Cordis consumer without crossing the Connection RPC',
   assert.equal(rpcCalls.length, 0);
 });
 
-test('Host waits for modern Harness Controllers', async () => {
+test('Host waits for modern Nezha Agent Controllers', async () => {
   for (const [modern, expected] of [
     [true, ['sessionController', 'workspaceController']],
   ]) {

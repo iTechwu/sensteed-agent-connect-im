@@ -45,13 +45,13 @@ function normalizeSettings(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)
     || !value.agentPresetCatalog || typeof value.agentPresetCatalog !== 'object'
     || !Array.isArray(value.agentPresetCatalog.items)) {
-    throw new TypeError('Harness returned invalid Agent Preset settings');
+    throw new TypeError('哪吒 Agent returned invalid Agent Preset settings');
   }
   const agentPreset = value.agentPreset === null
     ? null
     : normalizeAgentPresetId(value.agentPreset);
   if (value.agentPreset !== null && agentPreset === null) {
-    throw new TypeError('Harness returned an invalid current Agent Preset');
+    throw new TypeError('哪吒 Agent returned an invalid current Agent Preset');
   }
   return {
     agentPreset,
@@ -185,14 +185,14 @@ function presetErrorMessage(error, action) {
 
 async function settings(harness, options) {
   if (typeof harness?.agentPresetSettings !== 'function') {
-    throw new TypeError('Harness does not support Agent Preset settings');
+    throw new TypeError('哪吒 Agent does not support Agent Preset settings');
   }
   return normalizeSettings(await harness.agentPresetSettings(options));
 }
 
 async function update(harness, value, options) {
   if (typeof harness?.updateAgentPreset !== 'function') {
-    throw new TypeError('Harness does not support updating Agent Preset settings');
+    throw new TypeError('哪吒 Agent does not support updating Agent Preset settings');
   }
   return normalizeSettings(await harness.updateAgentPreset(value, options));
 }

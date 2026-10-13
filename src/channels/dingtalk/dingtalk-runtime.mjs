@@ -169,7 +169,7 @@ export class DingtalkRuntime {
     if (!config || !nonEmptyString(config.clientId) || !nonEmptyString(clientSecret)) {
       throw new TypeError('DingtalkRuntime requires app credentials');
     }
-    if (!harness || !state) throw new TypeError('DingtalkRuntime requires Harness and state');
+    if (!harness || !state) throw new TypeError('DingtalkRuntime requires 哪吒 Agent and state');
     if (typeof streamFactory !== 'function') throw new TypeError('streamFactory must be a function');
     this.#config = config;
     this.#clientSecret = clientSecret.trim();

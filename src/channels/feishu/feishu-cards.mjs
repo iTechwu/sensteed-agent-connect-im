@@ -1,5 +1,5 @@
 /**
- * Feishu interactive-card builders for the dsh-im menu / session-list /
+ * Feishu interactive-card builders for the sensteed-im menu / session-list /
  * workspace-list UX. All builders return the JSON string the
  * `im.message.create` API expects as `content` for `msg_type: interactive`
  * (card schema 2.0; callback buttons live inside a column_set/column layout).

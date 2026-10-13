@@ -119,12 +119,12 @@ test('web keeps its one bilingual settings entry, including hosts without provid
     const host = start(t, { provide });
     assert.equal(host.entries.size, 1);
     const { options, component } = [...host.entries][0];
-    assert.equal(options.id, 'xmanrui-dsh-im');
+    assert.equal(options.id, 'sensteed-im');
     assert.equal(options.order, 21);
     assert.equal(options.label(), 'IM机器人');
     assert.equal(options.locale, 'dsh-im');
     const markup = renderToStaticMarkup(React.createElement(component));
-    assert.match(markup, /DSH-IM/);
+    assert.match(markup, /sensteed-im/);
     assert.match(markup, /id="dim-panel-weixin"/);
     assert.equal(Boolean(host.service), provide);
     if (provide) {
@@ -238,8 +238,8 @@ test('render returns fresh elements of a stable type without changing settings o
 
 test('preferred section is initial-only, invalid sections retain the web default', (t) => {
   const host = start(t);
-  for (const id of ['weixin', 'feishu', 'dingtalk', 'wecom', 'wecomApp', 'qq', 'slack',
-    'telegram', 'discord', 'whatsapp', 'imessage', 'matrix', 'office', 'global-settings', 'unknown', undefined]) {
+  for (const id of ['weixin', 'feishu', 'dingtalk', 'wecom', 'wecomApp', 'qq',
+    'matrix', 'office', 'global-settings', 'unknown', undefined]) {
     const markup = renderToStaticMarkup(host.service.render({ preferredSectionId: id }));
     const expected = !id || id === 'unknown' ? 'weixin' : id;
     assert.ok(markup.includes(`id="dim-panel-${expected}"`), String(id));

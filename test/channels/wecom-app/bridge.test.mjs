@@ -118,7 +118,7 @@ test('stream answer is not duplicated over the API when the client refreshed', a
   await rm(root, { recursive: true, force: true });
 });
 
-test('the /help command replies through the API without touching Harness', async () => {
+test('the /help command replies through the API without touching Nezha Agent', async () => {
   const { root, state } = await stateFixture();
   const sends = [];
   let askCalls = 0;
@@ -160,7 +160,7 @@ test('welcome events are sent as plain text', async () => {
   await rm(root, { recursive: true, force: true });
 });
 
-test('rejected senders never reach Harness and never get replies', async () => {
+test('rejected senders never reach Nezha Agent and never get replies', async () => {
   const { root, state } = await stateFixture();
   const sends = [];
   let asked = false;

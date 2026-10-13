@@ -136,7 +136,7 @@ test('Enterprise WeChat runtime stop cancels an in-flight authentication wait', 
   assert.equal(runtime.status.wecomConnectionState, 'idle');
 });
 
-test('Enterprise WeChat runtime aborts an in-flight Harness interaction when stopped', async () => {
+test('Enterprise WeChat runtime aborts an in-flight Nezha Agent interaction when stopped', async () => {
   const client = new FakeClient();
   const askStarted = deferred();
   let askSignal;

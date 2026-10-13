@@ -293,7 +293,7 @@ test('explicit baseUrl still selects the existing HTTP transport', async () => {
   assert.equal(requests, 1);
 });
 
-test('Session rename uses the public Harness RPC and validates local input', async () => {
+test('Session rename uses the public Nezha Agent RPC and validates local input', async () => {
   const calls = [];
   const success = (rpcId, value) => ({ rpcId, result: { ok: true, value } });
   const client = localClient({

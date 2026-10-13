@@ -3,7 +3,7 @@
  * which order.
  *
  * The panel is stored server-side per Feishu app and is NOT pushed by
- * dsh/Harness, so dsh-im holds a manifest and registers it through
+ * dsh/哪吒 Agent, so sensteed-im holds a manifest and registers it through
  * `slash-command-registry.mjs`. This module owns that manifest plus the per-bot
  * configuration that narrows and orders it.
  *
@@ -17,7 +17,7 @@
 export const DEFAULT_SLASH_COMMAND_ICON = 'ai-agent_outlined';
 
 /**
- * The dsh-im Feishu command manifest. Every entry's `command` is registered
+ * The sensteed-im Feishu command manifest. Every entry's `command` is registered
  * WITHOUT the leading slash; Feishu displays it as "/<command>" in the panel
  * and sends "/<command>" back as text, which matches the bridge's regexes.
  *

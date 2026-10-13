@@ -65,7 +65,7 @@ export async function sendMarkdownReply(bot, target, text, { logger, signal, req
         (firstMsgSeq + chunks.length) & 0xFFFF,
       ));
     } catch (error) {
-      logger?.warn?.('[dsh-im:qq] unable to send partial reply notice:', error);
+      logger?.warn?.('[sensteed-im:qq] unable to send partial reply notice:', error);
     }
   };
 
@@ -87,14 +87,14 @@ export async function sendMarkdownReply(bot, target, text, { logger, signal, req
       } catch (error) {
         if (!isMarkdownRejection(error)) {
           logger?.warn?.(
-            '[dsh-im:qq] markdown delivery outcome is uncertain; refusing a duplicate-prone retry:',
+            '[sensteed-im:qq] markdown delivery outcome is uncertain; refusing a duplicate-prone retry:',
             error,
           );
           if (requireComplete || results.length === 0) throw error;
           await sendPartialNotice();
           break;
         }
-        logger?.warn?.('[dsh-im:qq] markdown delivery failed; retrying as plain text:', error);
+        logger?.warn?.('[sensteed-im:qq] markdown delivery failed; retrying as plain text:', error);
       }
     }
     // Synthetic Markdown can represent an empty fenced-code body even though

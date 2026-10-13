@@ -93,7 +93,7 @@ export class EmailController {
       'imap-smtp': (options) => new ImapSmtpTransport(options),
       'agent-mail': (options) => new AgentMailTransport(options),
     },
-    // Host-owned hook: the mailbox allowlist and the Harness access policy are
+    // Host-owned hook: the mailbox allowlist and the 哪吒 Agent access policy are
     // two separate stores, so a changed allowlist must be pushed into the
     // policy or the channel keeps rejecting the new senders.
     syncAccessPolicy = null,
@@ -110,7 +110,7 @@ export class EmailController {
   }) {
     if (!credentials || typeof credentials.resolve !== 'function'
       || typeof credentials.set !== 'function' || typeof credentials.unset !== 'function') {
-      throw new TypeError('EmailController requires the DSH credential provider');
+      throw new TypeError('EmailController requires the 哪吒 Agent credential provider');
     }
     if (!configStore || typeof configStore.list !== 'function'
       || typeof configStore.save !== 'function' || typeof configStore.remove !== 'function') {
@@ -152,7 +152,7 @@ export class EmailController {
           this.#errors.delete(config.botId);
         } catch (error) {
           this.#errors.set(config.botId, this.#safeError('connection-failed', error));
-          this.#logger.warn?.(`[dsh-im:email] bot ${config.botId} failed to start:`, extractConnectionEvidence(error).details);
+          this.#logger.warn?.(`[sensteed-im:email] bot ${config.botId} failed to start:`, extractConnectionEvidence(error).details);
         }
       });
     }
@@ -251,7 +251,7 @@ export class EmailController {
         // "workspace-bot-not-found", leaving the config on disk with no runtime
         // and no policy.
         await this.#ensureBotWorkspace(identity.botId, config);
-        // The allowlist has to reach the Harness now, not only when the settings
+        // The allowlist has to reach the 哪吒 Agent now, not only when the settings
         // are edited later: without it a freshly bound mailbox admits nobody, so
         // its first mail is refused for the wrong reason.
         await this.#applyAllowlistToPolicy(identity.botId, config);
@@ -443,7 +443,7 @@ export class EmailController {
 
   /**
    * Replace the bindings. An empty value clears them, which restores the
-   * default behaviour of one Harness session per mail thread.
+   * default behaviour of one 哪吒 Agent session per mail thread.
    */
   async setSessionBinding(botId, value = {}) {
     this.#requireConfig(botId);
@@ -523,7 +523,7 @@ export class EmailController {
   // ── internals ────────────────────────────────────────────────────────────
 
   /**
-   * Build the Harness access policy for a mailbox: both scopes are allowlists
+   * Build the 哪吒 Agent access policy for a mailbox: both scopes are allowlists
    * seeded from the configured senders, so mail from anyone else is refused.
    */
   #accessPolicyFor(config) {
@@ -553,7 +553,7 @@ export class EmailController {
     try {
       await this.#ensureWorkspace(botId, config);
     } catch (error) {
-      this.#logger.warn?.('[dsh-im:email] failed to prepare the bot workspace:', extractConnectionEvidence(error).details);
+      this.#logger.warn?.('[sensteed-im:email] failed to prepare the bot workspace:', extractConnectionEvidence(error).details);
       throw new Error(t('邮箱访问策略同步失败，请重试'));
     }
   }
@@ -576,11 +576,11 @@ export class EmailController {
     } catch (error) {
       // The bind failure is the error the user needs to see; a rollback that
       // could not complete is reported alongside it rather than replacing it.
-      this.#logger.warn?.('[dsh-im:email] failed to roll back the mailbox config:', extractConnectionEvidence(error).details);
+      this.#logger.warn?.('[sensteed-im:email] failed to roll back the mailbox config:', extractConnectionEvidence(error).details);
     }
   }
 
-  /** Push the mailbox allowlist into the Harness access policy. */
+  /** Push the mailbox allowlist into the 哪吒 Agent access policy. */
   async #applyAllowlistToPolicy(botId, config) {
     if (!this.#syncAccessPolicy) return;
     try {
@@ -588,7 +588,7 @@ export class EmailController {
     } catch (error) {
       // The mailbox itself is already saved and connected; a policy push
       // failure must not undo that, but it is surfaced for diagnosis.
-      this.#logger.warn?.('[dsh-im:email] failed to sync the access policy:', extractConnectionEvidence(error).details);
+      this.#logger.warn?.('[sensteed-im:email] failed to sync the access policy:', extractConnectionEvidence(error).details);
       throw new Error(t('邮箱访问策略同步失败，请重试'));
     }
   }
@@ -673,7 +673,7 @@ export class EmailController {
     const runtime = this.#runtimes.get(botId);
     this.#runtimes.delete(botId);
     await runtime?.stop().catch((error) => {
-      this.#logger.warn?.(`[dsh-im:email] bot ${botId} failed to stop cleanly:`, extractConnectionEvidence(error).details);
+      this.#logger.warn?.(`[sensteed-im:email] bot ${botId} failed to stop cleanly:`, extractConnectionEvidence(error).details);
     });
   }
 
@@ -742,7 +742,7 @@ export class EmailController {
     try {
       identity = await fetchAgentMailIdentity({ workspace: pending.workspace });
     } catch (error) {
-      this.#logger.warn?.('[dsh-im:email] unable to resolve the mailbox identity:', extractConnectionEvidence(error).details);
+      this.#logger.warn?.('[sensteed-im:email] unable to resolve the mailbox identity:', extractConnectionEvidence(error).details);
     }
     return {
       status: 'authorized',

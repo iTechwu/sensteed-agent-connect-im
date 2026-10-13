@@ -227,7 +227,7 @@ export class TextHarnessBridge {
   }) {
     if (!descriptor?.key || !descriptor?.label) throw new TypeError('A channel descriptor is required');
     if (!bot || typeof bot.sendText !== 'function') throw new TypeError('A bot client is required');
-    if (!harness || !state) throw new TypeError('Harness client and state store are required');
+    if (!harness || !state) throw new TypeError('哪吒 Agent client and state store are required');
     this.#descriptor = descriptor;
     this.#bot = bot;
     this.#harness = harness;
@@ -668,7 +668,7 @@ export class TextHarnessBridge {
       void Promise.resolve(this.#contextHooks.onSteered({ conversationKey: key, messageId }))
         .catch((error) => {
           this.#logger.warn?.(
-            `[dsh-im:${this.#descriptor.key}] could not retire a steered follow-up from the ambient window:`,
+            `[sensteed-im:${this.#descriptor.key}] could not retire a steered follow-up from the ambient window:`,
             error?.message ?? error,
           );
         });
@@ -732,7 +732,7 @@ export class TextHarnessBridge {
       this.#status.lastError = error?.message ?? String(error);
       const failure = setLastMessageFailure(this.#status, error);
       this.#logger.error?.(
-        `[dsh-im:${this.#descriptor.key}] failed to process a batch input message [${failure.referenceId}]:`,
+        `[sensteed-im:${this.#descriptor.key}] failed to process a batch input message [${failure.referenceId}]:`,
         messageFailureDiagnostic(error, failure),
       );
     }).finally(() => {
@@ -849,7 +849,7 @@ export class TextHarnessBridge {
       this.#status.lastError = error?.message ?? String(error);
       const failure = setLastMessageFailure(this.#status, error);
       this.#logger.error?.(
-        `[dsh-im:${this.#descriptor.key}] failed to process a command [${failure.referenceId}]:`,
+        `[sensteed-im:${this.#descriptor.key}] failed to process a command [${failure.referenceId}]:`,
         messageFailureDiagnostic(error, failure),
       );
       await this.#bot.sendText(target, messageFailureText(failure)).catch(() => undefined);
@@ -952,7 +952,7 @@ export class TextHarnessBridge {
       const command = text.toLowerCase();
       if (!hasImages && !hasFiles && command === '/help') {
         await this.#bot.sendText(target, [
-          t('{label}机器人已连接 DeepSeek Harness。', { label: this.#descriptor.label }),
+          t('{label}机器人已连接 哪吒 Agent。', { label: this.#descriptor.label }),
           '',
           t('直接发送文字、图片或文件即可继续当前会话。'),
           ...commandHelpLines(this.#descriptor.key),
@@ -961,7 +961,7 @@ export class TextHarnessBridge {
       }
       if (!hasImages && !hasFiles && command === '/status') {
         await this.#harness.ensureRunning({ signal: this.#signal });
-        await this.#bot.sendText(target, t('{label}机器人与 DeepSeek Harness 连接正常。', { label: this.#descriptor.label }));
+        await this.#bot.sendText(target, t('{label}机器人与 哪吒 Agent 连接正常。', { label: this.#descriptor.label }));
         return;
       }
       const workspaceCommand = !hasImages && !hasFiles
@@ -980,7 +980,7 @@ export class TextHarnessBridge {
             await this.#contextHooks.onSessionCleared(conversationKey);
           } catch (error) {
             // The cleared session is already done; a failed context reset must not block the command.
-            this.#logger.warn?.(`[dsh-im:${this.#descriptor.key}] failed to reset context anchors after /new:`, error?.message ?? error);
+            this.#logger.warn?.(`[sensteed-im:${this.#descriptor.key}] failed to reset context anchors after /new:`, error?.message ?? error);
           }
         }
         await this.#bot.sendText(target, t('已开启新会话。请发送你的问题。'));
@@ -1001,7 +1001,7 @@ export class TextHarnessBridge {
       }
 
       await this.#bot.sendTyping?.(target).catch((error) => {
-        this.#logger.warn?.(`[dsh-im:${this.#descriptor.key}] typing indicator failed:`, error);
+        this.#logger.warn?.(`[sensteed-im:${this.#descriptor.key}] typing indicator failed:`, error);
       });
       let streamFinished = false;
       if (this.#thinkingTraces && typeof this.#bot.openThinkingStream === 'function') {
@@ -1011,7 +1011,7 @@ export class TextHarnessBridge {
         } catch (error) {
           stream = null;
           this.#logger.warn?.(
-            `[dsh-im:${this.#descriptor.key}] unable to start a thinking stream; using final delivery:`,
+            `[sensteed-im:${this.#descriptor.key}] unable to start a thinking stream; using final delivery:`,
             error,
           );
         }
@@ -1023,7 +1023,7 @@ export class TextHarnessBridge {
             semanticStream = true;
           } catch (error) {
             this.#logger.warn?.(
-              `[dsh-im:${this.#descriptor.key}] unable to start a semantic reply stream; using final delivery:`,
+              `[sensteed-im:${this.#descriptor.key}] unable to start a semantic reply stream; using final delivery:`,
               error,
             );
           }
@@ -1032,7 +1032,7 @@ export class TextHarnessBridge {
             stream = await this.#bot.openStream(this.#turnDeliveryTarget(target, conversationKey));
           } catch (error) {
             this.#logger.warn?.(
-              `[dsh-im:${this.#descriptor.key}] unable to start a streamed reply; using text:`,
+              `[sensteed-im:${this.#descriptor.key}] unable to start a streamed reply; using text:`,
               error,
             );
           }
@@ -1088,7 +1088,7 @@ export class TextHarnessBridge {
           }
         } catch (error) {
           // Context is an enhancement: a collector failure must not lose the user's own turn.
-          this.#logger.warn?.(`[dsh-im:${this.#descriptor.key}] context collection failed; prompting without context:`, error?.message ?? error);
+          this.#logger.warn?.(`[sensteed-im:${this.#descriptor.key}] context collection failed; prompting without context:`, error?.message ?? error);
         }
       }
       // Start the keepalive only after the inbound payload is ready, so a
@@ -1189,7 +1189,7 @@ export class TextHarnessBridge {
         try {
           await this.#contextHooks.onConsumed({ conversationKey, sessionId, entries: contextEntries });
         } catch (error) {
-          this.#logger.warn?.(`[dsh-im:${this.#descriptor.key}] context consumption marking failed:`, error?.message ?? error);
+          this.#logger.warn?.(`[sensteed-im:${this.#descriptor.key}] context consumption marking failed:`, error?.message ?? error);
         }
       }
       const fileOnlyCompletion = !cleanText(answer) && artifacts.length > 0;
@@ -1220,7 +1220,7 @@ export class TextHarnessBridge {
         } catch (error) {
           stream.cancel?.();
           this.#logger.warn?.(
-            `[dsh-im:${this.#descriptor.key}] streamed reply finalization failed; using text:`,
+            `[sensteed-im:${this.#descriptor.key}] streamed reply finalization failed; using text:`,
             error,
           );
         }
@@ -1288,7 +1288,7 @@ export class TextHarnessBridge {
             await this.#contextHooks.onDelivered({ conversationKey, sessionId, providerMessageIds: deliveredEventIds });
           } catch (error) {
             // A missing binding only costs reply classification quality for these events; the answer itself reached the room.
-            this.#logger.warn?.(`[dsh-im:${this.#descriptor.key}] bot event binding recording failed:`, error?.message ?? error);
+            this.#logger.warn?.(`[sensteed-im:${this.#descriptor.key}] bot event binding recording failed:`, error?.message ?? error);
           }
         }
       }
@@ -1332,7 +1332,7 @@ export class TextHarnessBridge {
             : result !== false && result?.deliveryOutcome !== 'failed';
         } catch (streamError) {
           this.#logger.warn?.(
-            `[dsh-im:${this.#descriptor.key}] unable to finalize the failed stream:`,
+            `[sensteed-im:${this.#descriptor.key}] unable to finalize the failed stream:`,
             streamError,
           );
           return false;
@@ -1348,7 +1348,7 @@ export class TextHarnessBridge {
         ? `${messageFailureText(failure)}\n\n${failedBatch.message}`
         : messageFailureText(failure);
       this.#logger.error?.(
-        `[dsh-im:${this.#descriptor.key}] failed to process a message [${failure.referenceId}]:`,
+        `[sensteed-im:${this.#descriptor.key}] failed to process a message [${failure.referenceId}]:`,
         messageFailureDiagnostic(error, failure),
       );
       if (await presentStreamFailure(failureText)) {
@@ -1359,7 +1359,7 @@ export class TextHarnessBridge {
         await this.#bot.sendText(target, failureText);
       } catch (sendError) {
         this.#logger.error?.(
-          `[dsh-im:${this.#descriptor.key}] failed to send the safe error reply:`,
+          `[sensteed-im:${this.#descriptor.key}] failed to send the safe error reply:`,
           sendError,
         );
       }
@@ -1385,7 +1385,7 @@ export class TextHarnessBridge {
    *
    * Bounded: a message is retried at most `MAX_DELIVERY_ATTEMPTS` times, after
    * which the mark stays and the id becomes a tombstone. That keeps a mail that
-   * always fails from being re-executed forever, while a transient Harness
+   * always fails from being re-executed forever, while a transient 哪吒 Agent
    * outage no longer drops it permanently.
    *
    * Returns true when the message was released and will be retried.
@@ -1397,7 +1397,7 @@ export class TextHarnessBridge {
       // it. The sender has already been told the turn failed.
       this.#deliveryAttempts.delete(messageId);
       this.#logger.warn?.(
-        `[dsh-im:${this.#descriptor.key}] giving up on a message after `
+        `[sensteed-im:${this.#descriptor.key}] giving up on a message after `
         + `${attempts} failed delivery attempts; it will not be retried.`,
       );
       return false;
@@ -1409,7 +1409,7 @@ export class TextHarnessBridge {
       return true;
     } catch (error) {
       this.#logger.warn?.(
-        `[dsh-im:${this.#descriptor.key}] unable to release a failed message for retry:`,
+        `[sensteed-im:${this.#descriptor.key}] unable to release a failed message for retry:`,
         error,
       );
       return false;
@@ -1464,7 +1464,7 @@ export class TextHarnessBridge {
         await this.#bot.sendText(target, t('请用文字回答当前问题。'));
       } catch (error) {
         this.#logger.error?.(
-          `[dsh-im:${this.#descriptor.key}] failed to reject a non-text interaction reply:`,
+          `[sensteed-im:${this.#descriptor.key}] failed to reject a non-text interaction reply:`,
           error,
         );
       }
@@ -1492,7 +1492,7 @@ export class TextHarnessBridge {
         message.statusReaction?.error();
         this.#status.lastError = t('{label}交互问题发送失败。', { label: this.#descriptor.label });
         this.#logger.error?.(
-          `[dsh-im:${this.#descriptor.key}] failed to retry an interaction question:`,
+          `[sensteed-im:${this.#descriptor.key}] failed to retry an interaction question:`,
           error,
         );
         pending.interaction.reconnect?.();
@@ -1539,7 +1539,7 @@ export class TextHarnessBridge {
         message.statusReaction?.error();
         this.#status.lastError = t('{label}交互问题发送失败。', { label: this.#descriptor.label });
         this.#logger.error?.(
-          `[dsh-im:${this.#descriptor.key}] failed to send the next interaction question:`,
+          `[sensteed-im:${this.#descriptor.key}] failed to send the next interaction question:`,
           error,
         );
         pending.interaction.reconnect?.();
@@ -1569,7 +1569,7 @@ export class TextHarnessBridge {
           await this.#bot.sendText(target, t(INTERACTION_RESOLVED_TEXT));
         } catch (sendError) {
           this.#logger.error?.(
-            `[dsh-im:${this.#descriptor.key}] failed to send an expired interaction notice:`,
+            `[sensteed-im:${this.#descriptor.key}] failed to send an expired interaction notice:`,
             sendError,
           );
         }
@@ -1589,14 +1589,14 @@ export class TextHarnessBridge {
       pending.index -= 1;
       this.#status.lastError = t('回答提交失败。');
       this.#logger.error?.(
-        `[dsh-im:${this.#descriptor.key}] failed to answer a Harness interaction:`,
+        `[sensteed-im:${this.#descriptor.key}] failed to answer a 哪吒 Agent interaction:`,
         error,
       );
       try {
         await this.#bot.sendText(target, t('回答提交失败，请重新发送当前问题的答案。'));
       } catch (sendError) {
         this.#logger.error?.(
-          `[dsh-im:${this.#descriptor.key}] failed to send an interaction retry notice:`,
+          `[sensteed-im:${this.#descriptor.key}] failed to send an interaction retry notice:`,
           sendError,
         );
       }
@@ -1610,7 +1610,7 @@ export class TextHarnessBridge {
       await this.#bot.answerInteractionCallback(callback.callbackQueryId, text);
     } catch (error) {
       this.#logger.warn?.(
-        `[dsh-im:${this.#descriptor.key}] could not acknowledge a button press:`,
+        `[sensteed-im:${this.#descriptor.key}] could not acknowledge a button press:`,
         error?.message ?? error,
       );
     }
@@ -1625,7 +1625,7 @@ export class TextHarnessBridge {
       });
     } catch (error) {
       this.#logger.warn?.(
-        `[dsh-im:${this.#descriptor.key}] could not retire an interaction card:`,
+        `[sensteed-im:${this.#descriptor.key}] could not retire an interaction card:`,
         error?.message ?? error,
       );
     }
@@ -1702,7 +1702,7 @@ export class TextHarnessBridge {
       { resolveAnswer: (current) => ({ id: current.id, selected: [option.label] }) },
     ).catch((error) => {
       this.#logger.error?.(
-        `[dsh-im:${this.#descriptor.key}] failed to submit a card answer:`,
+        `[sensteed-im:${this.#descriptor.key}] failed to submit a card answer:`,
         error,
       );
     }).finally(() => {
@@ -1741,7 +1741,7 @@ export class TextHarnessBridge {
       || questions.length === 0
       || questions.some((question) => !validHarnessQuestion(question))) {
       this.#logger.warn?.(
-        `[dsh-im:${this.#descriptor.key}] ignored an invalid Harness question interaction`,
+        `[sensteed-im:${this.#descriptor.key}] ignored an invalid 哪吒 Agent question interaction`,
       );
       return;
     }
@@ -1758,7 +1758,7 @@ export class TextHarnessBridge {
         );
       } catch (error) {
         this.#logger.error?.(
-          `[dsh-im:${this.#descriptor.key}] failed to send an interaction recovery notice:`,
+          `[sensteed-im:${this.#descriptor.key}] failed to send an interaction recovery notice:`,
           error,
         );
       }
@@ -1774,7 +1774,7 @@ export class TextHarnessBridge {
     if (this.#interactionKeys.has(interactionId)) return;
     if (existing) {
       this.#logger.warn?.(
-        `[dsh-im:${this.#descriptor.key}] cancelled a second pending Harness question`,
+        `[sensteed-im:${this.#descriptor.key}] cancelled a second pending 哪吒 Agent question`,
       );
       await this.#respondCancellation(
         interaction,
@@ -1837,7 +1837,7 @@ export class TextHarnessBridge {
       });
     } catch (error) {
       this.#logger.warn?.(
-        `[dsh-im:${this.#descriptor.key}] interaction card renderer failed:`,
+        `[sensteed-im:${this.#descriptor.key}] interaction card renderer failed:`,
         error,
       );
       return null;
@@ -1869,7 +1869,7 @@ export class TextHarnessBridge {
           // fall through to the plain-text flow this channel already had.
           pending.cardMessageId = null;
           this.#logger.warn?.(
-            `[dsh-im:${this.#descriptor.key}] could not deliver an interaction card; `
+            `[sensteed-im:${this.#descriptor.key}] could not deliver an interaction card; `
               + 'falling back to plain text:',
             error?.message ?? error,
           );
@@ -1911,7 +1911,7 @@ export class TextHarnessBridge {
       await this.#bot.sendText(message.replyTarget, t(INTERACTION_RESOLVED_TEXT));
     } catch (error) {
       this.#logger.error?.(
-        `[dsh-im:${this.#descriptor.key}] failed to send an expired interaction notice:`,
+        `[sensteed-im:${this.#descriptor.key}] failed to send an expired interaction notice:`,
         error,
       );
     }
@@ -1951,7 +1951,7 @@ export class TextHarnessBridge {
       );
     } catch (error) {
       this.#logger.warn?.(
-        `[dsh-im:${this.#descriptor.key}] failed to cancel a pending Harness interaction:`,
+        `[sensteed-im:${this.#descriptor.key}] failed to cancel a pending 哪吒 Agent interaction:`,
         error,
       );
     }
@@ -1980,7 +1980,7 @@ export class TextHarnessBridge {
           );
         } catch (error) {
           this.#logger.warn?.(
-            `[dsh-im:${this.#descriptor.key}] failed to cancel an unanswered pending question:`,
+            `[sensteed-im:${this.#descriptor.key}] failed to cancel an unanswered pending question:`,
             error?.message ?? error,
           );
         }

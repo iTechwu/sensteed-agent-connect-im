@@ -90,7 +90,7 @@ export const inject = ['slots', 'connection', 'locale', 'workspaces'];
 export const IM_PLUGIN_VERSION = manifest.version;
 
 function callWorkspaceDirectoryApi(ctx, method, ...args) {
-  // Current DSH owns directory operations on uiWorkspace; legacy Hosts keep them on workspaces.
+  // Current 哪吒 Agent owns directory operations on uiWorkspace; legacy Hosts keep them on workspaces.
   const uiWorkspace = typeof ctx.get === 'function' ? ctx.get('uiWorkspace') : undefined;
   const service = typeof uiWorkspace?.[method] === 'function' ? uiWorkspace : ctx.workspaces;
   if (typeof service?.[method] !== 'function') {
@@ -99,18 +99,17 @@ function callWorkspaceDirectoryApi(ctx, method, ...args) {
   return service[method](...args);
 }
 
+// Slack, Telegram, Discord, WhatsApp and iMessage stay wired below (RPC
+// factories, panels, styles) but are intentionally left out of the rail:
+// their Host services keep running, and re-adding one entry here restores
+// the settings tab.
 const CHANNELS = Object.freeze([
   { id: 'weixin', label: '微信' },
   { id: 'feishu', label: '飞书' },
   { id: 'dingtalk', label: '钉钉' },
   { id: 'wecom', label: '企业微信' },
   { id: 'qq', label: 'QQ' },
-  { id: 'slack', label: 'Slack' },
-  { id: 'telegram', label: 'Telegram' },
-  { id: 'discord', label: 'Discord' },
-  { id: 'whatsapp', label: 'WhatsApp' },
   { id: 'wecomApp', label: '企业微信应用', note: '（实验功能）' },
-  { id: 'imessage', label: 'iMessage', note: '（实验功能）' },
   { id: 'email', label: '邮箱', note: '（实验功能）' },
   { id: 'matrix', label: 'Matrix', note: '（实验功能）' },
   { id: 'office', label: 'AI Office', note: '（实验功能）' },
@@ -245,7 +244,9 @@ export function IMSettingsTab({
       ? preferredSectionId : 'weixin'
   ));
   const [loopbackRecovery, setLoopbackRecovery] = React.useState(null);
-  const [runningVersion, setRunningVersion] = React.useState(IM_PLUGIN_VERSION);
+  // The brand line shows the Host (harness) version and falls back to v0.0.1
+  // until an update snapshot confirms the running Host identity.
+  const [hostVersion, setHostVersion] = React.useState(null);
   const [deliverySettings, setDeliverySettings] = React.useState(null);
   // The Host owns email availability and reports it over RPC. The
   // mailbox entry point is omitted entirely while it is closed, and the visible
@@ -255,7 +256,6 @@ export function IMSettingsTab({
     () => CHANNELS.filter((channel) => channel.id !== 'email' || emailEnabled),
     [emailEnabled],
   );
-  const githubTooltipId = React.useId();
   const generalSettingsTooltipId = React.useId();
   const globalSettingsSelected = selected === GLOBAL_SETTINGS_TAB_ID;
   const active = visibleChannels.find((channel) => channel.id === selected) ?? visibleChannels[0];
@@ -269,7 +269,7 @@ export function IMSettingsTab({
     setLoopbackRecovery((current) => current?.url === recovery.url ? current : recovery);
   }, []);
   const reportUpdateStatus = React.useCallback((snapshot) => {
-    setRunningVersion(snapshot.runningVersion);
+    setHostVersion(typeof snapshot.hostVersion === 'string' ? snapshot.hostVersion : null);
   }, []);
   const rpcCalls = React.useMemo(() => createLoopbackAwareRpcCalls({
     dingtalkRpcCall,
@@ -321,39 +321,15 @@ export function IMSettingsTab({
     h('header', { className: 'dim-title' },
       h('div', { className: 'dim-brand' },
         h('div', { className: 'dim-brandHeading' },
-          h('strong', { className: 'dim-brandName' }, 'DSH-IM'),
-          h('span', { className: 'dim-brandVersion' }, `v${runningVersion}`)),
-        h('p', null, '让 DeepSeek Harness 触手可及')),
+          h('strong', { className: 'dim-brandName' }, 'sensteed-im'),
+          h('span', { className: 'dim-brandVersion' }, `v${hostVersion ?? '0.0.1'}`)),
+        h('p', null, '让哪吒与 im深度链接，触手可及。')),
       h('div', { className: 'dim-titleActions' },
         h(UpdatePanel, {
           rpcCall: rpcCalls.updateRpcCall,
           clientVersion: IM_PLUGIN_VERSION,
           onStatus: reportUpdateStatus,
         }),
-      h('span', { className: 'dim-githubAction' },
-        h('a', {
-          className: 'dim-githubLink',
-          href: 'https://github.com/xmanrui/dsh-im',
-          target: '_blank',
-          rel: 'noopener noreferrer',
-          'aria-label': 'dsh-im GitHub',
-          'aria-describedby': githubTooltipId,
-        },
-        h('svg', {
-          width: 18,
-          height: 18,
-          viewBox: '0 0 16 16',
-          fill: 'currentColor',
-          focusable: 'false',
-          'aria-hidden': 'true',
-        }, h('path', {
-          d: 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z',
-        }))),
-        h('span', {
-          id: githubTooltipId,
-          className: 'dim-githubTooltip',
-          role: 'tooltip',
-        }, '帮助与反馈 · 前往 GitHub')),
       h('span', { className: 'dim-generalSettingsAction' },
         h('button', {
           type: 'button',
@@ -458,14 +434,14 @@ export function apply(ctx) {
   setImTranslator(t);
 
   // The settings page is the only place that knows the locale the interface is
-  // actually rendered in: DSH stores nothing when it came from the browser's
+  // actually rendered in: 哪吒 Agent stores nothing when it came from the browser's
   // language list. Report it so bot messages follow the same language.
   ctx.effect(
     () => installInterfaceLanguageMirror(ctx, {
       rpcCall: (endpoint, payload, signal) =>
         callManagementRpc(ctx.connection, HOST_LANGUAGE_RPC_CHANNEL, endpoint, payload, signal),
     }),
-    'im-settings: mirror the DSH interface language',
+    'im-settings: mirror the 哪吒 Agent interface language',
   );
 
   ctx.effect(() => installSessionChannelLogos(), 'im-settings: Session channel logos');
@@ -588,7 +564,7 @@ export function apply(ctx) {
       stopSettings = ctx.slots.inject('settings.section', () => {
         const unregister = ctx.slots.register({
           name: 'settings.section',
-          id: 'xmanrui-dsh-im',
+          id: 'sensteed-im',
           order: 21,
           label: () => t('IM机器人'),
           locale: IM_LOCALE_NAMESPACE,

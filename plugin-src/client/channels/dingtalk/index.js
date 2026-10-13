@@ -71,7 +71,7 @@ function Heading({ totals, adding, busy, onAdd, onCredential, credentialOpen, ad
     h('div', { className: 'ddt-headingCopy' },
       h('div', { className: 'ddt-eyebrow' }, 'Channel'),
       h('h2', null, '钉钉机器人'),
-      h('p', null, '通过扫码把钉钉机器人接入 DeepSeek Harness')),
+      h('p', null, '通过扫码把钉钉机器人接入 哪吒 Agent')),
     h('div', { className: 'ddt-tools' },
       h('div', { className: 'dim-bindActions' },
         h(Button, {
@@ -109,7 +109,7 @@ function EmptyView({ busy, onStart }) {
         h('div', { className: 'ddt-stateLabel dim-stateLabel' },
           h('span', { className: 'ddt-dot dim-stateDot' }), h('span', null, '尚未接入钉钉机器人')),
         h('h3', null, '扫一次码，自动创建并连接机器人'),
-        h('p', null, '授权由钉钉官方页面完成。扫码账号必须已加入一个企业/组织并有权创建机器人；创建成功后，应用凭据会直接写入 Harness Host。'),
+        h('p', null, '授权由钉钉官方页面完成。扫码账号必须已加入一个企业/组织并有权创建机器人；创建成功后，应用凭据会直接写入 哪吒 Agent Host。'),
         h('div', { className: 'ddt-actions dim-viewActions' },
           h(Button, { kind: 'primary', onClick: onStart, disabled: busy },
             busy ? '正在生成二维码…' : '生成钉钉二维码'))),
@@ -134,7 +134,7 @@ function QrPanel({ provision, now, busy, onRefresh, onCancel }) {
           source && !imageFailed
             ? h('img', {
                 src: source,
-                alt: '用于把钉钉机器人接入 DeepSeek Harness 的一次性二维码',
+                alt: '用于把钉钉机器人接入 哪吒 Agent 的一次性二维码',
                 onError: () => setImageFailed(true),
               })
             : h('div', { className: 'ddt-qrFallback dim-qrFallback' }, '二维码图片未就绪，请重新生成。'),
@@ -221,7 +221,7 @@ function RemoveConfirmation({ account, busy, onConfirm, onCancel }) {
       if (event.key === 'Escape' && !busy) onCancel();
     },
   },
-  h('strong', null, `从 DeepSeek Harness 移除“${account.bot.name}”？`),
+  h('strong', null, `从 哪吒 Agent 移除“${account.bot.name}”？`),
   h('p', null, '这会停止消息连接，并删除本机保存的应用凭据、机器人配置及会话映射。钉钉开放平台中的机器人不会被自动删除。'),
   h('div', { className: 'ddt-actions dim-viewActions' },
     h(Button, { ref: cancelRef, onClick: onCancel, disabled: busy }, '保留机器人'),

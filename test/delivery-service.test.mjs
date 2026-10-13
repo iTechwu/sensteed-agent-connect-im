@@ -278,7 +278,7 @@ test('DeliveryService exposes and revalidates local Session sync without changin
   assert.equal(syncCalls.length, sent);
 });
 
-test('DeliveryService marks explicit remote Harness channels unavailable for Session sync', async () => {
+test('DeliveryService marks explicit remote Nezha Agent channels unavailable for Session sync', async () => {
   const service = createDeliveryService({ unavailableSessionSyncChannels: ['telegram'] });
   const adapter = memoryAdapter();
   const calls = [];

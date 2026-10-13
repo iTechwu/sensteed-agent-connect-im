@@ -142,7 +142,7 @@ test('confirmed QR login stores bot_token only in credentials and starts a redac
 
   await controller.sendConnectionTest(completed.botId);
   assert.equal(runtimes.connectionTests[0].botId, completed.botId);
-  assert.match(runtimes.connectionTests[0].text, /DeepSeek Harness 连接测试成功/);
+  assert.match(runtimes.connectionTests[0].text, /哪吒 Agent 连接测试成功/);
   assert.match(runtimes.connectionTests[0].text, /微信机器人（accoun••••\.bot）/);
   const target = { kind: 'user', route: { toUserId: 'target-user' } };
   assert.deepEqual(await controller.sendProactiveText(completed.botId, target, '主动投递'), {
@@ -268,7 +268,7 @@ test('credential write failure is classified and rolls back a post-commit error'
   );
 
   assert.equal(failed.error.code, 'credential-save-failed');
-  assert.match(failed.error.message, /DSH 凭据存储/);
+  assert.match(failed.error.message, /哪吒 Agent 凭据存储/);
   assert.equal(credentials.values.size, 0);
   assert.equal(configs.accounts.size, 0);
   assert.doesNotMatch(JSON.stringify(failed), /private detail|must-be-rolled-back/);
@@ -370,7 +370,7 @@ test('known runtime activation codes cross the provisioning boundary unchanged',
     ['harness-loopback-forbidden', /回环地址/],
     ['harness-host-untrusted', /Host 信任检查/],
     ['harness-request-forbidden', /代理或网关配置/],
-    ['harness-api-not-found', /找不到 Harness 健康检查接口/],
+    ['harness-api-not-found', /找不到 哪吒 Agent 健康检查接口/],
   ]) {
     const [code, publicMessage] = scenario;
     const credentials = credentialsFixture();

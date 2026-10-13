@@ -172,7 +172,7 @@ test('aggregate budget keeps image numbering and originals for file-only images'
   assert.deepEqual(await readFile(join(root, batch.files[1].path)), PNG);
 });
 
-test('Harness saves originals before model admission, preserves accompanying files and downloads only once', async (t) => {
+test('Nezha Agent saves originals before model admission, preserves accompanying files and downloads only once', async (t) => {
   const large = Buffer.concat([PNG, Buffer.alloc(6 * MB)]);
   let loads = 0;
   const fixture = await clientFixture(t, { onPrompt: async (content) => {
@@ -228,7 +228,7 @@ test('policy is captured on each ask and loader errors remain image diagnostics'
 });
 
 for (const channel of ['slack', 'telegram', 'discord', 'whatsapp']) {
-  test(`${channel} shared bridge passes images through real Harness staging and compression`, async (t) => {
+  test(`${channel} shared bridge passes images through real Nezha Agent staging and compression`, async (t) => {
     const { root, client, prompts } = await clientFixture(t);
     const seen = new Set();
     const sent = [];
@@ -246,7 +246,7 @@ for (const channel of ['slack', 'telegram', 'discord', 'whatsapp']) {
   });
 }
 
-test('WeCom app media downloads pass through real Harness staging and compression', async (t) => {
+test('WeCom app media downloads pass through real Nezha Agent staging and compression', async (t) => {
   const { root, client, prompts } = await clientFixture(t);
   const seen = new Set();
   const sent = [];

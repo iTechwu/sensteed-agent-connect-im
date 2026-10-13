@@ -11,7 +11,7 @@ function workspaceSessionStaleError() {
 }
 
 /**
- * Read the conversation's effective-workspace generation. A bot-scoped Harness
+ * Read the conversation's effective-workspace generation. A bot-scoped 哪吒 Agent
  * exposes it; anything else (plain fixtures, older Harnesses) yields null and
  * disables the conversation-level fence without changing existing behavior.
  */
@@ -80,7 +80,7 @@ async function createSession(harness, options) {
  * session and retries before any prompt is sent to the stale session.
  *
  * `titleText` names the conversation title when the prompt itself is not the
- * user's own words -- a batch submission composes dsh-im's framing sentence and
+ * user's own words -- a batch submission composes sensteed-im's framing sentence and
  * message labels into one prompt, and only the collected text may name the
  * conversation.
  *
@@ -141,7 +141,7 @@ export async function askInWorkspaceSession({
               if (error?.code === WORKSPACE_SESSION_STALE || renameOptions?.signal?.aborted) {
                 throw error;
               }
-              console.warn('[dsh-im] unable to set the initial Session title:', error?.message ?? error);
+              console.warn('[sensteed-im] unable to set the initial Session title:', error?.message ?? error);
             }
           }
           // A switch that committed while the title was being set has already
@@ -178,7 +178,7 @@ export async function askInWorkspaceSession({
         ? await prepareContent({ sessionId: binding.sessionId, content, text })
         : content ?? text;
       try {
-        // An alternate Harness adapter may not supply finer ask() diagnostics.
+        // An alternate 哪吒 Agent adapter may not supply finer ask() diagnostics.
         diagnostic.stage = 'operation';
         diagnostic.submissionState = 'unknown';
         answer = await binding.session.ask(prompt, artifactOptions);
@@ -188,7 +188,7 @@ export async function askInWorkspaceSession({
             const { coordinator, ...destination } = deferredDelivery();
             await coordinator.trackTimeout(error, { ...destination, key, sessionId: binding.sessionId });
           } catch (registrationError) {
-            console.warn('[dsh-im] unable to persist deferred delivery:', registrationError.message);
+            console.warn('[sensteed-im] unable to persist deferred delivery:', registrationError.message);
           }
         }
         throw error;

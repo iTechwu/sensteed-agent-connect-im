@@ -63,7 +63,7 @@ export class WecomController {
     }
     if (!credentials || typeof credentials.resolve !== 'function'
       || typeof credentials.set !== 'function' || typeof credentials.unset !== 'function') {
-      throw new TypeError('WecomController requires the DSH credential provider');
+      throw new TypeError('WecomController requires the 哪吒 Agent credential provider');
     }
     if (!configStore || typeof configStore.list !== 'function'
       || typeof configStore.save !== 'function' || typeof configStore.remove !== 'function') {
@@ -102,7 +102,7 @@ export class WecomController {
           this.#errors.delete(config.botId);
         } catch (error) {
           this.#errors.set(config.botId, this.#failure(error, 'connection-failed', t('企业微信连接未就绪，插件会自动重试。')));
-          this.#logger.warn?.(`[dsh-im:wecom] bot ${config.botId} failed to initialize`);
+          this.#logger.warn?.(`[sensteed-im:wecom] bot ${config.botId} failed to initialize`);
         } finally {
           this.#touch();
         }
@@ -214,7 +214,7 @@ export class WecomController {
           identity.botId,
           safeError('connection-failed', t('企业微信机器人已绑定，消息连接暂未就绪。')),
         );
-        this.#logger.warn?.(`[dsh-im:wecom] bot ${identity.botId} credential connection failed`);
+        this.#logger.warn?.(`[sensteed-im:wecom] bot ${identity.botId} credential connection failed`);
       }
       this.#touch();
     });
@@ -408,7 +408,7 @@ export class WecomController {
       if (record.controller.signal.aborted) return;
       record.state = 'failed';
       record.error = this.#failure(error, 'qr-connect-failed', t('企业微信扫码服务暂时不可用，请重新生成二维码。'));
-      this.#logger.warn?.('[dsh-im:wecom] QR polling failed');
+      this.#logger.warn?.('[sensteed-im:wecom] QR polling failed');
       this.#finishAttempt(record);
     }
   }
@@ -428,7 +428,7 @@ export class WecomController {
       } else {
         record.state = 'failed';
         record.error = this.#failure(error, 'activation-failed', t('企业微信已授权，但无法安全保存接入配置。'));
-        this.#logger.error?.('[dsh-im:wecom] provisioning failed');
+        this.#logger.error?.('[sensteed-im:wecom] provisioning failed');
       }
     } finally {
       this.#finishAttempt(record);
@@ -467,7 +467,7 @@ export class WecomController {
             const removed = await atConnectionStage('account.remove', () => this.#configStore.remove(identity.botId), 'account-config').catch(() => null);
             if (removed) {
               await this.#deleteState({ botId: identity.botId, config }).catch((cleanupError) => {
-                this.#logger.warn?.('[dsh-im:wecom] cancelled bot state cleanup failed:', extractConnectionEvidence(cleanupError).details);
+                this.#logger.warn?.('[sensteed-im:wecom] cancelled bot state cleanup failed:', extractConnectionEvidence(cleanupError).details);
               });
             }
           }
@@ -475,7 +475,7 @@ export class WecomController {
           throw error;
         }
         this.#errors.set(identity.botId, this.#failure(error, 'connection-failed', t('企业微信机器人已绑定，消息连接暂未就绪。')));
-        this.#logger.warn?.(`[dsh-im:wecom] bot ${identity.botId} activation connection failed`);
+        this.#logger.warn?.(`[sensteed-im:wecom] bot ${identity.botId} activation connection failed`);
       }
       this.#touch();
       return identity.botId;
@@ -504,7 +504,7 @@ export class WecomController {
     const runtime = this.#runtimes.get(botId);
     this.#runtimes.delete(botId);
     await runtime?.stop().catch((error) => {
-      this.#logger.warn?.(`[dsh-im:wecom] bot ${botId} failed to stop cleanly:`, extractConnectionEvidence(error).details);
+      this.#logger.warn?.(`[sensteed-im:wecom] bot ${botId} failed to stop cleanly:`, extractConnectionEvidence(error).details);
     });
   }
 

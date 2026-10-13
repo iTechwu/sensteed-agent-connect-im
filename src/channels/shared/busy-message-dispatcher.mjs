@@ -34,7 +34,7 @@ export class BusyMessageDispatcher {
       if (onError) return onError(error);
       status.lastError = error?.message ?? String(error);
       const failure = setLastMessageFailure(status, error);
-      logger.error?.('[dsh-im] failed to route a message:', messageFailureDiagnostic(error, failure));
+      logger.error?.('[sensteed-im] failed to route a message:', messageFailureDiagnostic(error, failure));
       await Promise.resolve().then(() => send(messageFailureText(failure))).catch(() => undefined);
     };
     const queue = (alreadyRecorded = false) => {
@@ -43,7 +43,7 @@ export class BusyMessageDispatcher {
       const completion = enqueue({ alreadyRecorded });
       const receipt = waiting
         ? Promise.resolve().then(() => send(t('已排队，等待前序消息处理。'))).catch((error) => {
-            logger.warn?.('[dsh-im] failed to send queue receipt:', error);
+            logger.warn?.('[sensteed-im] failed to send queue receipt:', error);
           })
         : Promise.resolve();
       return { completion: Promise.all([completion, receipt]).then(([result]) => result) };

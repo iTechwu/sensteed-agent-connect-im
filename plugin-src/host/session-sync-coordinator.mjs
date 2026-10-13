@@ -5,8 +5,8 @@ import {
 } from '../../src/channels/shared/harness-client.mjs';
 import { deliverSessionSyncMirror } from '../../src/channels/shared/session-sync-registry.mjs';
 
-const DSH_USER_PREFIX = '[来自 DSH]\n';
-const DSH_ASSISTANT_PREFIX = '[DSH 助手]\n\n';
+const DSH_USER_PREFIX = '[来自 哪吒 Agent]\n';
+const DSH_ASSISTANT_PREFIX = '[哪吒 Agent 助手]\n\n';
 
 function completedTurn(reason) {
   return (typeof reason === 'string' ? reason : reason?.kind) === 'completed';
@@ -49,7 +49,7 @@ export function createSessionSyncCoordinator({ deliveryService, logger = console
 
   const logFailure = (phase, target, error) => {
     logger.warn?.(
-      `[dsh-im] ignored Session sync ${phase} failure`
+      `[sensteed-im] ignored Session sync ${phase} failure`
         + (target ? ` (${target.channel}/${target.botId}/${target.targetId})` : '')
         + ` [${error?.code ?? error?.name ?? 'unknown-error'}]`,
     );
@@ -128,7 +128,7 @@ export function createSessionSyncCoordinator({ deliveryService, logger = console
         targets = [];
       }
       // Scheduled framing is internal: select its recipients without echoing it.
-      // Direct DSH input still requires a successful echo before the final answer.
+      // Direct 哪吒 Agent input still requires a successful echo before the final answer.
       const recipients = scheduled
         ? new Map(targets.filter(validRecipient).map((target) => [recipientKey(target), target]))
         : await deliver(sessionId, targets, `${DSH_USER_PREFIX}${text}`, 'user delivery');
@@ -231,7 +231,7 @@ export function installSessionSyncCoordinator(ctx, deliveryService, {
     coordinator.close();
   };
   if (typeof ctx.effect === 'function') {
-    ctx.effect(() => close, 'dsh-im: Session sync coordinator');
+    ctx.effect(() => close, 'sensteed-im: Session sync coordinator');
   }
   return Object.freeze({ ...coordinator, close });
 }

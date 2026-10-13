@@ -32,7 +32,7 @@ test('QQ config stores only non-secret bot identity with mode 0600', async (t) =
   });
 });
 
-test('QQ QR wrapper disables console output and identifies DeepSeek Harness', () => {
+test('QQ QR wrapper disables console output and identifies 哪吒 Agent', () => {
   let observed;
   const auth = new QqQrAuth({
     start(callbacks, options) {

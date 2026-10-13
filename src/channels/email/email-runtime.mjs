@@ -153,15 +153,15 @@ export function normalizeEmail(parsed, { address, state } = {}) {
   if (!from) return null;
   // Loop break, per RFC 3834: anything marked as an automatic reply is never
   // answered, so this mailbox can safely be its own sender (writing to itself
-  // to drive the Harness) without two bots echoing each other forever.
+  // to drive the 哪吒 Agent) without two bots echoing each other forever.
   if (isAutoSubmitted(parsed)) return null;
   if (isAutomatedSender(from)) return null;
 
   const references = parseMessageIds(parsed?.references);
   const inReplyTo = parseMessageIds(parsed?.inReplyTo);
   // A fixed binding pins the conversation, so every message routed to that
-  // binding resolves to the same Harness session instead of a per-thread one.
-  // Without a binding the thread chain decides, which keeps one Harness session
+  // binding resolves to the same 哪吒 Agent session instead of a per-thread one.
+  // Without a binding the thread chain decides, which keeps one 哪吒 Agent session
   // per mail thread.
   const boundSession = state?.boundSessionFor?.(from) ?? null;
   const conversationId = boundSession
@@ -221,7 +221,7 @@ export function normalizeEmail(parsed, { address, state } = {}) {
       transportMessageId: parsed?.uid ?? null,
       references: [...references, ...inReplyTo, messageId].slice(-10),
     },
-    connectionTestTarget: { to: from, subject: 'DSH 连接测试' },
+    connectionTestTarget: { to: from, subject: '哪吒 Agent 连接测试' },
   };
 }
 
@@ -351,7 +351,7 @@ export class EmailRuntime {
     // Agent mailbox lets agently-cli hold the credentials in the system
     // keychain, so requiring one here blocked it from ever starting.
     if (!config || !harness || !state) {
-      throw new TypeError('EmailRuntime requires config, Harness, and state');
+      throw new TypeError('EmailRuntime requires config, harness, and state');
     }
     this.#config = config;
     this.#token = token;
@@ -385,7 +385,7 @@ export class EmailRuntime {
       channelLabel: 'Email',
       send: (target, value) => this.#api.sendReply({
         to: target.to,
-        subject: target.subject ?? 'DSH 连接测试',
+        subject: target.subject ?? '哪吒 Agent 连接测试',
         text: value,
       }),
     });
@@ -403,7 +403,7 @@ export class EmailRuntime {
       error.code = 'invalid-target';
       throw error;
     }
-    await this.#api.sendText({ to, subject: target?.route?.subject ?? 'DSH 消息', text });
+    await this.#api.sendText({ to, subject: target?.route?.subject ?? '哪吒 Agent 消息', text });
     return { sent: true };
   }
 
@@ -524,7 +524,7 @@ export class EmailRuntime {
       .catch((error) => {
         if (this.#stopped) return;
         this.#status.lastMessageError = this.#safeMessageError(error);
-        this.#logger.warn?.('[dsh-im:email] delivery failed', extractConnectionEvidence(error).details);
+        this.#logger.warn?.('[sensteed-im:email] delivery failed', extractConnectionEvidence(error).details);
       })
       .finally(() => { this.#deliveries.delete(task); });
     this.#deliveries.add(task);
@@ -563,7 +563,7 @@ export class EmailRuntime {
   /**
    * Wait for the deliveries started by the poll loop.
    *
-   * Bounded: a delivery whose Harness turn is parked on an approval never
+   * Bounded: a delivery whose 哪吒 Agent turn is parked on an approval never
    * settles, and shutdown must not hang on it. The abort signal is raised
    * before this is called, so a parked turn is already being torn down.
    */
@@ -590,7 +590,7 @@ export class EmailRuntime {
     const abandoned = this.#deliveries.size;
     if (abandoned > 0) {
       this.#logger.warn?.(
-        `[dsh-im:email] shutdown abandoned ${abandoned} in-flight delivery(ies); `
+        `[sensteed-im:email] shutdown abandoned ${abandoned} in-flight delivery(ies); `
         + 'their replies will not be sent',
       );
     }
@@ -637,7 +637,7 @@ export class EmailRuntime {
             this.#state.rememberThreadId(id, message.conversationId);
           }
           // Deliberately not awaited. `accept` resolves only when the whole
-          // Harness turn finishes, and a turn that is waiting for an approval
+          // 哪吒 Agent turn finishes, and a turn that is waiting for an approval
           // or an answer blocks the poll loop — so later mail stayed unread
           // until someone replied. The bridge already serialises per
           // conversation, so ordering is preserved without waiting here.

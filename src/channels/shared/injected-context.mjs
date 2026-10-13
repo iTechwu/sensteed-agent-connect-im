@@ -26,7 +26,7 @@ import {
 } from './context-enhancement.mjs';
 
 /** Source plugin name recorded on every split-out context message. */
-export const INJECTED_CONTEXT_PLUGIN = 'dsh-im';
+export const INJECTED_CONTEXT_PLUGIN = 'sensteed-im';
 
 /** Bound for a `notice` summary, mirroring the Host's context-summary bound. */
 export const CONTEXT_SUMMARY_MAX_LENGTH = 120;

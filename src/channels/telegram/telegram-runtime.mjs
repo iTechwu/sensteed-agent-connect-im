@@ -456,7 +456,7 @@ class TelegramDeliveryStream {
       try {
         return await this.#update(block);
       } catch (error) {
-        this.#logger.warn?.('[dsh-im:telegram] rich stream update failed:', extractConnectionEvidence(error).details);
+        this.#logger.warn?.('[sensteed-im:telegram] rich stream update failed:', extractConnectionEvidence(error).details);
         return undefined;
       }
     });
@@ -472,7 +472,7 @@ class TelegramDeliveryStream {
       try {
         return await this.#update(this.#lastBlock);
       } catch (error) {
-        this.#logger.warn?.('[dsh-im:telegram] rich stream refresh failed:', extractConnectionEvidence(error).details);
+        this.#logger.warn?.('[sensteed-im:telegram] rich stream refresh failed:', extractConnectionEvidence(error).details);
         return undefined;
       }
     });
@@ -717,7 +717,7 @@ export class TelegramBotClient {
           });
         } catch (terminalError) {
           this.#logger.warn?.(
-            '[dsh-im:telegram] unable to replace the processing placeholder:',
+            '[sensteed-im:telegram] unable to replace the processing placeholder:',
             terminalError,
           );
         }
@@ -761,7 +761,7 @@ export class TelegramBotClient {
     try {
       chunks = splitTelegramRichMarkdown(block.text);
     } catch {
-      this.#logger.warn?.('[dsh-im:telegram] Rich Markdown could not be prepared; sending plain text');
+      this.#logger.warn?.('[sensteed-im:telegram] Rich Markdown could not be prepared; sending plain text');
       return this.#sendPlain(target, block.text);
     }
     const providerMessageIds = [];
@@ -964,7 +964,7 @@ export class TelegramBotClient {
     let closed = false;
     const logger = this.#logger;
     const warnFailure = (label, error) => {
-      logger?.warn?.(`[dsh-im:telegram] thinking stream ${label} failed:`, error);
+      logger?.warn?.(`[sensteed-im:telegram] thinking stream ${label} failed:`, error);
     };
     const sendLine = async (text) => {
       const message = await this.#api.sendMessage({
@@ -1250,7 +1250,7 @@ export class TelegramRuntime {
         await api.setChatMenuButton({ menuButton: COMMANDS_MENU_BUTTON, signal: controller.signal });
       } catch (error) {
         this.#logger.warn?.(
-          `[dsh-im:telegram] bot ${this.#config.botId} command menu setup failed:`,
+          `[sensteed-im:telegram] bot ${this.#config.botId} command menu setup failed:`,
           extractConnectionEvidence(error).details,
         );
       }
@@ -1294,7 +1294,7 @@ export class TelegramRuntime {
           await this.#sendCommandMenu(api, controller.signal);
         } catch (error) {
           this.#logger.warn?.(
-            `[dsh-im:telegram] bot ${this.#config.botId} command menu catch-up failed:`,
+            `[sensteed-im:telegram] bot ${this.#config.botId} command menu catch-up failed:`,
             extractConnectionEvidence(error).details,
           );
         }
@@ -1357,7 +1357,7 @@ export class TelegramRuntime {
       return true;
     } catch (error) {
       this.#logger.warn?.(
-        `[dsh-im:telegram] bot ${this.#config.botId} command menu refresh failed:`,
+        `[sensteed-im:telegram] bot ${this.#config.botId} command menu refresh failed:`,
         extractConnectionEvidence(error).details,
       );
       return false;
@@ -1407,7 +1407,7 @@ export class TelegramRuntime {
             void this.#bridge.acceptCallback(callback, { contextSnapshot }).catch((error) => {
               if (signal.aborted) return;
               this.#logger.error?.(
-                `[dsh-im:telegram] bot ${this.#config.botId} callback handling failed:`,
+                `[sensteed-im:telegram] bot ${this.#config.botId} callback handling failed:`,
                 extractConnectionEvidence(error).details,
               );
             });
@@ -1427,7 +1427,7 @@ export class TelegramRuntime {
           void this.#bridge.accept(message, { contextSnapshot }).catch((error) => {
             if (signal.aborted) return;
             this.#logger.error?.(
-              `[dsh-im:telegram] bot ${this.#config.botId} message handling failed:`,
+              `[sensteed-im:telegram] bot ${this.#config.botId} message handling failed:`,
               extractConnectionEvidence(error).details,
             );
           });
@@ -1459,7 +1459,7 @@ export class TelegramRuntime {
     try {
       await httpTransport?.destroy();
     } catch {
-      this.#logger.warn?.('[dsh-im:telegram] Telegram HTTP transport cleanup failed');
+      this.#logger.warn?.('[sensteed-im:telegram] Telegram HTTP transport cleanup failed');
     }
     this.#status.ready = false;
     this.#status.connectionState = 'idle';

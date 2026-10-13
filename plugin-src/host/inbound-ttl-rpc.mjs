@@ -52,7 +52,7 @@ export function createInboundTtlRpcHandler({ store, service, logger = null } = {
       // The UI shows no result text, so the host log is the only place a
       // manual sweep can be diagnosed (TTL applied, coverage, deletions).
       logger?.info?.(
-        `[dsh-im] manual inbound attachment sweep: ${summary.deletedDirectories} deleted`
+        `[sensteed-im] manual inbound attachment sweep: ${summary.deletedDirectories} deleted`
         + ` across ${summary.sweptWorkspaces} workspaces (ttl ${store.getTtlHours()}h)`,
       );
       return { ok: true, value: summary };
@@ -74,7 +74,7 @@ export function createInboundTtlRpcHandler({ store, service, logger = null } = {
 export function installInboundTtlRpc(ctx, options = {}) {
   const runtime = options.runtime ?? getInboundTtlRuntime(ctx, options.config);
   const logger = typeof ctx?.logger === 'function'
-    ? ctx.logger('dsh-im:inbound-ttl') : (ctx?.logger ?? null);
+    ? ctx.logger('sensteed-im:inbound-ttl') : (ctx?.logger ?? null);
   const ttl = createInboundTtlRpcHandler({ ...runtime, logger });
   const image = createImageInputRpcHandler(getImageInputSettingsStore(options.config));
   return registerManagementRpc(ctx,

@@ -51,7 +51,7 @@ test('compact command validates syntax and requires an existing conversation Ses
   );
 });
 
-test('compact command renders Harness outcomes and never changes the command line', async () => {
+test('compact command renders Nezha Agent outcomes and never changes the command line', async () => {
   const calls = [];
   const harness = {
     executeCommand: async (sessionId, line, options) => {
@@ -156,7 +156,7 @@ test('Host command executor invokes the commands Typert endpoint with the Sessio
   assert.deepEqual(requests, [{
     namespace: 'commands',
     method: 'execute',
-    // Newer Harness descriptors require images even for plain commands.
+    // Newer Nezha Agent descriptors require images even for plain commands.
     args: { agentId: 'session-one', line: '/compact', images: [] },
     signal,
   }]);
@@ -164,7 +164,7 @@ test('Host command executor invokes the commands Typert endpoint with the Sessio
   assert.throws(() => createHarnessCommandExecutor({}, 'invalid'), /must be a function/);
 });
 
-test('compact executes once on older Harness after its gateway rejects the images field', async () => {
+test('compact executes once on older Nezha Agent after its gateway rejects the images field', async () => {
   const requests = [];
   let executions = 0;
   const signal = new AbortController().signal;

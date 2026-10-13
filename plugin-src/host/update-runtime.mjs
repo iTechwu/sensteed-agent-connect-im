@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import semver from 'semver';
 
-export const PACKAGE_NAME = '@xmanrui/dsh-im';
+export const PACKAGE_NAME = 'sensteed-im';
 export const NPM_REGISTRY = 'https://registry.npmjs.org/';
 
 const INSTALL_TIMEOUT_MS = 15 * 60_000;
@@ -86,6 +86,11 @@ function dshHome(env, osHome) {
 function registrySpec(spec) {
   return typeof spec === 'string' && spec.trim().length > 0
     && (semver.validRange(spec) !== null || /^[A-Za-z][A-Za-z0-9._-]*$/u.test(spec));
+}
+
+function manifestVersion(manifest) {
+  const version = manifest?.version;
+  return typeof version === 'string' && semver.valid(version) !== null ? version : null;
 }
 
 async function validPackage(pkg) {
@@ -208,7 +213,7 @@ export function createUpdateRuntime(options = {}) {
             || dirname(await realpath(bootstrap.dshBootstrapPath)) !== join(desktopPackage.directory, 'lib')) {
           return { ...base, blockedReason: 'executor-unavailable' };
         }
-        return { ...base, desktop, executable: execPath, cliEntry: bootstrap.dshBootstrapPath };
+        return { ...base, hostVersion: manifestVersion(desktopPackage.manifest), desktop, executable: execPath, cliEntry: bootstrap.dshBootstrapPath };
       } catch {
         return { ...base, blockedReason: 'executor-unavailable' };
       }
@@ -227,7 +232,7 @@ export function createUpdateRuntime(options = {}) {
       if (cliEntry !== publishedEntry && cliEntry !== join(cli.directory, 'src', 'bin.ts')) {
         return { ...base, blockedReason: 'executor-unavailable' };
       }
-      return { ...base, subprocess, executable: execPath, cliEntry };
+      return { ...base, hostVersion: manifestVersion(cli.manifest), subprocess, executable: execPath, cliEntry };
     } catch {
       return { ...base, blockedReason: 'executor-unavailable' };
     }
@@ -254,7 +259,7 @@ export function createUpdateRuntime(options = {}) {
   }
 
   async function checkRegistry(runtime, signal) {
-    const args = ['config', 'get', '@xmanrui:registry', '--json'];
+    const args = ['config', 'get', 'registry', '--json'];
     const result = await run(
       (childSignal) => runtime.desktop
         ? runtime.desktop.run(args, childSignal)
@@ -273,7 +278,7 @@ export function createUpdateRuntime(options = {}) {
     const result = { installedVersion: null, packageValid: false, eligible: false, installationKey: null };
     try {
       runtime = await environment();
-      for (const key of ['homeDir', 'profileDir', 'profileName', 'environmentKind', 'executable', 'cliEntry']) {
+      for (const key of ['homeDir', 'profileDir', 'profileName', 'environmentKind', 'executable', 'cliEntry', 'hostVersion']) {
         result[key] = runtime[key] ?? null;
       }
       if (!runtime.profileDir) return { ...result, blockedReason: runtime.blockedReason ?? 'unknown-profile' };

@@ -147,7 +147,7 @@ for (const { id, apply, Store, api } of channels) {
         assert.equal(error.code, result.error.code);
         const message = api.presentError ? api.presentError(error).message : error.message;
         assert.match(message, id === 'weixin' && filename === 'workspacesPath' ? /workspaces\.json/ : /config\.json/);
-        assert.match(message, /重启 DSH/);
+        assert.match(message, /重启 哪吒 Agent/);
         if (id === 'weixin') assert.ok(message.includes(result.error.details.file));
         else if (id === 'office') assert.doesNotMatch(message, /workspaces\.json/);
         else assert.match(message, /workspaces\.json/);
@@ -179,7 +179,7 @@ for (const { id, apply, Store, api } of channels) {
       for (const error of [new SyntaxError('private'), { code: 'EPERM' }, new Error('private')]) {
         const failure = publicChannelStartupError(id, error);
         assert.doesNotMatch(failure.message, /[一-鿿]|private|\{\w+\}/);
-        assert.match(failure.message, /restart DSH/);
+        assert.match(failure.message, /restart Nezha Agent/);
       }
       assert.match(publicChannelInitializing(id).message, /is initializing/);
     } finally {

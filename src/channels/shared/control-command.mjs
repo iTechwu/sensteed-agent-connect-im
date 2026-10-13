@@ -23,11 +23,11 @@ function boundSession(harness, state, key) {
   const sessionId = state.sessionFor(key);
   if (typeof sessionId !== 'string' || !sessionId) return null;
   if (typeof harness?.workspaceSession !== 'function') {
-    throw new TypeError('Harness does not support workspace sessions');
+    throw new TypeError('哪吒 Agent does not support workspace sessions');
   }
   const session = harness.workspaceSession(sessionId, key);
   if (!session || typeof session !== 'object') {
-    throw new TypeError('Harness returned an invalid workspace session');
+    throw new TypeError('哪吒 Agent returned an invalid workspace session');
   }
   return session;
 }
@@ -45,7 +45,7 @@ export async function steerMessage(text, harness, state, key, {
   const session = boundSession(harness, state, key);
   if (!session) return false;
   if (typeof session.steerActiveTurn !== 'function') {
-    throw new TypeError('Harness session does not support steering active turns');
+    throw new TypeError('哪吒 Agent session does not support steering active turns');
   }
   const steering = enhancement
     ? enhanceContextContent(text, enhancement.snapshot, enhancement.source)
@@ -70,7 +70,7 @@ export async function runControlCommand(text, harness, state, key, {
 
   if (version) {
     return /^\/version$/iu.test(command)
-      ? commandResult(`dsh-im v${manifest.version}`)
+      ? commandResult(`sensteed-im v${manifest.version}`)
       : commandResult(t(VERSION_USAGE));
   }
 
@@ -79,14 +79,14 @@ export async function runControlCommand(text, harness, state, key, {
     const session = boundSession(harness, state, key);
     if (!session) return commandResult(t('当前聊天没有正在运行的任务。'));
     if (typeof session.stopActiveTurn !== 'function') {
-      throw new TypeError('Harness session does not support stopping active turns');
+      throw new TypeError('哪吒 Agent session does not support stopping active turns');
     }
     const stopped = await session.stopActiveTurn(control, requestOptions(signal));
     if (!stopped && deferredDelivery) {
       const background = await deferredDelivery.stop(key);
       if (background === 'stopped') return commandResult(t('已请求停止后台任务。'), { stopped: true });
       if (background === 'unavailable') {
-        return commandResult(t('无法安全停止后台任务，请在 Harness 中查看并停止对应任务。'));
+        return commandResult(t('无法安全停止后台任务，请在 哪吒 Agent 中查看并停止对应任务。'));
       }
     }
     return stopped

@@ -68,7 +68,7 @@ export function conversationScope(event) {
 export function conversationKey(event) {
   const scope = conversationScope(event);
   // Topic groups: every message belongs to a thread, so key the session per
-  // thread to keep each topic's Harness conversation isolated. Regular group
+  // thread to keep each topic's 哪吒 Agent conversation isolated. Regular group
   // chats carry no thread_id and keep the single shared `group:<chat_id>` key.
   //
   // Direct chats deliberately keep one key per peer: their thread_id must not

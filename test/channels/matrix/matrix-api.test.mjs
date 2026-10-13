@@ -68,7 +68,7 @@ test('authenticated calls carry the bearer, the user agent and typed failures', 
   deepStrictEqual(identity.user_id, '@bot:example.org');
   match(calls[0].url, /\/_matrix\/client\/v3\/account\/whoami$/u);
   deepStrictEqual(calls[0].headers.authorization, 'Bearer syt_secret');
-  match(calls[0].headers['user-agent'], /^dsh-im\//u);
+  match(calls[0].headers['user-agent'], /^sensteed-im\//u);
   const { api: denied } = apiWith(() =>
     jsonResponse({ errcode: 'm.unauthorized', error: 'Unrecognized access token' }, 401));
   await rejects(() => denied.whoami(), (error) => {
@@ -198,7 +198,7 @@ test('password logins keep the server-assigned device identity and fail with typ
   const body = JSON.parse(calls[0].body);
   deepStrictEqual(body.type, 'm.login.password');
   deepStrictEqual(body.identifier, { type: 'm.id.user', user: '@bot:example.org' });
-  deepStrictEqual(body.initial_device_display_name, 'DeepSeek Harness');
+  deepStrictEqual(body.initial_device_display_name, '哪吒 Agent');
   ok(!('medium' in body));
   await rejects(() => performMatrixPasswordLogin(
     { homeserver: HOME, userId: 'bad', password: 'x', fetchImpl }), TypeError);

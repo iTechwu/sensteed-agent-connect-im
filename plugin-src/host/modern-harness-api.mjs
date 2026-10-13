@@ -19,7 +19,7 @@ function failureOf(error) {
   if (error?.name === 'AbortError' || error?.name === 'RemoteInvocationCancelled') {
     return {
       code: 'cancelled',
-      message: error instanceof Error ? error.message : 'Harness request was cancelled',
+      message: error instanceof Error ? error.message : '哪吒 Agent request was cancelled',
       details: {},
     };
   }
@@ -91,7 +91,7 @@ function expandChunkRecord(record) {
   }
   const packed = record?.type === 'chunks' ? record.event : null;
   if (!packed || typeof packed !== 'object') {
-    throw new Error('Harness returned an invalid session history record');
+    throw new Error('哪吒 Agent returned an invalid session history record');
   }
   const { data } = packed;
   const kind = packed.type;
@@ -99,7 +99,7 @@ function expandChunkRecord(record) {
   if (!data || !Array.isArray(members) || members.length === 0
     || members.some((member) => typeof member !== 'string')
     || !Array.isArray(data.dt) || data.dt.length !== members.length - 1) {
-    throw new Error('Harness returned an invalid packed session chunk');
+    throw new Error('哪吒 Agent returned an invalid packed session chunk');
   }
   let time = packed.time;
   return members.map((member, index) => {
@@ -118,7 +118,7 @@ function expandChunkRecord(record) {
         argumentsDelta: member,
       };
     } else {
-      throw new Error(`Harness returned an unsupported packed session chunk: ${String(kind)}`);
+      throw new Error(`哪吒 Agent returned an unsupported packed session chunk: ${String(kind)}`);
     }
     return {
       event: {
@@ -132,7 +132,7 @@ function expandChunkRecord(record) {
 }
 
 function historyEntries(records) {
-  if (!Array.isArray(records)) throw new Error('Harness returned invalid session history records');
+  if (!Array.isArray(records)) throw new Error('哪吒 Agent returned invalid session history records');
   return records.flatMap(expandChunkRecord);
 }
 
@@ -307,7 +307,7 @@ class ModernHarnessApi {
       ));
       iterator = source[Symbol.asyncIterator]();
       const first = await iterator.next();
-      if (first.done) throw new Error(`Harness ${namespace}.${method} stream ended before its baseline`);
+      if (first.done) throw new Error(`哪吒 Agent ${namespace}.${method} stream ended before its baseline`);
       return first.value;
     } finally {
       controller.abort(new DOMException('Baseline received', 'AbortError'));
@@ -318,7 +318,7 @@ class ModernHarnessApi {
   async #workspaceList(signal) {
     const frame = await this.#streamFirst('workspace', 'follow', {}, signal);
     if (frame?.type !== 'baseline' || !frame.value || typeof frame.value !== 'object') {
-      throw new Error('Harness workspace.follow returned no baseline');
+      throw new Error('哪吒 Agent workspace.follow returned no baseline');
     }
     return frame.value;
   }
@@ -331,7 +331,7 @@ class ModernHarnessApi {
       },
     }, signal);
     if (frame?.type !== 'snapshot' || !Number.isSafeInteger(frame.cursor)) {
-      throw new Error('Harness session.follow returned no snapshot');
+      throw new Error('哪吒 Agent session.follow returned no snapshot');
     }
     this.#rememberCursor(sessionId, frame.cursor);
     return frame;
@@ -395,7 +395,7 @@ class ModernHarnessApi {
       type: 'transient',
       event: {
         type: 'assistant/chunk',
-        // Match DSH's Web client ordering: live chunks sit in the numeric gap
+        // Match 哪吒 Agent's Web client ordering: live chunks sit in the numeric gap
         // before the durable assistant/message that replaces them.
         seq: stream.startedAfterSeq + 1 - 1 / (frame.index + 2),
         time: frame.time,
@@ -554,7 +554,7 @@ class ModernHarnessApi {
         // for IM rather than being failed outright.
         if (error?.code !== 'NO_PROVIDER' && error?.code !== 'ASK_ABORTED') {
           console.warn(
-            '[dsh-im] the host user-question answerer failed; waiting for the IM answer:',
+            '[sensteed-im] the host user-question answerer failed; waiting for the IM answer:',
             error?.message ?? error,
           );
         }
@@ -573,7 +573,7 @@ class ModernHarnessApi {
       im.dismiss(new Error('another client answered this question'));
       turnSignal?.removeEventListener('abort', forwardTurnAbort);
       if (answeredByIm) {
-        // The host's own answerer (DSH Web) keeps its question card until its own
+        // The host's own answerer (哪吒 Agent Web) keeps its question card until its own
         // pending settles, and a host-side adapter has no other handle on it. A Web
         // client holds that pending through the lifetime this question handed
         // downstream, so ending that lifetime makes the client drop a card whose
@@ -729,7 +729,7 @@ class ModernHarnessApi {
       }
     }, (error) => {
       nativeAvailable = false;
-      if (!lifetime.signal.aborted) console.warn('[dsh-im] native approval provider unavailable:', error?.code ?? error?.name);
+      if (!lifetime.signal.aborted) console.warn('[sensteed-im] native approval provider unavailable:', error?.code ?? error?.name);
       if (!pending.imAvailable) pending.settle('unavailable');
     });
     if (!lifetime.signal.aborted && owner) {
@@ -755,7 +755,7 @@ class ModernHarnessApi {
       }).then((available) => {
         if (!available) pending.withdraw();
       }, (error) => {
-        if (!lifetime.signal.aborted) console.warn('[dsh-im] synced approval delivery unavailable:', error?.code ?? error?.name);
+        if (!lifetime.signal.aborted) console.warn('[sensteed-im] synced approval delivery unavailable:', error?.code ?? error?.name);
         pending.withdraw();
       });
     }
@@ -863,7 +863,7 @@ class ModernHarnessApi {
     for (const pending of [...this.#pendingApprovals.values()]) pending.settle('cancelled');
     for (const pending of [...this.#pendingQuestions.values()]) pending.settle(
       'cancelled',
-      questionError('dsh-im interaction adapter was disposed', 'ASK_ABORTED'),
+      questionError('sensteed-im interaction adapter was disposed', 'ASK_ABORTED'),
     );
     for (const dispose of this.#disposers.splice(0).reverse()) dispose?.();
   }
@@ -873,7 +873,7 @@ class ModernHarnessApi {
 export function modernHarnessApi(ctx, { deliveryService } = {}) {
   const scope = ctx?.root ?? ctx;
   if (!scope || !['object', 'function'].includes(typeof scope)) {
-    throw new TypeError('dsh-im requires a Cordis Host context');
+    throw new TypeError('sensteed-im requires a Cordis Host context');
   }
   const cached = modernApis.get(scope);
   if (cached) {
@@ -882,7 +882,7 @@ export function modernHarnessApi(ctx, { deliveryService } = {}) {
   }
   const gateway = ctx?.typertGateway;
   if (!gateway || typeof gateway.invoke !== 'function' || typeof gateway.stream !== 'function') {
-    throw new TypeError('dsh-im requires the modern Host Typert gateway');
+    throw new TypeError('sensteed-im requires the modern Host Typert gateway');
   }
   const api = new ModernHarnessApi(ctx, gateway, scope);
   api.setDeliveryService(deliveryService);
@@ -891,7 +891,7 @@ export function modernHarnessApi(ctx, { deliveryService } = {}) {
     ctx.effect(() => () => {
       if (modernApis.get(scope) === api) modernApis.delete(scope);
       api.dispose();
-    }, 'dsh-im: modern Harness compatibility API');
+    }, 'sensteed-im: modern 哪吒 Agent compatibility API');
   }
   return api;
 }

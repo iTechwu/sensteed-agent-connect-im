@@ -2,7 +2,7 @@ import { t } from './i18n.mjs';
 
 const targets = new WeakMap();
 
-export const CONNECTION_TEST_STATE_IDENTITY = Symbol('dsh-im.connection-test-state-identity');
+export const CONNECTION_TEST_STATE_IDENTITY = Symbol('sensteed-im.connection-test-state-identity');
 
 function stateIdentity(state) {
   return state?.[CONNECTION_TEST_STATE_IDENTITY] ?? state;
@@ -29,7 +29,7 @@ export function connectionTestTarget(state) {
 
 export function connectionTestMessage(botName, channelLabel = t('机器人')) {
   const name = cleanText(botName) ?? channelLabel;
-  return `${t('✅ DeepSeek Harness 连接测试成功')}\n${t('这条消息由「IM机器人」设置页中的“{name}”机器人卡片发出。', { name })}`;
+  return `${t('✅ 哪吒 Agent 连接测试成功')}\n${t('这条消息由「IM机器人」设置页中的“{name}”机器人卡片发出。', { name })}`;
 }
 
 export function connectionTestTargetUnavailable(channelLabel = t('机器人')) {

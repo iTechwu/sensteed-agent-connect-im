@@ -1,6 +1,6 @@
 /**
  * Credential references owned by the Feishu Host plugin.  They deliberately
- * use DSH's credential provider instead of plugin settings, so the browser's
+ * use 哪吒 Agent's credential provider instead of plugin settings, so the browser's
  * configuration plane can only observe configured/source metadata.
  */
 export const FEISHU_APP_ID_REF = 'DSH_FEISHU_APP_ID';
@@ -24,7 +24,7 @@ async function restore(provider, ref, previous) {
 }
 
 /**
- * Adapt the real DSH `ctx.credentials` seam to the small interface consumed
+ * Adapt the real 哪吒 Agent `ctx.credentials` seam to the small interface consumed
  * by the Feishu controller.  Secret values only travel Host-to-Host here.
  *
  * @param {{resolve(Function), describe(Function), set(Function), unset(Function)}} provider
@@ -36,7 +36,7 @@ export function createDshCredentialStore(provider, options = {}) {
     || typeof provider.describe !== 'function'
     || typeof provider.set !== 'function'
     || typeof provider.unset !== 'function') {
-    throw new TypeError('A DSH credential provider is required');
+    throw new TypeError('A 哪吒 Agent credential provider is required');
   }
 
   const appIdRef = options.appIdRef ?? FEISHU_APP_ID_REF;

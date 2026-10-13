@@ -122,7 +122,7 @@ export class WecomAppCallbackServer {
     if (this.#server) return this.address;
     const server = createServer((request, response) => {
       this.#handleRequest(request, response).catch((error) => {
-        this.#logger.warn?.('[dsh-im:wecom-app] callback request failed:', error);
+        this.#logger.warn?.('[sensteed-im:wecom-app] callback request failed:', error);
         writeText(response, 500, 'internal error');
       });
     });
@@ -249,9 +249,9 @@ export class WecomAppCallbackServer {
     const nonce = query.get('nonce') ?? '';
     const echostr = query.get('echostr') ?? '';
     const signature = query.get('msg_signature') ?? query.get('msgsignature') ?? query.get('signature') ?? '';
-    this.#logger.info?.('[dsh-im:wecom-app] URL verification attempt', route.botId, { timestamp, nonce });
+    this.#logger.info?.('[sensteed-im:wecom-app] URL verification attempt', route.botId, { timestamp, nonce });
     if (!timestamp || !nonce || !echostr || !signature) {
-      this.#logger.warn?.('[dsh-im:wecom-app] URL verification rejected: missing query params', route.botId);
+      this.#logger.warn?.('[sensteed-im:wecom-app] URL verification rejected: missing query params', route.botId);
       writeText(response, 400, 'missing query params');
       return;
     }
@@ -259,21 +259,21 @@ export class WecomAppCallbackServer {
     try {
       crypto = route.cryptoFor();
     } catch (error) {
-      this.#logger.warn?.('[dsh-im:wecom-app] route credentials are incomplete:', error);
+      this.#logger.warn?.('[sensteed-im:wecom-app] route credentials are incomplete:', error);
       writeText(response, 503, 'route not ready');
       return;
     }
     try {
       if (!safeEqualHex(crypto.computeSignature(timestamp, nonce, echostr), signature)) {
-        this.#logger.warn?.('[dsh-im:wecom-app] URL verification signature mismatch', route.botId);
+        this.#logger.warn?.('[sensteed-im:wecom-app] URL verification signature mismatch', route.botId);
         writeText(response, 401, 'unauthorized');
         return;
       }
       const plaintext = crypto.decrypt(echostr);
-      this.#logger.info?.('[dsh-im:wecom-app] URL verification succeeded', route.botId);
+      this.#logger.info?.('[sensteed-im:wecom-app] URL verification succeeded', route.botId);
       writeText(response, 200, plaintext);
     } catch (error) {
-      this.#logger.warn?.('[dsh-im:wecom-app] URL verification failed:', error);
+      this.#logger.warn?.('[sensteed-im:wecom-app] URL verification failed:', error);
       writeText(response, 400, 'verification failed');
     }
   }
@@ -311,25 +311,25 @@ export class WecomAppCallbackServer {
       writeText(response, 400, 'missing encrypted payload');
       return;
     }
-    this.#logger.info?.('[dsh-im:wecom-app] callback POST received', route.botId, { format: envelope.format, bytes: body.raw.length });
+    this.#logger.info?.('[sensteed-im:wecom-app] callback POST received', route.botId, { format: envelope.format, bytes: body.raw.length });
     let crypto;
     try {
       crypto = route.cryptoFor();
     } catch (error) {
-      this.#logger.warn?.('[dsh-im:wecom-app] route credentials are incomplete:', error);
+      this.#logger.warn?.('[sensteed-im:wecom-app] route credentials are incomplete:', error);
       writeText(response, 503, 'route not ready');
       return;
     }
     let plaintext;
     try {
       if (!safeEqualHex(crypto.computeSignature(envelope.timestamp, envelope.nonce, envelope.encrypt), envelope.signature)) {
-        this.#logger.warn?.('[dsh-im:wecom-app] callback signature mismatch', route.botId);
+        this.#logger.warn?.('[sensteed-im:wecom-app] callback signature mismatch', route.botId);
         writeText(response, 401, 'unauthorized');
         return;
       }
       plaintext = crypto.decrypt(envelope.encrypt);
     } catch (error) {
-      this.#logger.warn?.('[dsh-im:wecom-app] callback signature or decryption failed:', error);
+      this.#logger.warn?.('[sensteed-im:wecom-app] callback signature or decryption failed:', error);
       writeText(response, 401, 'unauthorized');
       return;
     }
@@ -338,7 +338,7 @@ export class WecomAppCallbackServer {
       writeText(response, 400, 'invalid message');
       return;
     }
-    this.#logger.info?.('[dsh-im:wecom-app] callback message accepted', route.botId, { msgtype: message.msgtype ?? null, msgid: message.msgid ?? null });
+    this.#logger.info?.('[sensteed-im:wecom-app] callback message accepted', route.botId, { msgtype: message.msgtype ?? null, msgid: message.msgid ?? null });
     this.#dispatch(route, message, envelope, response);
   }
 
@@ -407,7 +407,7 @@ export class WecomAppCallbackServer {
     if (message.msgtype === 'event') {
       writeEmpty(response);
       route.onInbound({ kind: 'event', message }).catch((error) => {
-        this.#logger.warn?.('[dsh-im:wecom-app] event handling failed:', error);
+        this.#logger.warn?.('[sensteed-im:wecom-app] event handling failed:', error);
       });
       return;
     }
@@ -432,7 +432,7 @@ export class WecomAppCallbackServer {
       writeEmpty(response);
     }
     route.onInbound({ kind: 'message', message, stream: streamState }).catch((error) => {
-      this.#logger.warn?.('[dsh-im:wecom-app] message handling failed:', error);
+      this.#logger.warn?.('[sensteed-im:wecom-app] message handling failed:', error);
       if (streamState) this.finishStream(streamState.streamId, { error: error?.message ?? String(error) });
     });
   }
@@ -448,7 +448,7 @@ export class WecomAppCallbackServer {
         nonce: envelope.nonce,
       });
     } catch (error) {
-      this.#logger.warn?.('[dsh-im:wecom-app] failed to encrypt the passive reply:', error);
+      this.#logger.warn?.('[sensteed-im:wecom-app] failed to encrypt the passive reply:', error);
       writeEmpty(response);
       return;
     }

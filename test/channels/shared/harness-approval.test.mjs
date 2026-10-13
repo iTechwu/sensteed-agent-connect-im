@@ -125,7 +125,7 @@ test('maps only precise whole-message approval replies', () => {
   assert.equal(harnessApprovalDecision(1), null);
 });
 
-test('validates the Harness approval/requested payload without inventing options', () => {
+test('validates the Nezha Agent approval/requested payload without inventing options', () => {
   assert.equal(validHarnessApproval(approval), true);
   assert.equal(validHarnessApproval({ ...approval, callId: undefined, reason: undefined }), true);
 

@@ -12,7 +12,7 @@ export async function apply(ctx, config = {}) {
   const disposeRpc = installIMessageRpc(ctx, production.controller, config.rpcAuthority);
   ctx.effect(() => async () => {
     await unregisterDelivery?.(); await production.close();
-  }, 'dsh-im: close iMessage connections');
+  }, 'sensteed-im: close iMessage connections');
   return disposeRpc;
 }
 

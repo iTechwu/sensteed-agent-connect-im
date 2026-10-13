@@ -37,7 +37,7 @@ function deferred() {
   return { promise, resolve };
 }
 
-test('FeishuLiveCot maps a complete Harness process to ordered native events', async () => {
+test('FeishuLiveCot maps a complete Nezha Agent process to ordered native events', async () => {
   const { cot, calls } = fixture();
   await cot.handle({ type: 'turn-start', turn: 7 });
   await cot.handle({ type: 'reasoning', turn: 7, text: '先检查目录。' });

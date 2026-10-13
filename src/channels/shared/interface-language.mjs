@@ -1,13 +1,13 @@
-// Resolution policy for the DSH interface language that dsh-im's bot messages
+// Resolution policy for the 哪吒 Agent interface language that sensteed-im's bot messages
 // follow.
 //
 // The host message language (./i18n.mjs) is a two-value switch: English, or
-// Chinese as the always-available fallback. The DSH interface language is a
+// Chinese as the always-available fallback. The 哪吒 Agent interface language is a
 // BCP 47-style tag that a language pack may extend beyond the shipped zh/en
 // pair, so a tag is carried verbatim through resolution and persistence and is
 // collapsed to a dictionary language only where it reaches setImHostLanguage().
 
-/** Tag shape accepted by DSH's own locale preference (@deepseek-ai/dsh-client-locale). */
+/** Tag shape accepted by 哪吒 Agent's own locale preference (@deepseek-ai/dsh-client-locale). */
 const LANGUAGE_TAG = /^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/u;
 
 /**
@@ -16,11 +16,11 @@ const LANGUAGE_TAG = /^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/u;
  * - `config`: the plugin's own `language` option (or `DSH_IM_LANGUAGE`). An
  *   operator who pinned a language in the Host composition keeps it, whatever
  *   any individual browser reads the interface in.
- * - `settings`: the explicit selection in DSH's Language row, read from the
- *   Host user-settings document. This is the setting users mean by "DSH is set
+ * - `settings`: the explicit selection in 哪吒 Agent's Language row, read from the
+ *   Host user-settings document. This is the setting users mean by "哪吒 Agent is set
  *   to English".
  * - `mirror`: the last effective interface locale reported by the settings UI.
- *   DSH stores nothing when the interface language came from the browser's
+ *   哪吒 Agent stores nothing when the interface language came from the browser's
  *   language list, so without this layer a reader who never opened the
  *   Language row would still be answered in Chinese.
  */

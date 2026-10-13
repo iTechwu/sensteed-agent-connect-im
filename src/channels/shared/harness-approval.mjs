@@ -59,7 +59,7 @@ function toolArguments(toolCall) {
   }
   if (typeof source !== 'string') return null;
   const raw = printableText(source);
-  // Harness treats an empty tool argument string as an empty object.
+  // 哪吒 Agent treats an empty tool argument string as an empty object.
   if (!raw) return source === '' ? '{}' : null;
   try {
     return JSON.stringify(JSON.parse(raw), null, 2);
@@ -82,7 +82,7 @@ export function harnessApprovalText(payload, {
   if (!operation || operation.length > maxArgumentsLength) return null;
 
   const lines = [
-    t('DeepSeek Harness 需要你的审批：'),
+    t('哪吒 Agent 需要你的审批：'),
     '',
     t('工具：{tool}', { tool: printableText(payload.toolName) }),
     t('操作参数：'),
@@ -173,7 +173,7 @@ export class HarnessApprovalQueue {
         await send(value);
       },
     });
-    // Match Harness' own interaction precedence: a live ask_user_question
+    // Match 哪吒 Agent' own interaction precedence: a live ask_user_question
     // outranks sibling approvals. Otherwise a question answer such as "yes"
     // could accidentally authorize a tool call.
     const deferredByQuestion = hasPendingQuestion
@@ -274,7 +274,7 @@ export class HarnessApprovalQueue {
           await interaction.withdraw?.();
           await finish('unavailable');
         } catch (error) {
-          this.#logger.warn?.(`[dsh-im:${this.#label}] failed to withdraw a stopped approval:`, error);
+          this.#logger.warn?.(`[sensteed-im:${this.#label}] failed to withdraw a stopped approval:`, error);
         }
       });
     };
@@ -283,7 +283,7 @@ export class HarnessApprovalQueue {
       resolved = true;
       runtimeSignal?.removeEventListener('abort', onStop);
       await finish(outcome);
-    }).catch((error) => this.#logger.warn?.(`[dsh-im:${this.#label}] failed to retire a synced approval:`, error));
+    }).catch((error) => this.#logger.warn?.(`[sensteed-im:${this.#label}] failed to retire a synced approval:`, error));
     try {
       await this.handleRequested(interaction, context);
       if (runtimeSignal?.aborted) onStop();
@@ -306,7 +306,7 @@ export class HarnessApprovalQueue {
       || !validHarnessApproval(payload)
       || payload.sessionId !== interaction.sessionId
       || typeof interaction.respond !== 'function') {
-      this.#logger.warn?.(`[dsh-im:${this.#label}] ignored an invalid Harness approval`);
+      this.#logger.warn?.(`[sensteed-im:${this.#label}] ignored an invalid 哪吒 Agent approval`);
       return true;
     }
 
@@ -327,7 +327,7 @@ export class HarnessApprovalQueue {
     const key = cleanText(context?.key);
     const actor = cleanText(context?.actor);
     if (!key || !actor || typeof send !== 'function') {
-      this.#logger.warn?.(`[dsh-im:${this.#label}] ignored an approval without a reply route`);
+      this.#logger.warn?.(`[sensteed-im:${this.#label}] ignored an approval without a reply route`);
       await this.#rejectInteraction(interaction, payload);
       return true;
     }
@@ -383,7 +383,7 @@ export class HarnessApprovalQueue {
     this.#routes.set(key, route);
     pending.timeoutTimer = setTimeout(() => {
       void this.#expire(pending).catch((error) => {
-        this.#logger.warn?.(`[dsh-im:${this.#label}] failed to expire an approval:`, error);
+        this.#logger.warn?.(`[sensteed-im:${this.#label}] failed to expire an approval:`, error);
       });
     }, this.#approvalTimeoutMs);
     pending.timeoutTimer.unref?.();
@@ -458,7 +458,7 @@ export class HarnessApprovalQueue {
             await this.#notifyResolved(pending, 'resolved');
           }
         } else {
-          this.#logger.warn?.(`[dsh-im:${this.#label}] failed to reject a closing approval:`, error);
+          this.#logger.warn?.(`[sensteed-im:${this.#label}] failed to reject a closing approval:`, error);
         }
       }
     }));
@@ -493,7 +493,7 @@ export class HarnessApprovalQueue {
       pending.presentationTask = null;
       await pending.interaction.withdraw();
       await this.handleResolved({ kind: 'approval', interactionId: pending.approvalId, outcome: 'unavailable' });
-      this.#logger.warn?.(`[dsh-im:${this.#label}] approval presentation unavailable:`, error);
+      this.#logger.warn?.(`[sensteed-im:${this.#label}] approval presentation unavailable:`, error);
     } finally {
       if (pending.presentationTask === task) pending.presentationTask = null;
     }
@@ -527,7 +527,7 @@ export class HarnessApprovalQueue {
     } catch (error) {
       if (error?.code !== 'interaction-not-pending') {
         if (pending.inactive) return;
-        this.#logger.warn?.(`[dsh-im:${this.#label}] failed to release an expired approval:`, error);
+        this.#logger.warn?.(`[sensteed-im:${this.#label}] failed to release an expired approval:`, error);
         this.#retryExpiry(pending);
         if (!pending.expiryNoticeSent && pending.presented) {
           pending.expiryNoticeSent = true;
@@ -557,7 +557,7 @@ export class HarnessApprovalQueue {
     pending.expiryAttempts += 1;
     pending.timeoutTimer = setTimeout(() => {
       void this.#releaseExpired(pending).catch((error) => {
-        this.#logger.warn?.(`[dsh-im:${this.#label}] failed to expire an approval:`, error);
+        this.#logger.warn?.(`[sensteed-im:${this.#label}] failed to expire an approval:`, error);
       });
     }, delay);
     pending.timeoutTimer.unref?.();
@@ -587,7 +587,7 @@ export class HarnessApprovalQueue {
       }
       if (pending.inactive) return;
       pending.submitting = false;
-      this.#logger.error?.(`[dsh-im:${this.#label}] failed to submit an approval:`, error);
+      this.#logger.error?.(`[sensteed-im:${this.#label}] failed to submit an approval:`, error);
       // The deadline passed while this decision was in flight.
       if (pending.expired) {
         await this.#expire(pending);
@@ -613,7 +613,7 @@ export class HarnessApprovalQueue {
     try {
       await pending.onResolved?.(text);
     } catch (error) {
-      this.#logger.warn?.(`[dsh-im:${this.#label}] failed to update a resolved approval:`, error);
+      this.#logger.warn?.(`[sensteed-im:${this.#label}] failed to update a resolved approval:`, error);
     }
     await send(text).catch(() => undefined);
   }
@@ -637,7 +637,7 @@ export class HarnessApprovalQueue {
       await this.#present(pending);
     } catch (error) {
       this.#logger.error?.(
-        `[dsh-im:${this.#label}] failed to present the next approval:`,
+        `[sensteed-im:${this.#label}] failed to present the next approval:`,
         error,
       );
       try {

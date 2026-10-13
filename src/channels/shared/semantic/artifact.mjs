@@ -355,7 +355,7 @@ export class OutboundArtifactRegistry {
         + (this.#stagedTurns.get(keyForTurn)?.size ?? 0);
       this.discard(sessionId, turn);
       if (artifactCount > 0) {
-        logger?.warn?.('[dsh-im] discarded files without an active IM delivery consumer:', {
+        logger?.warn?.('[sensteed-im] discarded files without an active IM delivery consumer:', {
           sessionId, turn, artifactCount,
         });
       }
@@ -421,7 +421,7 @@ export class OutboundArtifactRegistry {
       || typeof workspace !== 'string' || !workspace || turn === null) {
       throw artifactError(
         'artifact-context-required',
-        'A live Harness Session is required to return a file.',
+        'A live Nezha Agent Session is required to return a file.',
       );
     }
 
@@ -711,7 +711,7 @@ export function installOutboundArtifactTool(ctx, { registry = outboundArtifactRe
     || typeof ctx?.systemPrompt?.context !== 'function'
     || typeof ctx?.on !== 'function') return false;
   const logger = typeof ctx.logger === 'function'
-    ? ctx.logger('dsh-im:outbound-artifact')
+    ? ctx.logger('sensteed-im:outbound-artifact')
     : (ctx.logger ?? console);
   const tool = createOutboundArtifactTool({ registry });
   ctx.tools.register(tool.definition);
@@ -722,7 +722,7 @@ export function installOutboundArtifactTool(ctx, { registry = outboundArtifactRe
   ctx.on('session/event', (session, event) => registry.observeSessionEvent(session, event, { logger }));
   ctx.on('session/disposed', (session) => registry.disposeSession(session));
   ctx.systemPrompt.context({
-    name: 'dsh-im:return-file',
+    name: 'sensteed-im:return-file',
     order: 115,
     text: (assembly) => registry.hasActiveConsumer(assembly?.agent?.session)
       ? `When the user asks to receive a file or generated image, call ${OUTBOUND_ARTIFACT_TOOL} with its path. Existing files can be sent directly; do not recreate or rename a file solely for delivery. This tool only registers the file; the channel uploads and sends it after your turn finishes. In your reply say the file is prepared or queued, never that it has already been sent or received. The channel reports delivery failures separately.`

@@ -91,7 +91,7 @@ test('DingTalk maps undocumented repliedMsg runtime fields into a reply snapshot
   });
 });
 
-test('DingTalk sends quote context to Harness but does not execute quoted commands', async () => {
+test('DingTalk sends quote context to Nezha Agent but does not execute quoted commands', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:staff-approved', 'session-quote');
   let clears = 0;
@@ -547,7 +547,7 @@ test('DingTalk normalizes a native file callback into one lazy ordinary file', a
   }]);
 });
 
-test('DingTalk bridge hands a native file source to the current Harness turn', async () => {
+test('DingTalk bridge hands a native file source to the current Nezha Agent turn', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:staff-approved', 'session-native-file');
   const bytes = Buffer.from('dingtalk-bridge-file');
@@ -639,7 +639,7 @@ test('DingTalk starts a native-file download before an earlier queued turn finis
   }));
 
   await eventually(() => downloads === 1, 'queued DingTalk file did not start downloading');
-  assert.equal(asks, 1, 'the second Harness turn must remain queued');
+  assert.equal(asks, 1, 'the second Nezha Agent turn must remain queued');
   firstTurn.resolve('第一条完成');
   await Promise.all([first, second]);
 });
@@ -946,7 +946,7 @@ test('DingTalk gives safe, actionable file delivery failure guidance', async (t)
   }
 });
 
-test('DingTalk resolves picture downloadCode lazily and sends image-only content to Harness', async () => {
+test('DingTalk resolves picture downloadCode lazily and sends image-only content to Nezha Agent', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:staff-approved', 'session-image');
   const downloads = [];
@@ -1064,7 +1064,7 @@ test('DingTalk checks the group mention before downloading a picture', async () 
   assert.equal(asks, 0);
 });
 
-test('DingTalk applies the unified access policy before attachments or Harness work', async () => {
+test('DingTalk applies the unified access policy before attachments or Nezha Agent work', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:staff-member', 'session-member');
   let downloads = 0;
@@ -1361,7 +1361,7 @@ test('DingTalk lists models and presets without prompting and advertises fast co
   assert.match(help, /\/preset id:<ID>/);
 });
 
-test('bridge maps a DingTalk direct conversation to one persistent Harness session', async () => {
+test('bridge maps a DingTalk direct conversation to one persistent Nezha Agent session', async () => {
   const fixture = stateFixture();
   const sent = [];
   const asked = [];
@@ -1375,7 +1375,7 @@ test('bridge maps a DingTalk direct conversation to one persistent Harness sessi
       createSession: async () => 'session-one',
       ask: async (sessionId, text) => {
         asked.push({ sessionId, text });
-        return 'Harness 回答';
+        return '哪吒 Agent 回答';
       },
     },
     state: fixture.state,
@@ -1394,8 +1394,8 @@ test('bridge maps a DingTalk direct conversation to one persistent Harness sessi
     { sessionId: 'session-one', text: '继续' },
   ]);
   assert.deepEqual(sent.map(({ text, sessionWebhook }) => ({ text, sessionWebhook })), [
-    { text: 'Harness 回答', sessionWebhook: 'https://oapi.dingtalk.com/robot/reply?ticket=one' },
-    { text: 'Harness 回答', sessionWebhook: 'https://oapi.dingtalk.com/robot/reply?ticket=two' },
+    { text: '哪吒 Agent 回答', sessionWebhook: 'https://oapi.dingtalk.com/robot/reply?ticket=one' },
+    { text: '哪吒 Agent 回答', sessionWebhook: 'https://oapi.dingtalk.com/robot/reply?ticket=two' },
   ]);
   assert.equal(status.messagesReceived, 2);
   assert.equal(status.messagesReplied, 2);
@@ -1541,7 +1541,7 @@ test('a hanging reaction cannot delay an error reply or the message queue', asyn
       createSession: async () => 'session-reaction-failure',
       ask: async () => {
         asks += 1;
-        if (asks === 1) throw new Error('private Harness failure');
+        if (asks === 1) throw new Error('private Nezha Agent failure');
         return '第二条正常';
       },
     },
@@ -1561,7 +1561,7 @@ test('a hanging reaction cannot delay an error reply or the message queue', asyn
 
   assert.equal(asks, 2);
   assert.equal(sent.length, 2, 'the safe error reply and next normal reply are both delivered');
-  assert.equal(sent.some((text) => text.includes('private Harness failure')), false);
+  assert.equal(sent.some((text) => text.includes('private Nezha Agent failure')), false);
   assert.equal(sent.some((text) => text.includes('第二条正常')), true);
   await eventually(() => recalls === 4 && terminals.length === 2);
   assert.deepEqual(terminals, [DINGTALK_ERROR_REACTION_NAME, DINGTALK_DONE_REACTION_NAME]);
@@ -1656,7 +1656,7 @@ test('a failed DingTalk reaction cleanup is retried once without delaying the re
   assert.equal(bridge.status.reactionsAdded, 2);
 });
 
-test('senders in the bot visibility scope enter Harness without local approval', async () => {
+test('senders in the bot visibility scope enter Nezha Agent without local approval', async () => {
   const fixture = stateFixture();
   const sent = [];
   const asked = [];
@@ -1694,7 +1694,7 @@ test('senders in the bot visibility scope enter Harness without local approval',
   assert.equal(status.messagesReplied, 1);
 });
 
-test('group messages require an explicit bot mention before Harness work', async () => {
+test('group messages require an explicit bot mention before Nezha Agent work', async () => {
   const fixture = stateFixture();
   const sent = [];
   const asked = [];
@@ -1946,7 +1946,7 @@ test('bridge does not record a delivered answer when both the AI Card and text f
   assert.equal(fixture.outbound.length, 0);
 });
 
-test('commands stay local and unsafe session webhooks are rejected before Harness', async () => {
+test('commands stay local and unsafe session webhooks are rejected before Nezha Agent', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:staff-approved', 'old-session');
   const sent = [];
@@ -1975,7 +1975,7 @@ test('commands stay local and unsafe session webhooks are rejected before Harnes
   assert.equal(bridge.status.lastError, '钉钉消息没有安全的回复地址。');
 });
 
-test('a DingTalk reply answers a pending Harness question before the original turn queue', async () => {
+test('a DingTalk reply answers a pending Nezha Agent question before the original turn queue', async () => {
   const fixture = stateFixture();
   const sent = [];
   const asked = [];
@@ -2045,7 +2045,7 @@ test('a DingTalk reply answers a pending Harness question before the original tu
   releaseTurn.resolve();
   await first;
   assert.equal(sent.length, 2);
-  assert.match(sent[0].text, /DeepSeek Harness 需要你补充信息/);
+  assert.match(sent[0].text, /哪吒 Agent 需要你补充信息/);
   assert.equal(sent[1].text, '已按测试环境继续。');
   assert.equal(bridge.status.messagesReceived, 2);
   assert.equal(bridge.status.messagesReplied, 1);
@@ -2720,7 +2720,7 @@ test('question delivery replays safely and a multi-question batch keeps canonica
   assert.equal(sent.at(-1).text, '批量问题已完成');
 });
 
-test('aborting a DingTalk turn cancels its pending Harness question', async () => {
+test('aborting a DingTalk turn cancels its pending Nezha Agent question', async () => {
   const fixture = stateFixture();
   const controller = new AbortController();
   const sent = [];
@@ -2962,7 +2962,7 @@ test('DingTalk private batch input submits once, cancels cleanly, and restores n
   assert.equal(sent.at(-1), '普通完成');
 });
 
-test('DingTalk retains a private batch after Harness ask fails and lets /send retry it', async () => {
+test('DingTalk retains a private batch after Nezha Agent ask fails and lets /send retry it', async () => {
   const fixture = stateFixture();
   const asked = [];
   const sent = [];
@@ -2975,7 +2975,7 @@ test('DingTalk retains a private batch after Harness ask fails and lets /send re
       sessionExists: async () => true,
       ask: async (_sessionId, prompt) => {
         asked.push(prompt);
-        if (asked.length === 1) throw new Error('temporary Harness failure');
+        if (asked.length === 1) throw new Error('temporary Nezha Agent failure');
         return '重试成功';
       },
     },
@@ -3052,7 +3052,7 @@ test('DingTalk mentions the sender in every group text chunk but not in private 
       }));
 
       assert.ok(sent.length > 1);
-      assert.equal(sent.map(({ text }) => text).join(''), '钉钉机器人与 DeepSeek Harness 连接正常。');
+      assert.equal(sent.map(({ text }) => text).join(''), '钉钉机器人与 哪吒 Agent 连接正常。');
       for (const request of sent) {
         assert.deepEqual(request.at, String(conversationType) === '2'
           ? { atUserIds: ['staff-approved'] }
@@ -3076,7 +3076,7 @@ test('DingTalk batch reply failures attempt a safe fallback and settle even if i
           },
           clientId: 'ding-client',
           clientSecret: 'host-secret',
-          harness: { ask: async () => assert.fail('batch acknowledgement must not call Harness') },
+          harness: { ask: async () => assert.fail('batch acknowledgement must not call Nezha Agent') },
           state: stateFixture().state,
           logger: { error() {} },
         });
@@ -3094,7 +3094,7 @@ test('DingTalk batch reply failures attempt a safe fallback and settle even if i
   }
 });
 
-test('DingTalk group batch commands are rejected without reaching Harness', async () => {
+test('DingTalk group batch commands are rejected without reaching Nezha Agent', async () => {
   const fixture = stateFixture();
   const sent = [];
   let asks = 0;

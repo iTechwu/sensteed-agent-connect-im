@@ -51,7 +51,7 @@ function matchingAssistantText(events, quotedAt, toleranceMs) {
  * Recover one completed assistant answer near a provider message timestamp.
  *
  * @param {object} options Recovery inputs.
- * @param {{readHistory: Function}} options.session Bound Harness Session handle.
+ * @param {{readHistory: Function}} options.session Bound 哪吒 Agent Session handle.
  * @param {number} options.quotedAt Provider message timestamp in milliseconds.
  * @param {AbortSignal} [options.signal] Caller cancellation signal.
  * @param {number} [options.pageSize=100] History events requested per page.

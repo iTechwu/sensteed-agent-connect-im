@@ -20,7 +20,7 @@ function result(message) {
 function permissions(value) {
   if (!value || !validId(value.currentValue) || !Array.isArray(value.options)
     || value.options.some((item) => !item || !validId(item.value))) {
-    throw new TypeError('Harness returned invalid permissions');
+    throw new TypeError('哪吒 Agent returned invalid permissions');
   }
   const seen = new Set();
   return {

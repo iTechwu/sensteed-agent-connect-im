@@ -119,7 +119,7 @@ export async function createWhatsappWebSession({
     settleFailure(abortError());
     await restartTask?.catch(() => undefined);
     await saveQueue.catch(() => undefined);
-    await socket?.logout('Removed from DeepSeek Harness').catch(() => undefined);
+    await socket?.logout('Removed from 哪吒 Agent').catch(() => undefined);
   };
 
   const startSocket = () => {
@@ -127,7 +127,7 @@ export async function createWhatsappWebSession({
     let connectionOpen = false;
     const nextSocket = makeSocket({
       auth: state,
-      browser: Browsers.macOS('DeepSeek Harness'),
+      browser: Browsers.macOS('哪吒 Agent'),
       logger: SILENT_LOGGER,
       markOnlineOnConnect: false,
       syncFullHistory: false,
@@ -153,7 +153,7 @@ export async function createWhatsappWebSession({
         await saveCreds();
         await hardenAuthDirectory(authDir);
       });
-      saveQueue.catch(() => logger.error?.('[dsh-im:whatsapp] failed to persist linked-device state'));
+      saveQueue.catch(() => logger.error?.('[sensteed-im:whatsapp] failed to persist linked-device state'));
       resolveWhenLinked();
     });
     nextSocket.ev.on('connection.update', (update) => {
@@ -193,7 +193,7 @@ export async function createWhatsappWebSession({
           if (timestamp === null || timestamp < sessionStartedAt - APPEND_RECENT_GRACE_MS) continue;
         }
         Promise.resolve(onMessage(message, { socket: nextSocket })).catch(() => {
-          logger.error?.('[dsh-im:whatsapp] failed to process an inbound WhatsApp message');
+          logger.error?.('[sensteed-im:whatsapp] failed to process an inbound WhatsApp message');
         });
       }
     });

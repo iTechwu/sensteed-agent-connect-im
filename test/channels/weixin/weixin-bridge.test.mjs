@@ -68,7 +68,7 @@ function message(id, text, overrides = {}) {
   };
 }
 
-test('Weixin bridge sends ref_msg context to Harness but does not execute quoted commands', async () => {
+test('Weixin bridge sends ref_msg context to Nezha Agent but does not execute quoted commands', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:owner-user', 'session-quote');
   let clears = 0;
@@ -261,7 +261,7 @@ test('Weixin bridge normalization keeps native file items separate from images',
   assert.deepEqual(await inbound.files[0].load({}), bytes);
 });
 
-test('Weixin bridge hands a native file source to the current Harness turn', async () => {
+test('Weixin bridge hands a native file source to the current Nezha Agent turn', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:owner-user', 'session-native-file');
   const bytes = Buffer.from('weixin-bridge-file');
@@ -444,7 +444,7 @@ test('Weixin starts a native-file download before an earlier queued turn finishe
   }));
 
   await eventually(() => downloads === 1, 'queued Weixin file did not start downloading');
-  assert.equal(asks, 1, 'the second Harness turn must remain queued');
+  assert.equal(asks, 1, 'the second Nezha Agent turn must remain queued');
   firstTurn.resolve('第一条完成');
   await Promise.all([first, second]);
 });
@@ -797,7 +797,7 @@ test('Weixin explains that an upload timeout happened before the file was sent',
   }]);
 });
 
-test('Weixin sends image-only messages to Harness as structured content', async () => {
+test('Weixin sends image-only messages to Nezha Agent as structured content', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:owner-user', 'session-image');
   const prompts = [];
@@ -860,7 +860,7 @@ test('Weixin authorizes the sender before resolving encrypted image references',
   assert.equal(asks, 0);
 });
 
-test('Weixin applies the unified access policy before attachments or Harness work', async () => {
+test('Weixin applies the unified access policy before attachments or Nezha Agent work', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:member-user', 'session-member');
   let imageExtractions = 0;
@@ -1127,7 +1127,7 @@ test('Weixin lists models and presets without prompting and advertises fast comm
   assert.match(help, /\/preset id:<ID>/);
 });
 
-test('bridge maps the scanning Weixin user to one persistent Harness session and echoes context_token', async () => {
+test('bridge maps the scanning Weixin user to one persistent Nezha Agent session and echoes context_token', async () => {
   const sent = [];
   const asked = [];
   const fixture = stateFixture();
@@ -1142,7 +1142,7 @@ test('bridge maps the scanning Weixin user to one persistent Harness session and
       createSession: async () => 'session-1',
       ask: async (sessionId, text) => {
         asked.push({ sessionId, text });
-        return 'Harness 的回答';
+        return '哪吒 Agent 的回答';
       },
     },
     state: fixture.state,
@@ -1158,8 +1158,8 @@ test('bridge maps the scanning Weixin user to one persistent Harness session and
   ]);
   assert.equal(fixture.sessions.get('p2p:owner-user'), 'session-1');
   assert.deepEqual(sent.map(({ toUserId, text, contextToken }) => ({ toUserId, text, contextToken })), [
-    { toUserId: 'owner-user', text: 'Harness 的回答', contextToken: 'context-1' },
-    { toUserId: 'owner-user', text: 'Harness 的回答', contextToken: 'context-2' },
+    { toUserId: 'owner-user', text: '哪吒 Agent 的回答', contextToken: 'context-1' },
+    { toUserId: 'owner-user', text: '哪吒 Agent 的回答', contextToken: 'context-2' },
   ]);
   assert.equal(status.messagesReceived, 2);
   assert.equal(status.messagesReplied, 2);
@@ -1221,7 +1221,7 @@ test('Weixin keeps the typing indicator alive until the final reply with one tic
   ]);
 });
 
-test('Weixin typing failures never prevent the Harness reply', async () => {
+test('Weixin typing failures never prevent the Nezha Agent reply', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:owner-user', 'session-typing-fallback');
   const sent = [];
@@ -1299,7 +1299,7 @@ test('Weixin best-effort cancels after a typing start or keepalive failure', asy
   }
 });
 
-test('Weixin stops typing while a Harness question is visible', async () => {
+test('Weixin stops typing while a Nezha Agent question is visible', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:owner-user', 'session-typing-question');
   const events = [];
@@ -1338,12 +1338,12 @@ test('Weixin stops typing while a Harness question is visible', async () => {
 
   assert.equal(events[0], 'typing:1');
   assert.equal(events[1], 'typing:2');
-  assert.match(events[2], /^text:DeepSeek Harness 需要你补充信息/);
+  assert.match(events[2], /^text:哪吒 Agent 需要你补充信息/);
   assert.equal(events.filter((event) => event === 'typing:1').length, 1);
   assert.equal(events.at(-1), 'text:任务结束');
 });
 
-test('Weixin resumes typing after the visible Harness question is resolved', async () => {
+test('Weixin resumes typing after the visible Nezha Agent question is resolved', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:owner-user', 'session-typing-question-resolved');
   const events = [];
@@ -2544,7 +2544,7 @@ test('Weixin batch cancellation is local and a failed submission remains retryab
   assert.equal(attempts, 2);
 });
 
-test('Weixin clears a submitted batch when the Harness turn is stopped', async () => {
+test('Weixin clears a submitted batch when the Nezha Agent turn is stopped', async () => {
   const fixture = stateFixture();
   fixture.sessions.set('p2p:owner-user', 'session-batch-stopped');
   const sent = [];

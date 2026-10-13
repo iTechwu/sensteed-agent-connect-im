@@ -64,7 +64,7 @@ export class QqRuntime {
     typingMiddleware = typingIndicator,
   }) {
     if (!config || !appSecret || !harness || !state) {
-      throw new TypeError('QqRuntime requires config, app secret, Harness, and state');
+      throw new TypeError('QqRuntime requires config, app secret, harness, and state');
     }
     this.#config = config;
     this.#appSecret = appSecret;
@@ -203,7 +203,7 @@ export class QqRuntime {
       await next();
     });
     // QQ delivers emoji/face messages as opaque `<faceType=..,faceId="..",ext="..">`
-    // tags. Parse them into readable text so the Harness sees what the sender
+    // tags. Parse them into readable text so the 哪吒 Agent sees what the sender
     // actually meant instead of an unusable markup fragment.
     bot.use(contentSanitizer({ parseFaceTags: true }));
     bot.use?.(this.#typingMiddleware({
@@ -247,7 +247,7 @@ export class QqRuntime {
       else {
         this.#status.error = this.#diagnostics.report(error, { operation: 'connection.monitor', botId: this.#config?.botId, automatic: true }).publicError;
         this.#status.lastError = this.#status.error.message;
-        this.#logger.warn?.(`[dsh-im:qq] bot ${this.#config.botId} connection error:`, extractConnectionEvidence(error).details);
+        this.#logger.warn?.(`[sensteed-im:qq] bot ${this.#config.botId} connection error:`, extractConnectionEvidence(error).details);
       }
     };
     const onMessage = (_ctx, message) => {
@@ -256,7 +256,7 @@ export class QqRuntime {
       void task.catch((error) => {
         if (controller.signal.aborted) return;
         this.#logger.error?.(
-          `[dsh-im:qq] bot ${this.#config.botId} message handling failed:`,
+          `[sensteed-im:qq] bot ${this.#config.botId} message handling failed:`,
           extractConnectionEvidence(error).details,
         );
       });
@@ -275,7 +275,7 @@ export class QqRuntime {
       this.#status.qqConnectionState = 'failed';
       this.#status.error = this.#diagnostics.report(error, { operation: 'connection.monitor', botId: this.#config?.botId, automatic: true }).publicError;
       this.#status.lastError = this.#status.error.message;
-      this.#logger.error?.(`[dsh-im:qq] bot ${this.#config.botId} connection stopped:`, extractConnectionEvidence(error).details);
+      this.#logger.error?.(`[sensteed-im:qq] bot ${this.#config.botId} connection stopped:`, extractConnectionEvidence(error).details);
     });
 
     let timer;
@@ -315,7 +315,7 @@ export class QqRuntime {
     try {
       bot?.stop();
     } catch (error) {
-      this.#logger.warn?.(`[dsh-im:qq] bot ${this.#config.botId} failed to stop cleanly:`, extractConnectionEvidence(error).details);
+      this.#logger.warn?.(`[sensteed-im:qq] bot ${this.#config.botId} failed to stop cleanly:`, extractConnectionEvidence(error).details);
     }
     await Promise.race([
       runTask?.catch(() => undefined) ?? Promise.resolve(),

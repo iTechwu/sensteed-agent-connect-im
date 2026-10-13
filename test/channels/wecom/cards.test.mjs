@@ -371,11 +371,11 @@ test('ordinary messages and text commands do not open menu cards', async () => {
   assert.equal(f.bridge.status.lastMessageError, null);
 });
 
-test('successful menus do not clear Harness failures or errors from concurrent requests', async () => {
+test('successful menus do not clear Nezha Agent failures or errors from concurrent requests', async () => {
   let release;
   const f = setup({ harness: {
     ensureRunning: async () => {
-      throw Object.assign(new Error('Harness offline'), { code: 'harness-connect-failed' });
+      throw Object.assign(new Error('Nezha Agent offline'), { code: 'harness-connect-failed' });
     },
   } });
   await f.bridge.accept(f.frame('/status'));

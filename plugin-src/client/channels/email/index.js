@@ -185,7 +185,7 @@ function AgentMailAuth({ rpcCall, endpoints, disabled, address = '', onAuthorize
 /**
  * Mailbox credential form: address + app password + provider (or explicit
  * hosts) + the sender allowlist, which is required because a mail address is
- * forgeable and an open mailbox would let anyone drive the Harness.
+ * forgeable and an open mailbox would let anyone drive the 哪吒 Agent.
  */
 function MailboxPanel({ busy, error, onSubmit, onCancel, rpcCall, endpoints }) {
   const [transportKey, setTransportKey] = React.useState('imap-smtp');
@@ -251,7 +251,7 @@ function MailboxPanel({ busy, error, onSubmit, onCancel, rpcCall, endpoints }) {
 
   return h('section', { className: 'ddt-card dim-surfaceCard dim-emailPanel' },
     h('h3', null, '接入邮箱'),
-    h('p', null, 'DeepSeek Harness 会读取该邮箱的新邮件作为指令，并在同一邮件线程内回复处理结果。'),
+    h('p', null, '哪吒 Agent 会读取该邮箱的新邮件作为指令，并在同一邮件线程内回复处理结果。'),
     h('div', { className: 'dim-emailFields' },
       field('接入方式', h('select', {
         value: transportKey,
@@ -324,7 +324,7 @@ function MailboxPanel({ busy, error, onSubmit, onCancel, rpcCall, endpoints }) {
         value: allowedSenders, disabled: busy,
         placeholder: 'me@example.com\n同事@example.com',
         onChange: (event) => setAllowedSenders(event.target.value),
-      }), '必填。只有这些地址发来的邮件会触发 Harness；多个地址用换行或逗号分隔。')),
+      }), '必填。只有这些地址发来的邮件会触发 哪吒 Agent；多个地址用换行或逗号分隔。')),
     error ? h(ConnectionError, { error: error }) : null,
     h('div', { className: 'ddt-actions dim-viewActions' },
       h('button', { type: 'button', className: 'ddt-button', onClick: onCancel, disabled: busy }, '取消'),
@@ -336,7 +336,7 @@ function MailboxPanel({ busy, error, onSubmit, onCancel, rpcCall, endpoints }) {
 }
 
 /**
- * Session binding: how incoming mail maps onto Harness sessions.
+ * Session binding: how incoming mail maps onto 哪吒 Agent sessions.
  *
  * Three levels, highest first:
  *   1. a per-sender binding,
@@ -680,7 +680,7 @@ export const EMAIL_SETTINGS_DEFINITION = Object.freeze({
   connectionLabel: ' IMAP/SMTP 邮箱',
   tokenPlaceholder: '',
   emptyTitle: '接入邮箱',
-  emptyDescription: '使用现有邮箱收发指令：邮件进来触发 Harness，处理结果以回信形式送达。',
+  emptyDescription: '使用现有邮箱收发指令：邮件进来触发 哪吒 Agent，处理结果以回信形式送达。',
   platformLabel: '邮箱地址',
   // The mailbox form supplies every field itself: the address is the identity
   // and the password is the secret, so the values pass through unchanged

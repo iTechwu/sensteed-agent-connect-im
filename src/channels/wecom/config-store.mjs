@@ -82,7 +82,7 @@ export class WecomConfigStore {
   async load() {
     try {
       const normalized = normalizeDocument(JSON.parse(await readFile(this.#path, 'utf8')));
-      if (!normalized) throw new Error('dsh-im Enterprise WeChat config contains invalid bot data');
+      if (!normalized) throw new Error('sensteed-im Enterprise WeChat config contains invalid bot data');
       this.#value = normalized;
     } catch (error) {
       if (error?.code !== 'ENOENT') throw error;

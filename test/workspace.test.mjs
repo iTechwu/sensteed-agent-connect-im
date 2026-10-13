@@ -223,7 +223,7 @@ test('BotWorkspaceStore fails closed when a stored target id does not match its 
   })}\n`);
   await assert.rejects(
     new BotWorkspaceStore(path, { defaultWorkspace }).load(),
-    { message: 'dsh-im workspace config is invalid' },
+    { message: 'sensteed-im workspace config is invalid' },
   );
 });
 
@@ -393,7 +393,7 @@ test('workspace validation rejects relative, missing, and file paths', async (t)
   await assert.rejects(validateWorkspacePath(file), { code: 'workspace-not-directory' });
 });
 
-test('bot-scoped Harness creates sessions in each bot workspace and switching clears sessions', async (t) => {
+test('bot-scoped Nezha Agent creates sessions in each bot workspace and switching clears sessions', async (t) => {
   const { path, defaultWorkspace, alternateWorkspace } = await fixture(t);
   const workspaces = await new BotWorkspaceStore(path, { defaultWorkspace }).load();
   await Promise.all([workspaces.ensure('bot_one'), workspaces.ensure('bot_two')]);
@@ -459,7 +459,7 @@ test('an old session cannot be written back while RPC switches the bot workspace
   await controller.updateWorkspace('bot_race', defaultWorkspace);
   finishCreation('second-session-from-old-workspace');
   assert.equal(await scope.harness.sessionExists(await oldSessionForLookup), false);
-  assert.equal(existenceChecks, 0, 'stale sessions are rejected before asking Harness');
+  assert.equal(existenceChecks, 0, 'stale sessions are rejected before asking Nezha Agent');
 });
 
 test('an old workspace session handle cannot read history, list, select, stop, or steer after a switch', async (t) => {
@@ -919,7 +919,7 @@ test('clearing workspace sessions preserves message deduplication and channel cu
 
   for (const [name, store] of stores) {
     await store.clearSessions();
-    assert.equal(store.sessionFor('conversation'), null, `${name} clears its Harness session`);
+    assert.equal(store.sessionFor('conversation'), null, `${name} clears its Nezha Agent session`);
     assert.equal(store.hasSeen(`message-${name}`), true, `${name} keeps message deduplication`);
   }
   assert.equal(stores[0][1].cursor(), 42);
@@ -1409,7 +1409,7 @@ test('/sessionlist and /sessions accept a one-off --limit for the current worksp
     const result = await runWorkspaceCommand(command, harness);
     assert.match(result.message, /\/sessionlist --limit N/);
   }
-  assert.equal(listCalls, 3, 'invalid limits must not query Harness');
+  assert.equal(listCalls, 3, 'invalid limits must not query Nezha Agent');
 });
 
 test('/sessions reuses /sessionlist parsing for current, numbered, and absolute workspaces', async (t) => {
@@ -1464,7 +1464,7 @@ test('/sessionlist returns actionable and safe errors', async (t) => {
   assert.match((await runWorkspaceCommand('/sessionlist', {})).message, /暂不支持/);
   assert.match((await runWorkspaceCommand('/sessionlist', {
     currentWorkspace() { return defaultWorkspace; },
-    async listWorkspaceSessions() { throw new Error('private Harness detail'); },
+    async listWorkspaceSessions() { throw new Error('private Nezha Agent detail'); },
   })).message, /暂时无法获取/);
 
   const stale = new Error('old bot lifecycle');
@@ -1474,7 +1474,7 @@ test('/sessionlist returns actionable and safe errors', async (t) => {
     async listWorkspaceSessions() { throw stale; },
   });
   assert.match(staleResult.message, /正在移除或已重新接入/);
-  assert.doesNotMatch(staleResult.message, /old bot lifecycle|private Harness detail/);
+  assert.doesNotMatch(staleResult.message, /old bot lifecycle|private Nezha Agent detail/);
 });
 
 test('/workspacelist and /sessionlist canonicalize a symbolic-link workspace', async (t) => {
@@ -1657,7 +1657,7 @@ for (const [name, Client] of [
   ['Feishu', FeishuHarnessClient],
   ['DingTalk', DingtalkHarnessClient],
 ]) {
-  test(`${name} Harness creates a session with an explicit workspace override`, async () => {
+  test(`${name} Nezha Agent creates a session with an explicit workspace override`, async () => {
     const client = new Client({
       baseUrl: 'http://127.0.0.1:3080',
       workspace: '/default-workspace',
@@ -1879,7 +1879,7 @@ test('changing a bot agent preset does not clear sessions', async (t) => {
   assert.equal(store.generationFor('bot_one'), generation);
 });
 
-test('bot-scoped Harness creates sessions with the selected agent preset', async (t) => {
+test('bot-scoped Nezha Agent creates sessions with the selected agent preset', async (t) => {
   const { path, defaultWorkspace } = await fixture(t);
   const workspaces = await new BotWorkspaceStore(path, { defaultWorkspace }).load();
   await Promise.all([workspaces.ensure('bot_one'), workspaces.ensure('bot_two')]);
@@ -2149,7 +2149,7 @@ test('conversation workspace override validates its conversation key and path', 
   });
 });
 
-test('bot-scoped Harness creates a conversation session in its override workspace', async (t) => {
+test('bot-scoped Nezha Agent creates a conversation session in its override workspace', async (t) => {
   const { path, defaultWorkspace, alternateWorkspace } = await fixture(t);
   const workspaces = await new BotWorkspaceStore(path, { defaultWorkspace }).load();
   await workspaces.ensure('bot_conv_scope');

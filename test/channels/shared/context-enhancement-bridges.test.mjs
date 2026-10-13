@@ -332,7 +332,7 @@ for (const channel of CHANNELS) {
         for (const contextEnhancement of variants) {
           const current = fixture(channel, { contextEnhancement });
           await current.bridge.accept(current.event(1, undefined, { kind, media, poisonName: true }));
-          assert.deepEqual(current.calls, baseline.calls, `${media ?? 'text'}: preserve platform/Harness call order and arguments`);
+          assert.deepEqual(current.calls, baseline.calls, `${media ?? 'text'}: preserve platform/Nezha Agent call order and arguments`);
           assert.deepEqual(current.sessions, baseline.sessions);
           assert.deepEqual(current.seen, baseline.seen);
           assert.equal(current.sourceReads, 0);

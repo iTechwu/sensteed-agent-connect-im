@@ -104,7 +104,7 @@ export class MatrixConfigStore {
   async load() {
     try {
       const normalized = this.#normalizeDocument(JSON.parse(await readFile(this.#path, 'utf8')));
-      if (!normalized) throw new Error('dsh-im Matrix config contains invalid bot data');
+      if (!normalized) throw new Error('sensteed-im Matrix config contains invalid bot data');
       this.#value = normalized;
     } catch (error) {
       if (error?.code !== 'ENOENT') throw error;

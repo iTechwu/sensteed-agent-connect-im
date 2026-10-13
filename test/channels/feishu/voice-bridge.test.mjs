@@ -113,7 +113,7 @@ function runBridge({
   stepPush = false,
   stepPushMode,
   stepPushClock,
-  askUpdates = [{ type: 'text', text: 'Harness' }],
+  askUpdates = [{ type: 'text', text: 'Nezha Agent' }],
   accessPolicy = null,
   state = null,
   harness = null,
@@ -166,7 +166,7 @@ function runBridge({
     ask: async (sessionId, text, options) => {
       asked.push({ sessionId, text });
       for (const update of askUpdates) await options.onUpdate(update);
-      return 'Harness reply';
+      return 'Nezha Agent reply';
     },
   };
   const effectiveState = state ?? stateFixture().state;
@@ -198,9 +198,9 @@ test('voice transcripts an audio message into the normal pipeline and replies wi
   assert.deepEqual(streamed, [{
     chatId: 'oc_chat',
     options: { replyTo: 'om_voice_1' },
-    updates: ['Harness', 'Harness reply'],
+    updates: ['Nezha Agent', 'Nezha Agent reply'],
   }]);
-  assert.deepEqual(voice.syntheses, ['Harness reply']);
+  assert.deepEqual(voice.syntheses, ['Nezha Agent reply']);
   assert.equal(creates.length, 0);
   assert.equal(uploads.length, 1);
   assert.deepEqual(uploads[0].data, {
@@ -300,7 +300,7 @@ test('consecutive voice turns in the same chat each voice their own answer', asy
 
   // 回合状态随各自消息处理结束清理,后一回合不得沿用或覆盖前一回合,
   // 音频回复必须各自回到发起语音的那条消息上。
-  assert.deepEqual(voice.syntheses, ['Harness reply', 'Harness reply']);
+  assert.deepEqual(voice.syntheses, ['Nezha Agent reply', 'Nezha Agent reply']);
   assert.equal(uploads.length, 2);
   assert.deepEqual(replies.map((reply) => reply.path.message_id), ['om_voice_a', 'om_voice_b']);
 });
@@ -326,7 +326,7 @@ test('a voice turn answered via streaming step card still gets its audio reply',
 
   // 修复前:卡封存成功分支提前 return,语音回合未被消费,音频哑火且
   // 状态泄漏到下一回合。修复后:合成、上传、音频回复原语音消息。
-  assert.deepEqual(voice.syntheses, ['Harness reply']);
+  assert.deepEqual(voice.syntheses, ['Nezha Agent reply']);
   assert.equal(uploads.length, 1);
   const audioReplies = replies.filter((reply) => reply.data?.msg_type === 'audio');
   assert.equal(audioReplies.length, 1);

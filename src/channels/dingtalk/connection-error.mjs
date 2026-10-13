@@ -185,13 +185,13 @@ export function describeDingtalkConnectionFailure(error, {
     publicError = fixedPublicError(
       'stream-proxy-dependency-incompatible',
       '钉钉 Stream 连接失败：检测到代理依赖 agent-base 6.0.0。',
-      '请将 DSH profile 中的 agent-base@6 固定为 6.0.2 后重新安装依赖，或升级 pnpm 后重新解析 lockfile。',
+      '请将 哪吒 Agent profile 中的 agent-base@6 固定为 6.0.2 后重新安装依赖，或升级 pnpm 后重新解析 lockfile。',
       referenceId,
     );
   } else if (stage === 'dingtalk-harness-connect-failed') {
     publicError = fixedPublicError(
       'harness-unavailable',
-      '插件无法连接本机 Harness。',
+      '插件无法连接本机 哪吒 Agent。',
       '请确认 dsh web 正常运行，并查看 dsh web 日志中相同参考号对应的诊断信息。',
       referenceId,
     );
@@ -199,7 +199,7 @@ export function describeDingtalkConnectionFailure(error, {
     publicError = fixedPublicError(
       'stream-sdk-load-failed',
       '钉钉 Stream SDK 加载失败。',
-      '请重新安装当前 DSH profile 的插件依赖，并查看 dsh web 日志中相同参考号对应的诊断信息。',
+      '请重新安装当前 哪吒 Agent profile 的插件依赖，并查看 dsh web 日志中相同参考号对应的诊断信息。',
       referenceId,
     );
   } else if (statuses.some((status) => status === 401 || status === 403)) {
@@ -249,14 +249,14 @@ export function describeDingtalkConnectionFailure(error, {
     publicError = fixedPublicError(
       'stream-listener-failed',
       '钉钉 Stream 消息监听初始化失败。',
-      '请确认 dsh-im 与 dingtalk-stream 版本兼容，并按参考号查看 dsh web 日志。',
+      '请确认 sensteed-im 与 dingtalk-stream 版本兼容，并按参考号查看 dsh web 日志。',
       referenceId,
     );
   } else if (stage === 'dingtalk-runtime-prepare-failed') {
     publicError = fixedPublicError(
       'runtime-prepare-failed',
       '钉钉机器人运行环境初始化失败。',
-      '请检查 DSH 数据目录、工作区和插件依赖，并按参考号查看 dsh web 日志。',
+      '请检查 哪吒 Agent 数据目录、工作区和插件依赖，并按参考号查看 dsh web 日志。',
       referenceId,
     );
   } else {

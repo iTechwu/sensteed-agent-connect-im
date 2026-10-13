@@ -91,7 +91,7 @@ export class OfficeRuntime {
     this.#task = this.#run(this.#controller.signal).finally(() => { this.#task = null; });
     this.#task.catch((error) => {
       if (this.#controller?.signal.aborted) return;
-      this.#logger.error?.('[dsh-im:office] connector stopped:', extractConnectionEvidence(error).details);
+      this.#logger.error?.('[sensteed-im:office] connector stopped:', extractConnectionEvidence(error).details);
     });
     return this.status;
   }

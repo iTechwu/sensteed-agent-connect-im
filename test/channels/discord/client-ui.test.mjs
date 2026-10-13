@@ -24,7 +24,7 @@ test('Discord account card matches the unified compact card layout', () => {
       botId: 'discord_test',
       connected: true,
       state: 'connected',
-      bot: { name: 'Harness Bot', username: 'HarnessBot', idMasked: '123•••' },
+      bot: { name: 'Nezha Agent Bot', username: 'HarnessBot', idMasked: '123•••' },
       health: { summary: 'Discord Gateway 长连接运行正常', lastCheckedAt: Date.now() },
       error: null,
     },

@@ -1,6 +1,6 @@
 import { modernHarnessApi } from './modern-harness-api.mjs';
 
-/** Connect to this Host directly unless an external Harness URL was configured. */
+/** Connect to this Host directly unless an external 哪吒 Agent URL was configured. */
 export function harnessConnection(ctx, config = {}, { competitiveApprovals = false } = {}) {
   if (config.harnessBaseUrl !== undefined) {
     return { baseUrl: new URL(config.harnessBaseUrl) };

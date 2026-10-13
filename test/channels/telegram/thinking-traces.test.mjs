@@ -644,7 +644,7 @@ test('E1: an explicit thinkingTraces=false is persisted and reported, absent mea
     credentials: credentials(),
     configStore,
     inspectToken: async () => ({
-      platformId: '123456789', name: 'Harness Telegram', username: 'harness_bot',
+      platformId: '123456789', name: 'Nezha Agent Telegram', username: 'harness_bot',
     }),
     createRuntime: async ({ botId, config }) => {
       runtimeRecords.push({ botId, config: structuredClone(config) });

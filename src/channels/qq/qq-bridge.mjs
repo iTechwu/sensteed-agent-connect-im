@@ -97,7 +97,7 @@ const QQ_IMAGE_FILENAME = /\.(?:gif|jpe?g|png|webp)$/i;
 
 function helpText() {
   return [
-    t('QQ 机器人已连接 DeepSeek Harness。'),
+    t('QQ 机器人已连接 哪吒 Agent。'),
     '',
     t('直接发送文字、图片或文件即可继续当前会话。'),
     t('/menu 或 /m  打开可点击的功能菜单'),
@@ -476,7 +476,7 @@ export class QqHarnessBridge {
   }) {
     if (!bot || typeof bot.sendText !== 'function') throw new TypeError('QQ bot client is required');
     if (!ownerUserOpenid) throw new TypeError('QQ scanner identity is required');
-    if (!harness || !state) throw new TypeError('Harness client and state store are required');
+    if (!harness || !state) throw new TypeError('哪吒 Agent client and state store are required');
     if (typeof fetchImpl !== 'function') throw new TypeError('fetchImpl must be a function');
     if (!Number.isInteger(fileUploadTimeoutMs) || fileUploadTimeoutMs < 1) {
       throw new TypeError('fileUploadTimeoutMs must be a positive integer');
@@ -624,7 +624,7 @@ export class QqHarnessBridge {
         this.#status.lastError = error?.message ?? String(error);
         const failure = setLastMessageFailure(this.#status, error);
         this.#logger.error?.(
-          `[dsh-im:qq] failed to process a command [${failure.referenceId}]:`,
+          `[sensteed-im:qq] failed to process a command [${failure.referenceId}]:`,
           messageFailureDiagnostic(error, failure),
         );
         return this.#bot.sendText(message.replyTarget, messageFailureText(failure))
@@ -908,7 +908,7 @@ export class QqHarnessBridge {
       this.#status.lastError = error?.message ?? String(error);
       const failure = setLastMessageFailure(this.#status, error);
       this.#logger.error?.(
-        `[dsh-im:qq] failed to process a batch input message [${failure.referenceId}]:`,
+        `[sensteed-im:qq] failed to process a batch input message [${failure.referenceId}]:`,
         messageFailureDiagnostic(error, failure),
       );
       await this.#bot.sendText(message.replyTarget, messageFailureText(failure))
@@ -940,7 +940,7 @@ export class QqHarnessBridge {
     }).catch((error) => {
       if (this.#signal?.aborted) return;
       this.#status.lastError = error?.message ?? String(error);
-      this.#logger.error?.('[dsh-im:qq] failed to apply inbound access policy:', error);
+      this.#logger.error?.('[sensteed-im:qq] failed to apply inbound access policy:', error);
     }).finally(() => {
       this.#acceptedMessageIds.delete(messageId);
       this.#commandTasks.delete(task);
@@ -1036,7 +1036,7 @@ export class QqHarnessBridge {
       }
       if (!hasImages && !hasFiles && command === '/status') {
         await this.#harness.ensureRunning({ signal: this.#signal });
-        await this.#bot.sendText(target, t('QQ 机器人与 DeepSeek Harness 连接正常。'));
+        await this.#bot.sendText(target, t('QQ 机器人与 哪吒 Agent 连接正常。'));
         await markMessageSeen();
         return;
       }
@@ -1104,7 +1104,7 @@ export class QqHarnessBridge {
       let answer;
       let artifacts = [];
       try {
-        // Persist consumption before handing the prompt to Harness. Provider
+        // Persist consumption before handing the prompt to 哪吒 Agent. Provider
         // redelivery after a failed error notice must never execute it twice.
         await markMessageSeen();
         ({ answer, artifacts = [] } = await askInWorkspaceSession({
@@ -1178,11 +1178,11 @@ export class QqHarnessBridge {
             try {
               await stream.complete();
             } catch (error) {
-              this.#logger.warn?.('[dsh-im:qq] QQ stream completion failed after visible final content:', error);
+              this.#logger.warn?.('[sensteed-im:qq] QQ stream completion failed after visible final content:', error);
             }
           } catch (error) {
             stream.cancel?.();
-            this.#logger.warn?.('[dsh-im:qq] QQ stream update failed; using markdown fallback:', error);
+            this.#logger.warn?.('[sensteed-im:qq] QQ stream update failed; using markdown fallback:', error);
           }
         }
         if (!streamFinished) {
@@ -1197,7 +1197,7 @@ export class QqHarnessBridge {
         }
       } catch (error) {
         textSendError = channelDeliveryFailure(error);
-        this.#logger.warn?.('[dsh-im:qq] final text delivery failed; continuing with result files:', error);
+        this.#logger.warn?.('[sensteed-im:qq] final text delivery failed; continuing with result files:', error);
       }
       const delivery = await this.#deliverArtifacts(target, messageId, artifacts, textReceipt);
       const artifactDispatched = delivery.receipt?.artifacts?.some(
@@ -1230,12 +1230,12 @@ export class QqHarnessBridge {
         try {
           stream?.cancel?.();
         } catch (streamError) {
-          this.#logger.warn?.('[dsh-im:qq] unable to cancel a stopped QQ stream:', streamError);
+          this.#logger.warn?.('[sensteed-im:qq] unable to cancel a stopped QQ stream:', streamError);
         }
         try {
           await this.#bot.sendText(target, t('已停止。'));
         } catch (sendError) {
-          this.#logger.warn?.('[dsh-im:qq] unable to announce a stopped QQ turn:', sendError);
+          this.#logger.warn?.('[sensteed-im:qq] unable to announce a stopped QQ turn:', sendError);
         }
         await markMessageSeen();
         return;
@@ -1243,7 +1243,7 @@ export class QqHarnessBridge {
       try {
         stream?.cancel?.();
       } catch (streamError) {
-        this.#logger.warn?.('[dsh-im:qq] unable to cancel a failed QQ stream:', streamError);
+        this.#logger.warn?.('[sensteed-im:qq] unable to cancel a failed QQ stream:', streamError);
       }
       if (this.#signal?.aborted) return;
       this.#status.lastError = error?.message ?? String(error);
@@ -1254,7 +1254,7 @@ export class QqHarnessBridge {
         reason: imagePromptDiagnostic(error)?.reason,
       });
       this.#logger.error?.(
-        `[dsh-im:qq] failed to process an inbound message [${failure.referenceId}]:`,
+        `[sensteed-im:qq] failed to process an inbound message [${failure.referenceId}]:`,
         messageFailureDiagnostic(error, failure),
       );
       try {
@@ -1265,7 +1265,7 @@ export class QqHarnessBridge {
         );
         await markMessageSeen();
       } catch (sendError) {
-        this.#logger.error?.('[dsh-im:qq] failed to send the safe error reply:', sendError);
+        this.#logger.error?.('[sensteed-im:qq] failed to send the safe error reply:', sendError);
       }
     }
   }
@@ -1309,7 +1309,7 @@ export class QqHarnessBridge {
         await this.#presentInteraction(pending);
       } catch {
         this.#status.lastError = t('QQ 交互问题发送失败。');
-        this.#logger.error?.('[dsh-im:qq] failed to retry an interaction question');
+        this.#logger.error?.('[sensteed-im:qq] failed to retry an interaction question');
         pending.interaction.reconnect?.();
         return;
       }
@@ -1340,7 +1340,7 @@ export class QqHarnessBridge {
         await this.#presentInteraction(pending);
       } catch {
         this.#status.lastError = t('QQ 交互问题发送失败。');
-        this.#logger.error?.('[dsh-im:qq] failed to send the next interaction question');
+        this.#logger.error?.('[sensteed-im:qq] failed to send the next interaction question');
         pending.interaction.reconnect?.();
       }
       return;
@@ -1369,7 +1369,7 @@ export class QqHarnessBridge {
       pending.answers.pop();
       pending.index -= 1;
       this.#status.lastError = t('回答提交失败。');
-      this.#logger.error?.('[dsh-im:qq] failed to answer a Harness interaction');
+      this.#logger.error?.('[sensteed-im:qq] failed to answer a 哪吒 Agent interaction');
       await this.#bot.sendText(pending.target, t('回答提交失败，请重新发送当前问题的答案。'))
         .catch(() => undefined);
     }
@@ -1406,7 +1406,7 @@ export class QqHarnessBridge {
       || !Array.isArray(questions)
       || questions.length === 0
       || questions.some((question) => !validHarnessQuestion(question))) {
-      this.#logger.warn?.('[dsh-im:qq] ignored an invalid Harness question interaction');
+      this.#logger.warn?.('[sensteed-im:qq] ignored an invalid 哪吒 Agent question interaction');
       return;
     }
 
@@ -1536,7 +1536,7 @@ export class QqHarnessBridge {
       }, { signal: AbortSignal.timeout(5_000) });
     } catch (error) {
       if (error?.code !== 'interaction-not-pending') {
-        this.#logger.warn?.('[dsh-im:qq] failed to cancel a pending Harness interaction');
+        this.#logger.warn?.('[sensteed-im:qq] failed to cancel a pending 哪吒 Agent interaction');
       }
     }
   }
@@ -1546,7 +1546,7 @@ export class QqHarnessBridge {
     this.#status.lastError = error?.message ?? String(error);
     const failure = setLastMessageFailure(this.#status, error);
     this.#logger.error?.(
-      `[dsh-im:qq] failed to process an interaction reply [${failure.referenceId}]:`,
+      `[sensteed-im:qq] failed to process an interaction reply [${failure.referenceId}]:`,
       messageFailureDiagnostic(error, failure),
     );
     if (!this.#state.hasSeen(messageId)) {

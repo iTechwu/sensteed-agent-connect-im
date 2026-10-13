@@ -33,7 +33,7 @@ import {
 } from '../shared/access-policy-production.mjs';
 
 export async function createProductionController(ctx, config = {}, internals = {}) {
-  if (!ctx?.credentials) throw new TypeError('dsh-im matrix requires ctx.credentials');
+  if (!ctx?.credentials) throw new TypeError('sensteed-im matrix requires ctx.credentials');
   const connection = harnessConnection(ctx, config, { competitiveApprovals: true });
 
   const ResolvedConfigStore = internals.ConfigStore ?? MatrixConfigStore;
@@ -44,7 +44,7 @@ export async function createProductionController(ctx, config = {}, internals = {
   const ResolvedRuntime = internals.Runtime ?? MatrixRuntime;
   const createSupervisor = internals.createConnectionSupervisor ?? createTokenConnectionSupervisor;
   const logger = typeof ctx.logger === 'function'
-    ? ctx.logger('dsh-im:matrix') : (ctx.logger ?? console);
+    ? ctx.logger('sensteed-im:matrix') : (ctx.logger ?? console);
   const agentPresetCatalog = () => listAgentPresetCatalog(ctx);
   const paths = pluginPaths(config, 'matrix');
   const configStore = await new ResolvedConfigStore(paths.config).load();

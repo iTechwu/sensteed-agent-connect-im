@@ -20,7 +20,7 @@ function controller(overrides = {}) {
   };
 }
 
-test('iMessage RPC failures include details for the DSH connection envelope', async () => {
+test('iMessage RPC failures include details for the Nezha Agent connection envelope', async () => {
   const handle = createIMessageRpcHandler(controller({
     bindNative: async () => {
       const error = new Error('请授予完全磁盘访问权限');
@@ -36,7 +36,7 @@ test('iMessage RPC failures include details for the DSH connection envelope', as
     ok: false,
     error: {
       code: 'messages-database-permission-required',
-      message: '请在 macOS 系统设置中授予 DSH 完全磁盘访问权限，以读取 Messages 数据库。',
+      message: '请在 macOS 系统设置中授予 哪吒 Agent 完全磁盘访问权限，以读取 Messages 数据库。',
       details: result.error.details,
     },
   });

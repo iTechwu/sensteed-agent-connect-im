@@ -303,7 +303,7 @@ test('Enterprise WeChat maps its native quote snapshot without changing current 
   });
 });
 
-test('Enterprise WeChat sends quote context to Harness but does not execute quoted commands', async () => {
+test('Enterprise WeChat sends quote context to Nezha Agent but does not execute quoted commands', async () => {
   const transport = testClient();
   const fixture = state();
   let prompt;
@@ -714,7 +714,7 @@ test('Enterprise WeChat lists models and presets without prompting and advertise
   assert.match(help, /\/preset id:<ID>/);
 });
 
-test('Enterprise WeChat messages stream Harness progress and finalize once', async () => {
+test('Enterprise WeChat messages stream Nezha Agent progress and finalize once', async () => {
   const replies = [];
   const active = [];
   const store = state();
@@ -1063,7 +1063,7 @@ test('Enterprise WeChat exposes native file callbacks through the SDK downloader
   }]);
 });
 
-test('Enterprise WeChat applies the unified access policy before attachments or Harness work', async () => {
+test('Enterprise WeChat applies the unified access policy before attachments or Nezha Agent work', async () => {
   const transport = testClient();
   let downloads = 0;
   const harnessCalls = [];
@@ -1135,7 +1135,7 @@ test('Enterprise WeChat applies the unified access policy before attachments or 
   assert.match(transport.streamed.at(-1).content, /\/help/);
 });
 
-test('Enterprise WeChat bridge hands its prefetched native file to the current Harness turn', async () => {
+test('Enterprise WeChat bridge hands its prefetched native file to the current Nezha Agent turn', async () => {
   const transport = testClient();
   const bytes = Buffer.from('wecom-bridge-file');
   const downloads = [];
@@ -1316,7 +1316,7 @@ test('Enterprise WeChat visibility scope accepts direct and group conversations 
   assert.equal(asks, 2);
 });
 
-test('Enterprise WeChat finalizes an existing progress stream when Harness fails', async () => {
+test('Enterprise WeChat finalizes an existing progress stream when Nezha Agent fails', async () => {
   const replies = [];
   const store = state();
   const bridge = new WecomHarnessBridge({
@@ -1329,7 +1329,7 @@ test('Enterprise WeChat finalizes an existing progress stream when Harness fails
     harness: {
       sessionExists: async () => true,
       ensureRunning: async () => true,
-      ask: async () => { throw new Error('Harness unavailable'); },
+      ask: async () => { throw new Error('Nezha Agent unavailable'); },
     },
     state: store,
     logger: { error() {} },
@@ -2517,7 +2517,7 @@ test('Enterprise WeChat cancellation prevents SDK upload', async (t) => {
   assert.equal(uploads, 0);
 });
 
-test('Enterprise WeChat batch input collects ten texts and submits one ordered Harness turn', async () => {
+test('Enterprise WeChat batch input collects ten texts and submits one ordered Nezha Agent turn', async () => {
   const transport = testClient();
   const prompts = [];
   const bridge = new WecomHarnessBridge({
@@ -2560,7 +2560,7 @@ test('Enterprise WeChat batch input collects ten texts and submits one ordered H
   assert.equal(transport.streamed.at(-1).content, '批量完成');
 });
 
-test('Enterprise WeChat rejects batch commands in groups without invoking Harness', async () => {
+test('Enterprise WeChat rejects batch commands in groups without invoking Nezha Agent', async () => {
   const transport = testClient();
   let asks = 0;
   const bridge = new WecomHarnessBridge({
@@ -2631,7 +2631,7 @@ test('Enterprise WeChat keeps a failed batch for retry and queues later ordinary
   assert.match(transport.streamed.at(-1).content, /已取消批量输入.*丢弃 1 条消息/s);
 });
 
-test('Enterprise WeChat clears a submitted batch when the Harness turn is stopped', async () => {
+test('Enterprise WeChat clears a submitted batch when the Nezha Agent turn is stopped', async () => {
   const transport = testClient();
   const bridge = new WecomHarnessBridge({
     client: transport.client,
