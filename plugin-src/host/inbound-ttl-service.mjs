@@ -30,7 +30,7 @@ export function createInboundTtlService({
 
   const runSweep = () => {
     sweepNow().catch((error) => {
-      logger.error?.('[dsh-im] inbound attachment sweep failed', error);
+      logger.error?.('[sensteed-im] inbound attachment sweep failed', error);
     });
   };
 
@@ -118,7 +118,7 @@ export function createInboundTtlService({
           if (typeof workspace === 'string' && workspace) workspaces.add(resolve(workspace));
         }
       } catch (error) {
-        logger.warn?.('[dsh-im] inbound TTL workspace provider failed', error);
+        logger.warn?.('[sensteed-im] inbound TTL workspace provider failed', error);
       }
     }
     const isTracked = (directory) => isTrackedNow(directory)
@@ -131,12 +131,12 @@ export function createInboundTtlService({
         deletedDirectories += result.deleted;
         sweptWorkspaces += 1;
       } catch (error) {
-        logger.warn?.(`[dsh-im] inbound attachment sweep failed under ${workspace}`, error);
+        logger.warn?.(`[sensteed-im] inbound attachment sweep failed under ${workspace}`, error);
       }
     }
     if (deletedDirectories > 0) {
       logger.info?.(
-        `[dsh-im] inbound attachment sweep deleted ${deletedDirectories} directories`
+        `[sensteed-im] inbound attachment sweep deleted ${deletedDirectories} directories`
         + ` across ${sweptWorkspaces} workspaces (ttl ${ttlHours}h)`,
       );
     }

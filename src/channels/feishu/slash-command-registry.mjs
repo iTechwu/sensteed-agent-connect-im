@@ -1,9 +1,9 @@
 /**
- * Feishu native Slash Command registration for the dsh-im Feishu channel.
+ * Feishu native Slash Command registration for the sensteed-im Feishu channel.
  *
  * The Feishu client shows a "/" command panel in the chat input box. The
  * command list is stored server-side per bot application and is NOT pushed
- * by dsh/Harness. dsh-im holds its own static command manifest and calls the
+ * by dsh/哪吒 Agent. sensteed-im holds its own static command manifest and calls the
  * Feishu OpenAPI to register it, so users can discover commands by typing "/".
  *
  * Reference (official):
@@ -326,7 +326,7 @@ function slashPanelDescription(entry, command) {
  *      newest-first, one per `intervalMs`, because the order *is* the creation
  *      order.
  *
- * Commands registered outside the manifest are never deleted: dsh-im does not
+ * Commands registered outside the manifest are never deleted: sensteed-im does not
  * own them, and their position is the platform's business.
  *
  * @returns {{ created: Array<{command,command_id}>, deleted: string[],

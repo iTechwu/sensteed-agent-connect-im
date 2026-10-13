@@ -78,13 +78,13 @@ test('Discord API authenticates with a Bot header and validates the current bot'
         id: '1234567890123456789',
         bot: true,
         username: 'HarnessBot',
-        global_name: 'Harness Discord',
+        global_name: 'Nezha Agent Discord',
       });
     },
   });
   assert.deepEqual(bot, {
     platformId: '1234567890123456789',
-    name: 'Harness Discord',
+    name: 'Nezha Agent Discord',
     username: 'HarnessBot',
   });
   assert.equal(calls[0].options.headers.authorization, `Bot ${TOKEN}`);
@@ -425,7 +425,7 @@ test('Discord controller persists a credential reference and exposes only masked
     inspectOwner: async () => '234567890123456789',
     inspectToken: async () => ({
       platformId: '1234567890123456789',
-      name: 'Harness Discord',
+      name: 'Nezha Agent Discord',
       username: 'HarnessBot',
     }),
     createRuntime: async () => ({
@@ -445,7 +445,7 @@ test('Discord controller persists a credential reference and exposes only masked
   });
   const status = await controller.bindCredentials({ token: TOKEN });
   assert.equal(status.totals.connected, 1);
-  assert.equal(status.bots[0].bot.name, 'Harness Discord');
+  assert.equal(status.bots[0].bot.name, 'Nezha Agent Discord');
   setImHostLanguage('en');
   try {
     assert.equal(
@@ -1371,7 +1371,7 @@ test('Discord runtime keeps one isolated Session per managed thread and reuses i
     async markSeen(messageId) { seen.add(messageId); },
   };
   const createRuntime = () => new DiscordRuntime({
-    config: { botId: 'discord_test', platformId: botId, name: 'Harness Discord' },
+    config: { botId: 'discord_test', platformId: botId, name: 'Nezha Agent Discord' },
     token: TOKEN,
     harness,
     state,
@@ -1623,7 +1623,7 @@ test('Discord captures context settings before asynchronous Thread routing and u
   };
   let accessSettings = allowedAccessSettings;
   const runtime = new DiscordRuntime({
-    config: { botId: 'discord_internal', platformId: botId, name: 'Harness Discord' },
+    config: { botId: 'discord_internal', platformId: botId, name: 'Nezha Agent Discord' },
     token: TOKEN,
     contextEnhancement: {
       botId: 'discord_internal',
@@ -1740,7 +1740,7 @@ test('Discord runtime records one uncertain Thread result and suppresses Gateway
   let starts = 0;
   let socket;
   const runtime = new DiscordRuntime({
-    config: { botId: 'discord_test', platformId: botId, name: 'Harness Discord' },
+    config: { botId: 'discord_test', platformId: botId, name: 'Nezha Agent Discord' },
     token: TOKEN,
     harness: {
       ensureRunning: async () => true,
@@ -1832,7 +1832,7 @@ test('Discord runtime identifies on Gateway v10 and becomes ready', async () => 
     config: {
       botId: 'discord_test',
       platformId: '1234567890123456789',
-      name: 'Harness Discord',
+      name: 'Nezha Agent Discord',
     },
     token: TOKEN,
     harness: { ensureRunning: async () => true },
@@ -1883,7 +1883,7 @@ test('Discord runtime identifies on Gateway v10 and becomes ready', async () => 
   const identify = socket.sent.find((packet) => packet.op === 2);
   assert.equal(identify.d.token, TOKEN);
   assert.equal(identify.d.intents, 37_377);
-  assert.equal(identify.d.properties.browser, 'dsh-im');
+  assert.equal(identify.d.properties.browser, 'sensteed-im');
 
   for (const [id, sequence] of [
     ['111111111111111190', 2],

@@ -17,7 +17,7 @@ const PNG_1X1 = Buffer.from(
   'base64',
 );
 
-test('text-only messages retain the existing Harness content shape', async () => {
+test('text-only messages retain the existing Nezha Agent content shape', async () => {
   assert.equal(hasInboundPrompt({ content: ' hello ' }), true);
   assert.deepEqual(await promptContentForMessage({ content: ' hello ' }), [
     { type: 'text', text: 'hello' },
@@ -102,7 +102,7 @@ test('unsupported image bytes receive a channel-safe error', async () => {
   );
 });
 
-test('Harness attachment failures map only allowlisted reasons to safe channel messages', () => {
+test('Nezha Agent attachment failures map only allowlisted reasons to safe channel messages', () => {
   const modelError = Object.assign(new Error('private provider detail'), {
     code: 'attachment-error',
     details: { reason: 'MODEL_DOES_NOT_SUPPORT_IMAGES', privatePath: '/secret/model' },
@@ -129,7 +129,7 @@ test('Harness attachment failures map only allowlisted reasons to safe channel m
   }
 });
 
-test('unknown Harness failures remain generic and cannot access inherited map properties', () => {
+test('unknown Nezha Agent failures remain generic and cannot access inherited map properties', () => {
   for (const reason of ['FUTURE_PRIVATE_REASON', 'toString']) {
     const error = {
       code: 'attachment-error',

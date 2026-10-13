@@ -188,7 +188,7 @@ test('/send keeps an empty batch collecting and creates one immutable submission
     '[消息 1]\nfirst line\ncontinued',
     '[消息 2]\nsecond',
   ].join('\n\n'));
-  // The composed prompt is dsh-im's own framing; only the collected text may
+  // The composed prompt is sensteed-im's own framing; only the collected text may
   // name the conversation.
   assert.equal(submission.title, 'first line\ncontinued');
   assert.equal(batches.status('direct:one').phase, 'submitting');

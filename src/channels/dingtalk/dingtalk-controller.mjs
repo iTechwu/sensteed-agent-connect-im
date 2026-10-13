@@ -149,7 +149,7 @@ export class DingtalkController {
   /**
    * @param {object} options Controller dependencies.
    * @param {object} options.deviceAuth Host-only DingTalk device auth client.
-   * @param {object} options.credentials DSH credential provider.
+   * @param {object} options.credentials 哪吒 Agent credential provider.
    * @param {object} options.configStore Loaded DingTalk config store.
    * @param {Function} options.createRuntime Runtime factory.
    * @param {Function} [options.deleteState] Per-bot state cleanup callback.
@@ -174,7 +174,7 @@ export class DingtalkController {
       || typeof credentials.resolve !== 'function'
       || typeof credentials.set !== 'function'
       || typeof credentials.unset !== 'function') {
-      throw new TypeError('DingtalkController requires the DSH credential provider');
+      throw new TypeError('DingtalkController requires the 哪吒 Agent credential provider');
     }
     if (!configStore
       || typeof configStore.list !== 'function'

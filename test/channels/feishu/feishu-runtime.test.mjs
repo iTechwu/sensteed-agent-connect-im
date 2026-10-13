@@ -119,7 +119,7 @@ async function waitFor(predicate, timeoutMs = 1_000) {
   }
 }
 
-test('FeishuRuntime becomes chat-ready only after Harness and Feishu are connected', async () => {
+test('FeishuRuntime becomes chat-ready only after Nezha Agent and Feishu are connected', async () => {
   let harnessChecks = 0;
   let harnessSignal;
   const wsAgent = { addRequest() {} };
@@ -420,7 +420,7 @@ test('FeishuRuntime uses a remembered private target for wildcard-only manual bo
   await runtime.stop();
 });
 
-test('FeishuRuntime stop waits for a pending Harness check and prevents startup resurrection', async () => {
+test('FeishuRuntime stop waits for a pending Nezha Agent check and prevents startup resurrection', async () => {
   const harnessReady = deferred();
   let harnessSignal;
   const runtime = new FeishuRuntime({
@@ -492,24 +492,24 @@ test('FeishuRuntime fails closed when the initial WebSocket handshake times out'
   assert.deepEqual(runtime.status, failedStatus);
 });
 
-test('FeishuRuntime fails closed when Harness is unavailable', async () => {
+test('FeishuRuntime fails closed when Nezha Agent is unavailable', async () => {
   const runtime = new FeishuRuntime({
     lark: fakeLark(),
     appId: 'cli_test',
     appSecret: 'secret',
     ownerOpenId: 'ou_owner',
     harness: {
-      async ensureRunning() { throw new Error('Harness unavailable'); },
+      async ensureRunning() { throw new Error('Nezha Agent unavailable'); },
     },
     state: { hasSeen: () => false },
   });
 
-  await assert.rejects(runtime.start(), /Harness unavailable/);
+  await assert.rejects(runtime.start(), /Nezha Agent unavailable/);
   assert.equal(runtime.status.ready, false);
   assert.equal(runtime.status.feishuLongConnectionState, 'failed');
   assert.equal(runtime.status.error.details.stage, 'harness.check');
   assert.match(runtime.status.error.details.referenceId, /^IM-CONN-[A-F0-9]{8}$/);
-  assert.doesNotMatch(JSON.stringify(runtime.status), /Harness unavailable/);
+  assert.doesNotMatch(JSON.stringify(runtime.status), /Nezha Agent unavailable/);
 });
 
 async function startRuntimeForProbe(options = {}) {
@@ -543,7 +543,7 @@ for (const phase of ['user echo', 'final fallback']) {
     const create = client.im.v1.message.create;
     client.im.v1.message.create = async request => {
       const text = JSON.parse(request.data.content).text;
-      if (!held && text.startsWith(phase === 'user echo' ? '[来自 DSH]' : '[DSH 助手]')) {
+      if (!held && text.startsWith(phase === 'user echo' ? '[来自 哪吒 Agent]' : '[哪吒 Agent 助手]')) {
         held = true;
         return pending.promise;
       }
@@ -576,9 +576,9 @@ for (const phase of ['user echo', 'final fallback']) {
     emitTurn(2);
     t.mock.timers.tick(15_000);
     await coordinator.whenIdle();
-    assert.ok(delivered.includes('[DSH 助手]\n\nanswer 1'));
-    assert.ok(delivered.includes('[DSH 助手]\n\nanswer 2'));
-    assert.ok(FakeClient.sent.some(request => JSON.parse(request.data.content).text === '[DSH 助手]\n\nanswer 2'));
+    assert.ok(delivered.includes('[哪吒 Agent 助手]\n\nanswer 1'));
+    assert.ok(delivered.includes('[哪吒 Agent 助手]\n\nanswer 2'));
+    assert.ok(FakeClient.sent.some(request => JSON.parse(request.data.content).text === '[哪吒 Agent 助手]\n\nanswer 2'));
     const sent = FakeClient.sent.length;
     pending.resolve({ code: 0 });
     await new Promise(resolve => setImmediate(resolve));

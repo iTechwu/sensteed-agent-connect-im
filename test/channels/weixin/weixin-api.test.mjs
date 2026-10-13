@@ -219,7 +219,7 @@ test('sendText emits the iLink message envelope without reflecting the token in 
     baseUrl: 'https://ilinkai.weixin.qq.com',
     token: 'host-only-token',
     toUserId: 'wx-user',
-    text: 'Harness reply',
+    text: 'Nezha Agent reply',
     contextToken: 'message-context',
     runId: 'run-1',
   });
@@ -228,7 +228,7 @@ test('sendText emits the iLink message envelope without reflecting the token in 
   const body = JSON.parse(calls[0].init.body);
   assert.equal(body.msg.to_user_id, 'wx-user');
   assert.equal(body.msg.context_token, 'message-context');
-  assert.equal(body.msg.item_list[0].text_item.text, 'Harness reply');
+  assert.equal(body.msg.item_list[0].text_item.text, 'Nezha Agent reply');
   assert.deepEqual(result.providerMessageIds, [body.msg.client_id]);
   assert.equal(body.base_info.channel_version, '2.4.6');
   assert.equal(body.base_info.bot_agent, 'DeepSeekHarness/1.1.0');
@@ -250,7 +250,7 @@ test('sendText preserves safe iLink business rejection codes', async (t) => {
           baseUrl: 'https://ilinkai.wechat.com',
           token: 'host-only-token',
           toUserId: 'wx-user',
-          text: 'Harness reply',
+          text: 'Nezha Agent reply',
           contextToken: 'message-context',
         }),
         (error) => error instanceof WeixinApiError

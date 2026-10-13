@@ -280,7 +280,7 @@ export class DeliveryService {
         }
       } catch (error) {
         console.warn(
-          `[dsh-im] ignored ${adapter.channel} Session sync target lookup failure`
+          `[sensteed-im] ignored ${adapter.channel} Session sync target lookup failure`
             + ` (${error?.code ?? error?.name ?? 'unknown-error'})`,
         );
       }
@@ -308,7 +308,7 @@ export class DeliveryService {
     Promise.resolve(completion).then(async (value) => {
       outcome = value;
       if (value === 'unavailable' && notified) await notify(true);
-    }).catch((error) => console.warn('[dsh-im] approval status notification failed:', error?.code ?? error?.name));
+    }).catch((error) => console.warn('[sensteed-im] approval status notification failed:', error?.code ?? error?.name));
     const candidates = new Map();
     let unresolvedTarget = false;
     for (const target of targets) {
@@ -322,7 +322,7 @@ export class DeliveryService {
         candidates.set(JSON.stringify([target.channel, target.botId, info.conversationKey]), { adapter, target });
       } catch (error) {
         unresolvedTarget = true;
-        console.warn('[dsh-im] approval target unavailable:', error?.code ?? error?.name);
+        console.warn('[sensteed-im] approval target unavailable:', error?.code ?? error?.name);
       }
     }
     if (signal?.aborted) return false;
@@ -333,7 +333,7 @@ export class DeliveryService {
           signal, completion,
         })) return true;
       } catch (error) {
-        if (!signal?.aborted) console.warn('[dsh-im] synced approval unavailable:', error?.code ?? error?.name);
+        if (!signal?.aborted) console.warn('[sensteed-im] synced approval unavailable:', error?.code ?? error?.name);
       }
     }
     if (outcome === 'unavailable') await notify(true);

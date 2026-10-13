@@ -91,7 +91,7 @@ export class WeixinController {
       || typeof credentials.resolve !== 'function'
       || typeof credentials.set !== 'function'
       || typeof credentials.unset !== 'function') {
-      throw new TypeError('WeixinController requires the DSH credential provider');
+      throw new TypeError('WeixinController requires the 哪吒 Agent credential provider');
     }
     if (!configStore
       || typeof configStore.list !== 'function'

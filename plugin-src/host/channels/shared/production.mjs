@@ -43,7 +43,7 @@ export async function createTokenProductionController(ctx, config, internals, de
   const {
     channel, ConfigStore, StateStore, HarnessClient, Controller, Runtime, runtimeOptions,
   } = definitions;
-  if (!ctx?.credentials) throw new TypeError(`dsh-im ${channel} requires ctx.credentials`);
+  if (!ctx?.credentials) throw new TypeError(`sensteed-im ${channel} requires ctx.credentials`);
   const connection = harnessConnection(ctx, config, { competitiveApprovals: ['telegram', 'discord'].includes(channel) });
 
   const ResolvedConfigStore = internals.ConfigStore ?? ConfigStore;
@@ -54,7 +54,7 @@ export async function createTokenProductionController(ctx, config, internals, de
   const channelRuntimeOptions = typeof runtimeOptions === 'function' ? runtimeOptions(config) : {};
   if (!channelRuntimeOptions || typeof channelRuntimeOptions !== 'object'
     || Array.isArray(channelRuntimeOptions)) {
-    throw new TypeError(`dsh-im ${channel} runtimeOptions must return an object`);
+    throw new TypeError(`sensteed-im ${channel} runtimeOptions must return an object`);
   }
   const createSupervisor = internals.createConnectionSupervisor ?? createTokenConnectionSupervisor;
   const seedAccessPolicy = typeof definitions.initialAccessPolicyForBot === 'function'
@@ -63,7 +63,7 @@ export async function createTokenProductionController(ctx, config, internals, de
     // current token channels preserve their fully-open baseline.
     : (bot) => initialAccessPolicyFor(channel === 'telegram' ? 'telegram' : 'discord', bot);
   const logger = typeof ctx.logger === 'function'
-    ? ctx.logger(`dsh-im:${channel}`) : (ctx.logger ?? console);
+    ? ctx.logger(`sensteed-im:${channel}`) : (ctx.logger ?? console);
   const agentPresetCatalog = () => listAgentPresetCatalog(ctx);
   const paths = pluginPaths(config, channel);
   const configStore = await new ResolvedConfigStore(paths.config).load();

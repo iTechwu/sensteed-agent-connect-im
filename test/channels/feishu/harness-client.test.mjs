@@ -71,7 +71,7 @@ class FakeSocket {
   }
 }
 
-test('interaction watcher uses the real Harness wire protocol and leaves approvals fail-closed', async () => {
+test('interaction watcher uses the real Nezha Agent wire protocol and leaves approvals fail-closed', async () => {
   const requests = [];
   const opened = deferred();
   let socket;
@@ -585,7 +585,7 @@ test('HarnessClient safely rejects invalid, unregistered, ambiguous, and subagen
   assert.equal(createCalls, 1);
 });
 
-test('HarnessClient reads the nested workspace.create response used by DSH rc.6', async (t) => {
+test('HarnessClient reads the nested workspace.create response used by Nezha Agent rc.6', async (t) => {
   const methods = [];
   t.mock.method(globalThis, 'fetch', async (_url, options) => {
     const request = JSON.parse(options.body);
@@ -758,7 +758,7 @@ test('HarnessClient stages inbound files, appends a neutral manifest, and cleans
   assert.match(promptText, /\n<\/dsh_im_files>$/);
   const manifest = JSON.parse(promptText.match(/<dsh_im_files>\n(.+)\n<\/dsh_im_files>$/s)[1]);
   assert.deepEqual(manifest, {
-    description: 'Files uploaded with this user message. Paths are relative to the current Harness workspace.',
+    description: 'Files uploaded with this user message. Paths are relative to the current Nezha Agent workspace.',
     files: stagedFiles,
   });
   assert.doesNotMatch(promptText, /summari[sz]e|解析|总结|处理这些文件/i);
@@ -766,7 +766,7 @@ test('HarnessClient stages inbound files, appends a neutral manifest, and cleans
 });
 
 test('HarnessClient cleans staged inbound files when session.prompt rejects them', async () => {
-  const promptFailure = new Error('Harness rejected prompt');
+  const promptFailure = new Error('Nezha Agent rejected prompt');
   let cleanupCalls = 0;
   let prompted = false;
   const client = new HarnessClient({
@@ -1552,7 +1552,7 @@ test('a production-owned turn that starts and then stalls still times out', asyn
   assert.equal(sessionListPolls, 1);
 });
 
-test('a silent turn renews only after Harness confirms the Session is running', async () => {
+test('a silent turn renews only after Nezha Agent confirms the Session is running', async () => {
   const client = new HarnessClient({
     baseUrl: 'http://127.0.0.1:3080',
     workspace: '/tmp/dsh-feishu-workspace',

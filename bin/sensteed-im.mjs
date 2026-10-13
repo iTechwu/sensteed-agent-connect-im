@@ -5,9 +5,10 @@ import { homedir, tmpdir } from 'node:os';
 import { isAbsolute, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
-const PACKAGE_NAME = '@xmanrui/dsh-im';
-const DEFAULT_SOURCE = 'github:xmanrui/dsh-im';
+const PACKAGE_NAME = 'sensteed-im';
+const DEFAULT_SOURCE = 'github:iTechwu/sensteed-agent-connect-im';
 const LEGACY_PACKAGES = [
+  '@xmanrui/dsh-im',
   '@xmanrui/dsh-feishu',
   '@xmanrui/dsh-weixin',
   '@xmanrui/dsh-dingtalk',
@@ -15,12 +16,12 @@ const LEGACY_PACKAGES = [
 
 function usage() {
   console.log(`Usage:
-  dsh-im install [--profile web] [--source <package-spec>]
-  dsh-im uninstall [--profile web]
+  sensteed-im install [--profile web] [--source <package-spec>]
+  sensteed-im uninstall [--profile web]
 
 Examples:
-  npx -y github:xmanrui/dsh-im install
-  dsh-im install --source .`);
+  npx -y github:iTechwu/sensteed-agent-connect-im install
+  sensteed-im install --source .`);
 }
 
 function takeOption(args, name, fallback) {
@@ -39,7 +40,7 @@ function runDsh(args) {
     shell: false,
   });
   if (result.error?.code === 'ENOENT') {
-    throw new Error('找不到 dsh，请先安装 DeepSeek Harness 并确保 dsh 在 PATH 中。');
+    throw new Error('找不到 dsh，请先安装哪吒 Agent 并确保 dsh 在 PATH 中。');
   }
   if (result.error) throw result.error;
   if (result.status !== 0) throw new Error(`dsh 退出，状态码 ${result.status ?? 1}`);
@@ -55,7 +56,7 @@ async function directProfilePackages(profile) {
     return new Set(LEGACY_PACKAGES.filter((name) => dependencies[name] || bundles.has(name)));
   } catch (error) {
     if (error?.code === 'ENOENT') return new Set();
-    throw new Error(`无法读取 Harness 配置 ${profilePackage}：${error.message}`);
+    throw new Error(`无法读取哪吒 Agent 配置 ${profilePackage}：${error.message}`);
   }
 }
 
@@ -84,7 +85,7 @@ try {
     }
     console.log('\nIM 机器人插件已安装。请重启 dsh web、刷新浏览器，然后打开「设置 → IM机器人」。');
     if (legacy.size > 0) {
-      console.log('已用 dsh-im 替换独立飞书/微信/钉钉插件；原有凭据和扫码绑定保持不变。');
+      console.log('已用 sensteed-im 替换旧版独立插件；原有凭据和扫码绑定保持不变。');
     }
   } else if (command === 'uninstall') {
     if (args.length > 0) throw new Error(`无法识别的参数：${args.join(' ')}`);
@@ -94,6 +95,6 @@ try {
     throw new Error(`无法识别的命令：${command}`);
   }
 } catch (error) {
-  console.error(`dsh-im: ${error.message}`);
+  console.error(`sensteed-im: ${error.message}`);
   process.exit(1);
 }

@@ -100,7 +100,7 @@ export function OfficeSettingsTab({ rpcCall, initialStatus }) {
     h('div', { className: 'dof-hero' },
       h('div', { className: 'dof-heroCopy' },
         h('h3', null, 'AI Office Connector'),
-        h('p', null, '本机主动连接公网 Office；Harness 不开放端口。协议 Hook 固定为 ', OFFICE_PROTOCOL_VERSION, '。')),
+        h('p', null, '本机主动连接公网 Office；哪吒 Agent 不开放端口。协议 Hook 固定为 ', OFFICE_PROTOCOL_VERSION, '。')),
       h('span', { className: 'dof-status', 'data-connected': String(model.connected) },
         h('span', { className: 'dof-dot' }), stateLabel(model))),
     model.configured ? h('div', { className: 'dof-metrics' },
@@ -149,5 +149,5 @@ export function OfficeSettingsTab({ rpcCall, initialStatus }) {
       h('div', { className: 'dof-cardTitle' }, h('h4', null, '协议 Hook 预览'), h('span', null, '由 Base URL 自动派生，不单独填写')),
       h('div', { className: 'dof-hooks' },
         [['SSE', hooks.stream], ['Heartbeat', hooks.heartbeat], ['Job', hooks.job], ['Result', hooks.result]].map(([label, url]) => h('div', { className: 'dof-hook', key: label }, h('strong', null, label), h('code', null, url ?? 'Base URL 无效'))))),
-    h('p', { className: 'dof-notice' }, 'Office Hook 尚未部署时，配置会安全保存并自动重试；出现 HTTP 404 代表协议端点待上线，不代表 Harness 故障。'));
+    h('p', { className: 'dof-notice' }, 'Office Hook 尚未部署时，配置会安全保存并自动重试；出现 HTTP 404 代表协议端点待上线，不代表 哪吒 Agent 故障。'));
 }

@@ -59,7 +59,7 @@ export class WecomRuntime {
     createClient = (options) => new WSClient(options),
   }) {
     if (!config || !secret || !harness || !state) {
-      throw new TypeError('WecomRuntime requires config, secret, Harness, and state');
+      throw new TypeError('WecomRuntime requires config, secret, harness, and state');
     }
     this.#config = config;
     this.#secret = secret;
@@ -164,7 +164,7 @@ export class WecomRuntime {
       }
       this.#status.error = this.#diagnostics.report(error, { operation: 'connection.monitor', botId: this.#config?.botId, automatic: true }).publicError;
       this.#status.lastError = this.#status.error.message;
-      this.#logger.warn?.(`[dsh-im:wecom] bot ${this.#config.botId} connection error`);
+      this.#logger.warn?.(`[sensteed-im:wecom] bot ${this.#config.botId} connection error`);
     };
     const onMessage = (frame) => this.#bridge?.accept(frame);
     client.on('authenticated', onAuthenticated);
@@ -276,7 +276,7 @@ export class WecomRuntime {
       client?.disconnect();
       client?.removeAllListeners?.();
     } catch (error) {
-      this.#logger.warn?.(`[dsh-im:wecom] bot ${this.#config.botId} failed to stop cleanly`);
+      this.#logger.warn?.(`[sensteed-im:wecom] bot ${this.#config.botId} failed to stop cleanly`);
     }
     await bridge?.waitForIdle();
     this.#status.ready = false;

@@ -70,7 +70,7 @@ export class OfficeConfigStore {
   async load() {
     try {
       const normalized = normalizeOfficeConfig(JSON.parse(await readFile(this.#path, 'utf8')));
-      if (!normalized) throw new Error('dsh-im AI Office config is invalid');
+      if (!normalized) throw new Error('sensteed-im AI Office config is invalid');
       this.#value = normalized;
     } catch (error) {
       if (error?.code !== 'ENOENT') throw error;

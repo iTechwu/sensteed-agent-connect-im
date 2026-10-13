@@ -146,7 +146,7 @@ export class WeixinRuntime {
     startRetryDelaysMs,
   }) {
     if (!api || !config || !token || !harness || !state) {
-      throw new TypeError('WeixinRuntime requires API, account, token, Harness, and state');
+      throw new TypeError('WeixinRuntime requires API, account, token, harness, and state');
     }
     this.#api = api;
     this.#config = config;

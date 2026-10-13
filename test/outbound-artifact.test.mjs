@@ -127,7 +127,7 @@ test('file return still requires a live Session turn on modern snapshots', async
   await assert.rejects(
     tool.definition.execute({ path: 'ended.txt' }, execution(fx.agent, 'ended')),
     (error) => error.code === 'artifact-context-required'
-      && error.message === 'A live Harness Session is required to return a file.',
+      && error.message === 'A live Nezha Agent Session is required to return a file.',
   );
 });
 
@@ -459,7 +459,7 @@ test('Host installer exposes the tool but only guides the current owned IM Turn'
   assert.match(definition.description, /Existing and newly created files are both valid/);
   assert.match(definition.description, /Success means queued, not sent/);
   assert.match(definition.output.render({}, { fileName: 'result.zip', size: 123 })[0].text, /has not been sent yet/);
-  assert.equal(context.name, 'dsh-im:return-file');
+  assert.equal(context.name, 'sensteed-im:return-file');
   const session = { id: 'im-session' };
   const assembly = { agent: { session } };
   const observe = (type, data) => listeners.get('session/event')(session, { type, data });
@@ -514,7 +514,7 @@ test('file return rejects once the observed turn has closed without any session 
   await assert.rejects(
     tool.definition.execute({ path: 'closed.txt' }, execution(fx.agent, 'closed')),
     (error) => error.code === 'artifact-context-required'
-      && error.message === 'A live Harness Session is required to return a file.',
+      && error.message === 'A live Nezha Agent Session is required to return a file.',
   );
 });
 
@@ -526,7 +526,7 @@ test('file return rejects a bare session without snapshot or observed turn activ
   await assert.rejects(
     tool.definition.execute({ path: 'bare.txt' }, execution(fx.agent, 'bare')),
     (error) => error.code === 'artifact-context-required'
-      && error.message === 'A live Harness Session is required to return a file.',
+      && error.message === 'A live Nezha Agent Session is required to return a file.',
   );
 });
 

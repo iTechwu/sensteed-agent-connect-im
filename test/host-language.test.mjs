@@ -48,7 +48,7 @@ test('normalizeInterfaceLanguageTag keeps BCP 47-style tags and rejects everythi
   }
 });
 
-test('resolveHostLanguageTag prefers the plugin config, then DSH settings, then the mirror', () => {
+test('resolveHostLanguageTag prefers the plugin config, then Nezha Agent settings, then the mirror', () => {
   assert.deepEqual(HOST_LANGUAGE_SOURCES, ['config', 'settings', 'mirror']);
   assert.deepEqual(
     resolveHostLanguageTag({ config: 'zh-CN', settings: 'en', mirror: 'en' }),
@@ -74,7 +74,7 @@ test('resolveHostLanguageTag prefers the plugin config, then DSH settings, then 
 test('InterfaceLanguageStore persists the mirrored tag and survives a damaged document', async (t) => {
   const home = await directory(t);
   const path = interfaceLanguageSettingsPath({ dshHome: home });
-  assert.equal(path, join(home, 'integrations', 'dsh-im', 'interface-language.json'));
+  assert.equal(path, join(home, 'integrations', 'sensteed-im', 'interface-language.json'));
 
   const store = await new InterfaceLanguageStore(path).load();
   assert.equal(store.getLanguageTag(), null, 'a first run has nothing mirrored yet');
@@ -130,7 +130,7 @@ test('the controller applies the winning layer and never lets the mirror beat an
   assert.equal(getImHostLanguage(), 'en');
   assert.deepEqual(controller.snapshot(), { language: 'en', tag: 'en', source: 'mirror', pinned: false });
 
-  // An explicit DSH Language selection outranks the mirrored browser locale.
+  // An explicit Nezha Agent Language selection outranks the mirrored browser locale.
   preference = 'zh';
   assert.deepEqual(controller.apply(), { language: 'zh', tag: 'zh', source: 'settings', pinned: false });
   assert.equal(store.getLanguageTag(), 'en', 'the mirror is kept for when the selection is cleared');
@@ -179,7 +179,7 @@ test('the controller keeps the operator pin authoritative and contains a failing
   assert.match(warnings[0][0], /interface language/i);
 });
 
-test('installHostLanguage follows the DSH locale preference live and tolerates an absent settings service', async (t) => {
+test('installHostLanguage follows the Nezha Agent locale preference live and tolerates an absent settings service', async (t) => {
   restoreLanguage(t);
   const home = await directory(t);
   setImHostLanguage('zh');
@@ -214,7 +214,7 @@ test('installHostLanguage follows the DSH locale preference live and tolerates a
   section = { [DSH_LOCALE_PREFERENCE_FIELD]: 'en' };
   ctx.emit('settings/updated', DSH_LOCALE_NAMESPACE, section, {}, 'update');
   await new Promise(setImmediate);
-  assert.equal(getImHostLanguage(), 'en', 'switching the DSH interface language switches the bot language');
+  assert.equal(getImHostLanguage(), 'en', 'switching the Nezha Agent interface language switches the bot language');
 
   section = { [DSH_LOCALE_PREFERENCE_FIELD]: 'zh' };
   ctx.emit('settings/updated', 'llm-deepseek', {}, {}, 'update');

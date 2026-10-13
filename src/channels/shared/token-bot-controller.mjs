@@ -44,7 +44,7 @@ export class TokenBotController {
     }
     if (!credentials || typeof credentials.resolve !== 'function'
       || typeof credentials.set !== 'function' || typeof credentials.unset !== 'function') {
-      throw new TypeError(`${descriptor.label} requires the DSH credential provider`);
+      throw new TypeError(`${descriptor.label} requires the 哪吒 Agent credential provider`);
     }
     if (!configStore || typeof configStore.list !== 'function'
       || typeof configStore.save !== 'function' || typeof configStore.remove !== 'function') {
@@ -362,7 +362,7 @@ export class TokenBotController {
         return await runtime.refreshCommandMenu() === true;
       } catch (error) {
         this.#logger.warn?.(
-          `[dsh-im:${this.#descriptor.key}] bot ${botId} command menu refresh failed:`,
+          `[sensteed-im:${this.#descriptor.key}] bot ${botId} command menu refresh failed:`,
           extractConnectionEvidence(error).details,
         );
         return false;
@@ -401,7 +401,7 @@ export class TokenBotController {
     this.#runtimes.delete(botId);
     await runtime?.stop().catch((error) => {
       this.#logger.warn?.(
-        `[dsh-im:${this.#descriptor.key}] bot ${botId} failed to stop cleanly:`,
+        `[sensteed-im:${this.#descriptor.key}] bot ${botId} failed to stop cleanly:`,
         extractConnectionEvidence(error).details,
       );
     });

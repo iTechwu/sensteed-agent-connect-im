@@ -46,14 +46,14 @@ test('isControlCommand reserves valid and malformed control command forms', () =
   }
 });
 
-test('/version returns the package version without touching Harness or Session state', async () => {
+test('/version returns the package version without touching Nezha Agent or Session state', async () => {
   const { calls, harness, state } = fixture();
   const { version } = await import('../package.json', { with: { type: 'json' } })
     .then((module) => module.default);
 
   assert.deepEqual(
     await runControlCommand('/VERSION', harness, state, 'direct:one'),
-    { message: `dsh-im v${version}` },
+    { message: `sensteed-im v${version}` },
   );
   assert.match(
     (await runControlCommand('/version details', harness, state, 'direct:one')).message,
@@ -138,7 +138,7 @@ test('/steer requires text, preserves multiple lines, and rejects images', async
   ]);
 });
 
-test('/steer never reaches Harness while an interaction is pending', async () => {
+test('/steer never reaches Nezha Agent while an interaction is pending', async () => {
   const { harness, state, calls } = fixture();
   const result = await runControlCommand('/steer continue', harness, state, 'direct:one', {
     pendingInteraction: true,

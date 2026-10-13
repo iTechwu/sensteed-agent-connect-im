@@ -96,7 +96,7 @@ function pluginPaths(config) {
 }
 
 /**
- * Assemble the production controller from DSH Host services and local plugin
+ * Assemble the production controller from 哪吒 Agent Host services and local plugin
  * classes. No bridge process or environment App credentials are required.
  */
 export async function createProductionController(ctx, config = {}, internals = {}) {
@@ -206,8 +206,8 @@ export async function createProductionController(ctx, config = {}, internals = {
     ...connection,
     workspace: defaultWorkspace,
     ungroupedWorkspace,
-    // This plugin is already hosted by a running DSH process. Starting a
-    // second DSH would create a competing server and lifecycle.
+    // This plugin is already hosted by a running 哪吒 Agent process. Starting a
+    // second 哪吒 Agent would create a competing server and lifecycle.
     autostart: false,
     dshBin: config.dshBin ?? 'dsh',
     ...(commandExecutor ? { commandExecutor } : {}),

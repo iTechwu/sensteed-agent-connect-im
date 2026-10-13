@@ -107,7 +107,7 @@ for (const channel of ['feishu', 'wecom', 'weixin', 'dingtalk', 'qq', ...Object.
       sessionExists: async () => true, createSession: async () => 'session',
       ensureRunning: async () => true, stopActiveTurn: async () => false,
       stopDeferredTurn: async (sessionId, identity, options) => { stops.push({ sessionId, identity }); return options.isCurrent(); },
-      ask: async () => { asks++; throw Object.assign(new Error('Harness stalled'), { code: 'harness-reply-timeout',
+      ask: async () => { asks++; throw Object.assign(new Error('Nezha Agent stalled'), { code: 'harness-reply-timeout',
         details: { sessionId: 'session', promptRpcId: 'im-prompt', turn: 3, baselineSeq: 0 } }); },
       rpc: async (method) => { assert.equal(method, 'session.history'); return { events: history, hasMore: false }; },
       watchHarnessEvents: (listener) => { listeners.push(listener); },

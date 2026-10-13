@@ -98,11 +98,11 @@ function watchWebSocketMux({ baseUrl, createWebSocket, signal, onOpen, onEnvelop
       invoke(onEnvelope, envelope, finish);
     };
     const handleClose = () => finish(opened ? undefined : Object.assign(new Error(
-      'Harness event mux WebSocket closed before opening',
+      '哪吒 Agent event mux WebSocket closed before opening',
     ), { code: 'stream-closed-before-open' }));
     const handleError = () => finish(Object.assign(new Error(opened
-      ? 'Harness event mux WebSocket failed'
-      : 'Harness event mux WebSocket failed before opening'), {
+      ? '哪吒 Agent event mux WebSocket failed'
+      : '哪吒 Agent event mux WebSocket failed before opening'), {
       code: opened ? 'stream-failed' : 'stream-failed-before-open',
     }));
     const handleAbort = () => finish();

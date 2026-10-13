@@ -116,7 +116,7 @@ test('detail action opens the shared IM panel and returns to this plugin in both
   assert.deepEqual(host.opened, [packageName]);
 });
 
-test('the action is limited to dsh-im bundle and component details', async (t) => {
+test('the action is limited to sensteed-im bundle and component details', async (t) => {
   const host = await start(t);
   await host.provideNavigation();
   let renderer;

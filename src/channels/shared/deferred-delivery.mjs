@@ -132,7 +132,7 @@ export function createDeferredDeliveryRegistry(store, {
       const existing = sameKey.find((candidate) => candidate.id === entry.id);
       if (existing) return existing;
       if (sameKey.length >= maxPerKey) {
-        logger?.warn?.('[dsh-im] deferred delivery limit reached for key; dropping the oldest entry');
+        logger?.warn?.('[sensteed-im] deferred delivery limit reached for key; dropping the oldest entry');
         await store.removeDeferred(sameKey[0].id);
       }
       await store.putDeferred(entry);

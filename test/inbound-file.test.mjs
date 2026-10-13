@@ -23,7 +23,7 @@ async function workspace(t) {
 }
 
 function absoluteStagedPath(root, file) {
-  assert.equal(isAbsolute(file.path), false, 'Harness receives a workspace-relative path');
+  assert.equal(isAbsolute(file.path), false, 'Nezha Agent receives a workspace-relative path');
   const path = resolve(root, file.path);
   assertPathInside(root, path);
   return path;

@@ -13,22 +13,22 @@ export default Object.freeze({
   '打开前关闭': 'Closed before opening',
   '打开前失败': 'Failed before opening',
   '通道连接失败': 'Stream connection failed',
-  '与 DSH 的交互通道在 30 秒内未就绪，本条消息尚未提交执行。请稍后重试。':
-    'The DSH interaction channel was not ready within 30 seconds. This message has not been submitted for execution. Please try again later.',
+  '与 哪吒 Agent 的交互通道在 30 秒内未就绪，本条消息尚未提交执行。请稍后重试。':
+    'The Nezha Agent interaction channel was not ready within 30 seconds. This message has not been submitted for execution. Please try again later.',
   '消息提交前的操作超时，本条消息尚未提交执行。请稍后重试。':
     'An operation timed out before submission. This message has not been submitted for execution. Please try again later.',
   '消息提交前的网络请求失败，本条消息尚未提交执行。请检查连接后重试。':
     'A network request failed before submission. This message has not been submitted for execution. Check the connection and try again.',
   '消息在提交前处理失败，尚未提交执行。请重试；若持续发生，请将参考号提供给管理员。':
     'Message preparation failed before submission. It has not been submitted for execution. Try again; if this persists, share the reference with your administrator.',
-  '消息已尝试提交，但任务结果尚未确认。请先到 DSH 查看状态，不要立即重复提交；若持续发生，请将参考号提供给管理员。':
-    'Message submission was attempted, but the task outcome is unconfirmed. Check its status in DSH before resubmitting; if this persists, share the reference with your administrator.',
-  "DSH 版本": "DSH version",
+  '消息已尝试提交，但任务结果尚未确认。请先到 哪吒 Agent 查看状态，不要立即重复提交；若持续发生，请将参考号提供给管理员。':
+    'Message submission was attempted, but the task outcome is unconfirmed. Check its status in Nezha Agent before resubmitting; if this persists, share the reference with your administrator.',
+  "哪吒 Agent 版本": "Nezha Agent version",
   "依赖版本": "Dependency versions",
   "代理已配置": "Proxy configured",
   "原因链已截断": "Cause chain truncated",
-  "请在 macOS 系统设置中授予 DSH 完全磁盘访问权限，以读取 Messages 数据库。": "Grant DSH Full Disk Access in macOS System Settings to read the Messages database.",
-  "请在 macOS 系统设置中允许 DSH 自动控制 Messages。": "Allow DSH to control Messages in macOS System Settings.",
+  "请在 macOS 系统设置中授予 哪吒 Agent 完全磁盘访问权限，以读取 Messages 数据库。": "Grant Nezha Agent Full Disk Access in macOS System Settings to read the Messages database.",
+  "请在 macOS 系统设置中允许 哪吒 Agent 自动控制 Messages。": "Allow Nezha Agent to control Messages in macOS System Settings.",
   "先在 macOS 系统设置中授予 Messages 权限。": "Grant Messages permissions in macOS System Settings first.",
 
   "加载渠道配置": "Load channel configuration",
@@ -53,13 +53,13 @@ export default Object.freeze({
 
   "操作失败，请查看原因和诊断详情。": "The operation failed. See the cause and diagnostic details.",
   "检测到多个底层原因，请展开诊断详情逐项检查。": "Multiple underlying causes were detected. Expand the diagnostic details to inspect them.",
-  "服务域名解析失败，请检查运行 DSH 的机器的 DNS 和网络设置。": "Service DNS resolution failed. Check DNS and network settings on the machine running DSH.",
+  "服务域名解析失败，请检查运行 哪吒 Agent 的机器的 DNS 和网络设置。": "Service DNS resolution failed. Check DNS and network settings on the machine running Nezha Agent.",
   "目标拒绝连接，请检查服务地址、端口和访问限制。": "The connection was refused. Check the service address, port, and access restrictions.",
   "连接已中断，请检查网络和目标服务状态。": "The connection was interrupted. Check the network and target service.",
-  "目标网络不可达，请检查运行 DSH 的机器的网络出口和访问限制。": "The target network is unreachable. Check network routing and access restrictions on the machine running DSH.",
+  "目标网络不可达，请检查运行 哪吒 Agent 的机器的网络出口和访问限制。": "The target network is unreachable. Check network routing and access restrictions on the machine running Nezha Agent.",
   "TLS 或证书校验失败，请检查系统时间、证书链和网络设置。": "TLS or certificate validation failed. Check the system clock, certificate chain, and network settings.",
   "请求超时，请检查目标服务和网络；诊断详情中可查看已知的耗时。": "The request timed out. Check the service and network; available timings are in the diagnostic details.",
-  "代理连接或认证失败，请检查 DSH 进程使用的代理配置。": "Proxy connection or authentication failed. Check the proxy configuration used by the DSH process.",
+  "代理连接或认证失败，请检查 哪吒 Agent 进程使用的代理配置。": "Proxy connection or authentication failed. Check the proxy configuration used by the Nezha Agent process.",
   "服务认证失败，请检查账号和授权信息。": "Service authentication failed. Check the account and credentials.",
   "操作权限不足，请检查对应资源的访问权限。": "Permission was denied. Check access to the affected resource.",
   "所需文件或本地工具不存在，请检查安装和配置。": "A required file or local tool is missing. Check installation and configuration.",
@@ -68,7 +68,7 @@ export default Object.freeze({
   "目标服务暂时异常，请稍后重试。": "The target service is temporarily unavailable. Try again later.",
   "目标服务返回了 HTTP 错误，请查看诊断详情。": "The target service returned an HTTP error. See the diagnostic details.",
   "数据格式无效，请按失败阶段检查服务响应或本地配置。": "The data format is invalid. Check the service response or local configuration indicated by the failing stage.",
-  "暂未识别具体原因，请复制诊断信息，并查看相同参考号的 DSH 日志。": "The underlying cause is unknown. Copy the diagnostics and find the matching reference in the DSH logs.",
+  "暂未识别具体原因，请复制诊断信息，并查看相同参考号的 哪吒 Agent 日志。": "The underlying cause is unknown. Copy the diagnostics and find the matching reference in the Nezha Agent logs.",
   "多个原因": "Multiple causes",
   "服务域名": "Service host",
   "RPC 方法": "RPC method",
@@ -78,5 +78,5 @@ export default Object.freeze({
   "超时阈值（毫秒）": "Timeout (ms)",
   "Node 版本": "Node version",
   "运行平台": "Platform",
-  "无法访问 DSH 管理接口，请检查 DSH 连接或重新登录后重试。": "Cannot access the DSH management API. Check the DSH connection or sign in again."
+  "无法访问 哪吒 Agent 管理接口，请检查 哪吒 Agent 连接或重新登录后重试。": "Cannot access the Nezha Agent management API. Check the Nezha Agent connection or sign in again."
 });

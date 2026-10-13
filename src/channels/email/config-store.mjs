@@ -66,7 +66,7 @@ export const EMAIL_PROVIDERS = Object.freeze({
 
 /**
  * Email access is allowlist-only: a mail address is trivially forgeable, so an
- * open mailbox would let anyone drive the Harness. Unlike other channels the
+ * open mailbox would let anyone drive the 哪吒 Agent. Unlike other channels the
  * policy is therefore not optional — `allowedSenders` must be non-empty.
  */
 export function normalizeEmailAllowedSenders(value) {

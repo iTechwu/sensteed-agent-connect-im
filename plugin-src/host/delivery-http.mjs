@@ -118,7 +118,7 @@ export function createDeliveryHttpHandler(service) {
 export function installDeliveryHttp(ctx, service) {
   if (!ctx?.webServer || typeof ctx.webServer.register !== 'function'
     || typeof ctx.effect !== 'function') {
-    throw new TypeError('DSH Host WebServer is required');
+    throw new TypeError('哪吒 Agent Host WebServer is required');
   }
   const route = {
     kind: 'exact',
@@ -127,6 +127,6 @@ export function installDeliveryHttp(ctx, service) {
   };
   return ctx.effect(
     () => ctx.webServer.register(route),
-    `dsh-im: ${DELIVERY_HTTP_PATH}`,
+    `sensteed-im: ${DELIVERY_HTTP_PATH}`,
   );
 }

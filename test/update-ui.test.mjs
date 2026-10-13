@@ -170,7 +170,7 @@ test('historical jobs do not suppress a new check or its available version', asy
     assert.match(textOf(details), /最新版本v4\.24\.0/);
     assert.match(textOf(details), /上次更新目标v4\.21\.1/);
     assert.equal(details.findAllByType('dt').some(node => textOf(node) === '目标版本'), false);
-    assert.equal(manualCommandOf(renderer), 'dsh plugin --profile web add -w @xmanrui/dsh-im@4.24.0');
+    assert.equal(manualCommandOf(renderer), 'dsh plugin --profile web add -w sensteed-im@4.24.0');
     await click(renderer, '安装更新');
     assert.equal(calls.at(-1).payload.checkId, 'new-check');
     assert.match(textOf(renderer.toJSON()), /目标版本v4\.24\.0/);
@@ -415,7 +415,7 @@ test('pending restart shows manual restart guidance instead of a redundant page 
   await click(renderer, '待手动重启');
   assert.deepEqual(calls, ['update.status', 'update.status']);
   assert.match(textOf(renderer.toJSON()), /运行版本v3.0.8/);
-  assert.match(textOf(renderer.toJSON()), /手动重启当前 Harness 或 Desktop/);
+  assert.match(textOf(renderer.toJSON()), /手动重启当前 哪吒 Agent 或 Desktop/);
   assert.doesNotMatch(textOf(renderer.toJSON()), /页面版本与运行版本不同|手动刷新页面/);
   assert.equal(buttonNamed(renderer, '安装更新'), undefined);
   assert.equal(buttonNamed(renderer, '重新检查'), undefined);
@@ -423,7 +423,7 @@ test('pending restart shows manual restart guidance instead of a redundant page 
   const stalePage = await mount(t, async () => ok(available()), { clientVersion: '3.0.7' });
   await click(stalePage, '更新至 v3.0.9');
   assert.match(textOf(stalePage.toJSON()), /页面版本与运行版本不同/);
-  assert.match(textOf(stalePage.toJSON()), /手动刷新页面.*手动重启 Harness 或 Desktop/);
+  assert.match(textOf(stalePage.toJSON()), /手动刷新页面.*手动重启 哪吒 Agent 或 Desktop/);
 });
 
 test('remounting the new client retains the old Host version and restores the restart requirement', async (t) => {
@@ -809,7 +809,7 @@ test('manual commands use the current profile and a known target without downgra
     const renderer = await mount(t, async () => ok(snapshot(fields)));
     await click(renderer, fields.blockedReason === 'pending-restart' ? '待手动重启' : '检查更新');
     assert.equal(manualCommandOf(renderer),
-      `dsh plugin --profile ${expected} add -w @xmanrui/dsh-im@${version}`);
+      `dsh plugin --profile ${expected} add -w sensteed-im@${version}`);
     assert.equal(renderer.root.findByType('textarea').props.readOnly, true);
     assert.match(textOf(renderer.toJSON()), /自动更新失败可以使用命令更新：/);
     assert.doesNotMatch(textOf(renderer.toJSON()), /通常只需手动重启/);
@@ -843,7 +843,7 @@ test('manual commands remain available after a failed npm check and explain the 
     throw new Error('npm unavailable');
   });
   await click(renderer, '检查更新');
-  assert.match(manualCommandOf(renderer), /@xmanrui\/dsh-im@latest$/);
+  assert.match(manualCommandOf(renderer), /sensteed-im@latest$/);
   assert.match(textOf(renderer.toJSON()), /尚未确认目标版本.*执行时 npm 的 latest/);
   assert.match(textOf(renderer.toJSON()), /DSH_HOME 一致/);
   assert.equal(buttonNamed(renderer, '复制命令').props.disabled, false);

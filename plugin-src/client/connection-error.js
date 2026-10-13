@@ -13,9 +13,9 @@ const STAGE_LABELS = {
   'credential.remove': '移除登录凭据', 'account.save': '保存账号配置', 'account.remove': '移除账号配置',
   'state.load': '读取账号状态', 'state.write': '保存账号状态', 'state.cleanup': '清理账号状态',
   'workspace.write': '保存工作区设置', 'workspace.cleanup': '清理工作区设置', 'runtime.prepare': '准备消息连接',
-  activation: '激活账号', 'harness.check': '检查 DSH 宿主', 'connection.start': '启动连接',
+  activation: '激活账号', 'harness.check': '检查 哪吒 Agent 宿主', 'connection.start': '启动连接',
   'connection.poll': '监测连接与消息', 'connection.stop': '停止连接', 'status.read': '读取连接状态',
-  rollback: '恢复原账号状态', 'management.request': '访问 DSH 管理接口',
+  rollback: '恢复原账号状态', 'management.request': '访问 哪吒 Agent 管理接口',
 };
 const SUBMISSION_LABELS = { 'not-submitted': '未提交', accepted: '已确认接收', unknown: '提交结果未知' };
 const STREAM_REASON_LABELS = {
@@ -62,7 +62,7 @@ export function ConnectionError({ error: value, warning = false, showMessage = t
     ['消息提交状态', localizeText(SUBMISSION_LABELS[details.submissionState] ?? '')],
     ['连接尝试次数', details.attempts],
     ['最近一次连接失败', localizeText(STREAM_REASON_LABELS[details.lastFailureReason] ?? details.lastFailureReason ?? '')],
-    ['底层原因', details.reason === 'unknown' ? localizeText('暂未识别') : details.reason], ['多个原因', details.reasons?.join(', ')], ['服务域名', details.host], ['请求耗时（毫秒）', details.durationMs], ['超时阈值（毫秒）', details.timeoutMs], ['Node 版本', details.nodeVersion], ['DSH 版本', details.dshVersion], ['依赖版本', details.dependencies ? Object.entries(details.dependencies).map(([name, version]) => `${name}: ${version}`).join(', ') : undefined], ['代理已配置', details.proxyConfigured], ['原因链已截断', details.truncated], ['运行平台', details.platform], ['HTTP 状态', details.httpStatus], ['服务返回码', details.providerCode],
+    ['底层原因', details.reason === 'unknown' ? localizeText('暂未识别') : details.reason], ['多个原因', details.reasons?.join(', ')], ['服务域名', details.host], ['请求耗时（毫秒）', details.durationMs], ['超时阈值（毫秒）', details.timeoutMs], ['Node 版本', details.nodeVersion], ['哪吒 Agent 版本', details.dshVersion], ['依赖版本', details.dependencies ? Object.entries(details.dependencies).map(([name, version]) => `${name}: ${version}`).join(', ') : undefined], ['代理已配置', details.proxyConfigured], ['原因链已截断', details.truncated], ['运行平台', details.platform], ['HTTP 状态', details.httpStatus], ['服务返回码', details.providerCode],
     ['配置文件', details.file], ['配置字段', details.field],
     ['校验原因', details.issue ? localizeText(CONFIG_ISSUE_LABELS[details.issue]) : undefined],
     ['参考号', details.referenceId], ['发生时间', details.occurredAt], ['插件版本', details.pluginVersion],

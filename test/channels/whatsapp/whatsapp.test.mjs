@@ -145,7 +145,7 @@ function linkedConfig(overrides = {}) {
     botId: deriveWhatsappBotId(ACCOUNT_JID),
     accountJid: ACCOUNT_JID,
     authDirectory: AUTH_DIRECTORY,
-    name: 'Harness WhatsApp',
+    name: 'Nezha Agent WhatsApp',
     accessMode: WHATSAPP_ACCESS_MODES.open,
     allowedNumbers: [],
     createdAt: new Date().toISOString(),
@@ -220,7 +220,7 @@ test('WhatsApp Web session reports QR and linked identity without printing eithe
   let ended = false;
   const socket = {
     ev: events,
-    user: { id: '16505550123:4@s.whatsapp.net', name: 'Harness WhatsApp' },
+    user: { id: '16505550123:4@s.whatsapp.net', name: 'Nezha Agent WhatsApp' },
     end: async () => { ended = true; },
     logout: async () => {},
   };
@@ -242,7 +242,7 @@ test('WhatsApp Web session reports QR and linked identity without printing eithe
   assert.deepEqual(qrValues, ['host-only-qr-value']);
   assert.deepEqual(await session.ready, {
     accountJid: ACCOUNT_JID,
-    name: 'Harness WhatsApp',
+    name: 'Nezha Agent WhatsApp',
   });
   await assertRestrictiveMode(root, 0o700);
   await session.close();
@@ -254,7 +254,7 @@ test('WhatsApp Web session restarts the socket after first-time QR pairing', asy
   const sockets = Array.from({ length: 2 }, (_, index) => ({
     ev: new EventEmitter(),
     user: index === 1
-      ? { id: '16505550123:4@s.whatsapp.net', name: 'Harness WhatsApp' }
+      ? { id: '16505550123:4@s.whatsapp.net', name: 'Nezha Agent WhatsApp' }
       : undefined,
     end: async () => {},
     logout: async () => {},
@@ -289,7 +289,7 @@ test('WhatsApp Web session restarts the socket after first-time QR pairing', asy
   sockets[1].ev.emit('connection.update', { connection: 'open' });
   assert.deepEqual(await session.ready, {
     accountJid: ACCOUNT_JID,
-    name: 'Harness WhatsApp',
+    name: 'Nezha Agent WhatsApp',
   });
   await session.close();
 });
@@ -801,7 +801,7 @@ test('WhatsApp runtime uses live unified policy settings and existing JID alias 
   const harness = {
     ensureRunning: async () => {},
     sessionExists: async () => true,
-    ask: async () => 'Harness answer',
+    ask: async () => 'Nezha Agent answer',
   };
   const runtime = new WhatsappRuntime({
     config: linkedConfig({ accessMode: WHATSAPP_ACCESS_MODES.selfOnly }),
@@ -815,7 +815,7 @@ test('WhatsApp runtime uses live unified policy settings and existing JID alias 
       callbacks = options;
       return {
         socket,
-        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Harness WhatsApp' }),
+        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Nezha Agent WhatsApp' }),
         close: async () => {},
         logout: async () => {},
       };
@@ -834,18 +834,18 @@ test('WhatsApp runtime uses live unified policy settings and existing JID alias 
     message: { conversation: 'owner bypass' },
   });
   assert.ok(calls.some((call) => call[0] === 'message'
-    && call[2].text === 'Harness answer'), 'linked owner bypasses an empty allowlist');
+    && call[2].text === 'Nezha Agent answer'), 'linked owner bypasses an empty allowlist');
   const ownerGroupJid = '120363000000000001@g.us';
   await callbacks.onMessage({
     key: { remoteJid: ownerGroupJid, id: 'owner-group-policy', fromMe: true },
     message: { conversation: 'owner group bypass' },
   });
   assert.ok(calls.some((call) => call[0] === 'message' && call[1] === ownerGroupJid
-    && call[2].text === 'Harness answer'), 'linked owner bypasses an empty group allowlist');
+    && call[2].text === 'Nezha Agent answer'), 'linked owner bypasses an empty group allowlist');
   const beforeEcho = calls.length;
   await callbacks.onMessage({
     key: { remoteJid: ownerGroupJid, id: 'reply-1', fromMe: true },
-    message: { conversation: 'Harness answer' },
+    message: { conversation: 'Nezha Agent answer' },
   });
   assert.equal(calls.length, beforeEcho, 'privileged access must not bypass outgoing-message loop protection');
   accessSettings = {
@@ -859,7 +859,7 @@ test('WhatsApp runtime uses live unified policy settings and existing JID alias 
     },
   };
   const answerCountBeforeAlternate = calls.filter((call) => (
-    call[0] === 'message' && call[2].text === 'Harness answer'
+    call[0] === 'message' && call[2].text === 'Nezha Agent answer'
   )).length;
   await callbacks.onMessage({
     key: {
@@ -871,7 +871,7 @@ test('WhatsApp runtime uses live unified policy settings and existing JID alias 
     message: { conversation: 'hello again' },
   });
   assert.equal(calls.filter((call) => (
-    call[0] === 'message' && call[2].text === 'Harness answer'
+    call[0] === 'message' && call[2].text === 'Nezha Agent answer'
   )).length, answerCountBeforeAlternate + 1,
   'a bare allowlist number matches the PN alternate for an inbound LID');
   await runtime.stop();
@@ -911,7 +911,7 @@ test('WhatsApp runtime handles other members LID mentions and replies with live 
     harness: {
       ensureRunning: async () => {},
       sessionExists: async () => true,
-      ask: async () => { askCount += 1; return 'Harness group answer'; },
+      ask: async () => { askCount += 1; return 'Nezha Agent group answer'; },
     },
     state: artifactState('session-group-lid-aliases'),
     accessPolicy: { getSettings: () => settings },
@@ -965,7 +965,7 @@ test('WhatsApp runtime handles other members LID mentions and replies with live 
   assert.equal(askCount, 3, 'an allowed member is matched using their phone-number alternate');
   await receive({ mentionedJid: [ACCOUNT_LID] }, '16505550888@s.whatsapp.net');
   assert.equal(askCount, 3, 'other members still cannot bypass the allowlist');
-  assert.equal(sent.filter(({ content }) => content.text === 'Harness group answer').length, 3);
+  assert.equal(sent.filter(({ content }) => content.text === 'Nezha Agent group answer').length, 3);
 });
 
 test('WhatsApp open mode answers linked-account group messages without processing reply echoes', async (t) => {
@@ -996,7 +996,7 @@ test('WhatsApp open mode answers linked-account group messages without processin
       sessionExists: async () => true,
       ask: async () => {
         askCount += 1;
-        return 'Harness group answer';
+        return 'Nezha Agent group answer';
       },
     },
     state: artifactState('session-linked-account-group'),
@@ -1004,7 +1004,7 @@ test('WhatsApp open mode answers linked-account group messages without processin
       callbacks = options;
       return {
         socket,
-        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Harness WhatsApp' }),
+        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Nezha Agent WhatsApp' }),
         close: async () => {},
         logout: async () => {},
       };
@@ -1029,7 +1029,7 @@ test('WhatsApp open mode answers linked-account group messages without processin
   assert.equal(textSends[0].options.quoted, inbound);
   assert.match(textSends[0].options.messageId, /^[0-9A-F]{20}$/);
   assert.equal(textSends[1].jid, groupJid);
-  assert.equal(textSends[1].content.text, 'Harness group answer');
+  assert.equal(textSends[1].content.text, 'Nezha Agent group answer');
   assert.deepEqual(textSends[1].content.edit, {
     remoteJid: groupJid, fromMe: true, id: textSends[0].options.messageId,
   });
@@ -1073,7 +1073,7 @@ test('WhatsApp runtime sends result files with native metadata, quote, stable id
       callbacks = options;
       return {
         socket,
-        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Harness WhatsApp' }),
+        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Nezha Agent WhatsApp' }),
         close: async () => {},
         logout: async () => {},
       };
@@ -1400,7 +1400,7 @@ test('WhatsApp suppresses a self-chat file echo that arrives before the provider
       callbacks = options;
       return {
         socket,
-        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Harness WhatsApp' }),
+        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Nezha Agent WhatsApp' }),
         close: async () => {},
         logout: async () => {},
       };
@@ -1458,7 +1458,7 @@ test('WhatsApp runtime treats a lost file-send response as uncertain delivery', 
       callbacks = options;
       return {
         socket,
-        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Harness WhatsApp' }),
+        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Nezha Agent WhatsApp' }),
         close: async () => {},
         logout: async () => {},
       };
@@ -1520,7 +1520,7 @@ test('stopping WhatsApp aborts a pending upload without another file or failure 
       callbacks = options;
       return {
         socket,
-        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Harness WhatsApp' }),
+        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Nezha Agent WhatsApp' }),
         close: async () => {},
         logout: async () => {},
       };
@@ -1564,7 +1564,7 @@ test('WhatsApp runtime answers self-chat without processing its own reply echo',
     harness: {
       ensureRunning: async () => {},
       sessionExists: async () => true,
-      ask: async () => { askCount += 1; return 'Harness self-chat answer'; },
+      ask: async () => { askCount += 1; return 'Nezha Agent self-chat answer'; },
     },
     state: {
       hasSeen: () => false,
@@ -1576,7 +1576,7 @@ test('WhatsApp runtime answers self-chat without processing its own reply echo',
       callbacks = options;
       return {
         socket,
-        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Harness WhatsApp' }),
+        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Nezha Agent WhatsApp' }),
         close: async () => {},
         logout: async () => {},
       };
@@ -1590,7 +1590,7 @@ test('WhatsApp runtime answers self-chat without processing its own reply echo',
   await callbacks.onMessage(inbound);
   await callbacks.onMessage({
     key: { remoteJid: ACCOUNT_JID, id: 'bot-reply-1', fromMe: true },
-    message: { conversation: 'Harness self-chat answer' },
+    message: { conversation: 'Nezha Agent self-chat answer' },
   });
   await eventually(() => sent.filter(([, content]) => content.react).length === 2);
   assert.equal(askCount, 1);
@@ -1599,7 +1599,7 @@ test('WhatsApp runtime answers self-chat without processing its own reply echo',
     [
       [ACCOUNT_JID, { text: '正在处理…' }],
       [ACCOUNT_JID, {
-        text: 'Harness self-chat answer',
+        text: 'Nezha Agent self-chat answer',
         edit: { remoteJid: ACCOUNT_JID, fromMe: true, id: 'bot-reply-1' },
       }],
     ],
@@ -1641,7 +1641,7 @@ test('WhatsApp runtime sends a connection test to self and suppresses its outbou
       callbacks = options;
       return {
         socket,
-        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Harness WhatsApp' }),
+        ready: Promise.resolve({ accountJid: ACCOUNT_JID, name: 'Nezha Agent WhatsApp' }),
         close: async () => {},
         logout: async () => {},
       };
@@ -1699,7 +1699,7 @@ test('WhatsApp controller delegates connection test copy to the current runtime'
   await controller.initialize();
   assert.deepEqual(await controller.sendConnectionTest(config.botId), { sent: true });
   assert.deepEqual(sent, [
-    '✅ DeepSeek Harness 连接测试成功\n这条消息由「IM机器人」设置页中的“Harness WhatsApp（1650••••0123）”机器人卡片发出。',
+    '✅ 哪吒 Agent 连接测试成功\n这条消息由「IM机器人」设置页中的“Nezha Agent WhatsApp（1650••••0123）”机器人卡片发出。',
   ]);
   const target = { kind: 'user', route: { jid: '16505550199@s.whatsapp.net' } };
   assert.deepEqual(await controller.sendProactiveText(config.botId, target, 'proactive-test'), {
@@ -1721,7 +1721,7 @@ test('WhatsApp reconnect RPC sends tests only for the connected target and keeps
       state: connected ? 'connected' : 'offline',
       connected,
       configured: true,
-      bot: { name: 'Harness WhatsApp', idMasked: '1650••••0123' },
+      bot: { name: 'Nezha Agent WhatsApp', idMasked: '1650••••0123' },
       health: { summary: 'status', lastCheckedAt: Date.now() },
     }],
     totals: { configured: 1, connected: connected ? 1 : 0 },
@@ -1861,7 +1861,7 @@ test('WhatsApp QR controller and RPC keep the raw QR and linked identity host-on
   assert.equal(started.ok, true);
   assert.match(started.value.qrCodeDataUrl, /^data:image\/png/);
   assert.doesNotMatch(JSON.stringify(started.value), /raw-linked-device-qr|accountJid|authDirectory/);
-  resolveReady({ accountJid: ACCOUNT_JID, name: 'Harness WhatsApp' });
+  resolveReady({ accountJid: ACCOUNT_JID, name: 'Nezha Agent WhatsApp' });
   let status;
   for (let index = 0; index < 20; index += 1) {
     status = await handler(WHATSAPP_ENDPOINTS.status, {});

@@ -386,7 +386,7 @@ test('HarnessClient safely rejects invalid, unregistered, ambiguous, and subagen
   assert.equal(createCalls, 1);
 });
 
-test('reply tracker associates only the Harness turn created by the DingTalk prompt RPC', () => {
+test('reply tracker associates only the Nezha Agent turn created by the DingTalk prompt RPC', () => {
   const tracker = new HarnessReplyTracker({ promptRpcId: 'dingtalk-prompt', afterSeq: 2 });
   const update = tracker.consume([
     { event: { seq: 3, type: 'turn/start', data: { turn: 9 } } },
@@ -430,7 +430,7 @@ test('reply tracker ignores interleaved turns and events at or before the baseli
   assert.equal(tracker.finished, false);
 });
 
-test('Harness client validates the RPC envelope and preserves server error codes', async () => {
+test('Nezha Agent client validates the RPC envelope and preserves server error codes', async () => {
   let request;
   const client = new HarnessClient({
     baseUrl: 'http://127.0.0.1:3080',
@@ -1114,7 +1114,7 @@ test('interaction callbacks preserve frame order but watcher abort does not awai
   assert.deepEqual(order, ['requested:start', 'requested:end', 'resolved']);
 });
 
-test('concurrent asks on one Harness session receive interactions only for their own active turn', async () => {
+test('concurrent asks on one Nezha Agent session receive interactions only for their own active turn', async () => {
   const sockets = [];
   const prompts = [];
   const received = { first: [], second: [] };
@@ -1211,7 +1211,7 @@ test('concurrent asks on one Harness session receive interactions only for their
   await Promise.allSettled([first, second]);
 });
 
-test('channel-specific clients share interaction ownership for the same Harness origin', async () => {
+test('channel-specific clients share interaction ownership for the same Nezha Agent origin', async () => {
   const sockets = [];
   const prompts = [];
   const received = { dingtalk: [], feishu: [] };

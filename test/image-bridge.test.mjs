@@ -42,7 +42,7 @@ function bridgeFixture() {
   return { bridge, sent, prompts };
 }
 
-test('the shared bridge sends image and caption content to Harness', async () => {
+test('the shared bridge sends image and caption content to Nezha Agent', async () => {
   const { bridge, sent, prompts } = bridgeFixture();
   let loads = 0;
   await bridge.accept({
@@ -100,7 +100,7 @@ test('image validation failures receive a specific safe reply', async () => {
   assert.match(sent[0], /错误码：INPUT_INVALID；参考号：MF-[A-F0-9]{8}$/);
 });
 
-test('an image caption cannot answer a pending Harness question', async () => {
+test('an image caption cannot answer a pending Nezha Agent question', async () => {
   const sent = [];
   const questionSent = Promise.withResolvers();
   const answered = Promise.withResolvers();

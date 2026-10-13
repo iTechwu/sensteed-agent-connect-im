@@ -29,7 +29,7 @@ test('DingTalk proactive Markdown preserves private/group routes and uses sample
   assert.equal(calls[1].openConversationId, 'cid-test');
   for (const call of calls) {
     assert.equal(call.msgKey, 'sampleMarkdown');
-    assert.deepEqual(call.param, { title: 'DSH', text });
+    assert.deepEqual(call.param, { title: '哪吒 Agent', text });
     assert.equal(call.sessionWebhook, undefined);
   }
 });

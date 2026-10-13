@@ -21,14 +21,14 @@ export async function createProductionController(ctx, config = {}, internals = {
   const ResolvedHarness = internals.HarnessClient ?? HarnessClient;
   const paths = officePaths(config);
   const configStore = await new Store(paths.config).load();
-  const logger = typeof ctx.logger === 'function' ? ctx.logger('dsh-im:office') : (ctx.logger ?? console);
+  const logger = typeof ctx.logger === 'function' ? ctx.logger('sensteed-im:office') : (ctx.logger ?? console);
   const createHarness = internals.createHarness ?? (({ workspace }) => new ResolvedHarness({
     ...connection,
     workspace,
     autostart: false,
     dshBin: config.dshBin ?? 'dsh',
     rpcIdPrefix: 'office',
-    logPrefix: 'dsh-im:office',
+    logPrefix: 'sensteed-im:office',
   }));
   const controller = new Controller({
     credentials: ctx.credentials,

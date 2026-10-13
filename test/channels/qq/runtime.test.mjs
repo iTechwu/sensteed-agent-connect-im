@@ -213,7 +213,7 @@ test('QQ runtime requires a remembered private target for wildcard owners and st
   await runtime.stop();
 });
 
-test('QQ runtime aborts an in-flight Harness interaction when stopped', async () => {
+test('QQ runtime aborts an in-flight Nezha Agent interaction when stopped', async () => {
   const bot = new FakeBot();
   const askStarted = deferred();
   let askSignal;

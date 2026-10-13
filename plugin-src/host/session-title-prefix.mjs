@@ -89,7 +89,7 @@ export function installSessionTitlePrefix(ctx, { logger = console } = {}) {
       pending.delete(session);
       decorate(session);
     }).catch((error) => {
-      logger.warn?.('[dsh-im] unable to add Session channel prefix:', error?.message ?? error);
+      logger.warn?.('[sensteed-im] unable to add Session channel prefix:', error?.message ?? error);
     }).finally(() => {
       if (pending.get(session) === task) pending.delete(session);
     });
@@ -110,7 +110,7 @@ export function installSessionTitlePrefix(ctx, { logger = console } = {}) {
     disposeCreated?.();
   };
   if (typeof ctx.effect === 'function') {
-    ctx.effect(() => close, 'dsh-im: Session title channel prefixes');
+    ctx.effect(() => close, 'sensteed-im: Session title channel prefixes');
   }
   for (const session of ctx.sessions.list()) enqueue(session);
   return Object.freeze({

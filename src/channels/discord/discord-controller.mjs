@@ -26,7 +26,7 @@ export class DiscordController extends TokenBotController {
         } catch {
           // Neither provider errors nor optional metadata writes should break
           // an otherwise usable bot. Do not log provider responses or user IDs.
-          (options.logger ?? console).warn?.('[dsh-im:discord] owner lookup unavailable; using saved identity', {
+          (options.logger ?? console).warn?.('[sensteed-im:discord] owner lookup unavailable; using saved identity', {
             botId: request.botId,
           });
         }

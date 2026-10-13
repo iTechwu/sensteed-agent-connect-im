@@ -24,7 +24,7 @@ export function validHostLanguagePayload(endpoint, payload) {
 /**
  * Serve the interface-language mirror. The settings UI is the only caller: it
  * knows the locale the interface is actually rendered in, including a
- * browser-derived one that DSH never stores.
+ * browser-derived one that 哪吒 Agent never stores.
  */
 export function createHostLanguageRpcHandler({ controller, logger = null } = {}) {
   if (!controller || typeof controller.snapshot !== 'function'
@@ -46,7 +46,7 @@ export function createHostLanguageRpcHandler({ controller, logger = null } = {})
     } catch (error) {
       // The failure is almost always a settings-directory write problem; keep
       // the path and the underlying message out of the browser response.
-      logger?.warn?.('[dsh-im] could not persist the mirrored DSH interface language', error);
+      logger?.warn?.('[sensteed-im] could not persist the mirrored 哪吒 Agent interface language', error);
       return {
         ok: false,
         error: {
@@ -60,7 +60,7 @@ export function createHostLanguageRpcHandler({ controller, logger = null } = {})
 
 export function installHostLanguageRpc(ctx, controller, authority) {
   const logger = typeof ctx?.logger === 'function'
-    ? ctx.logger('dsh-im:language')
+    ? ctx.logger('sensteed-im:language')
     : (ctx?.logger ?? null);
   return registerManagementRpc(
     ctx,

@@ -28,7 +28,7 @@ function scheduler() {
   };
 }
 
-test('supervisor waits for the in-process Harness Host before initializing bots', async () => {
+test('supervisor waits for the in-process Nezha Agent Host before initializing bots', async () => {
   const timers = scheduler();
   const warnings = [];
   let healthChecks = 0;

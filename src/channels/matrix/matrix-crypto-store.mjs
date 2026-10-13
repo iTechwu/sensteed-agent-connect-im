@@ -185,7 +185,7 @@ export class MatrixCryptoStore {
   async load() {
     try {
       const parsed = normalizeDocument(JSON.parse(await readFile(this.#path, 'utf8')));
-      if (!parsed) throw new Error('dsh-im Matrix crypto store contains invalid data');
+      if (!parsed) throw new Error('sensteed-im Matrix crypto store contains invalid data');
       this.#value = parsed;
     } catch (error) {
       if (error?.code !== 'ENOENT') throw error;

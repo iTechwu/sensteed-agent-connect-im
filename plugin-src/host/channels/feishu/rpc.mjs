@@ -602,7 +602,7 @@ function assertController(controller) {
   }
 }
 
-/** DSH rc.6 handler: (endpoint, payload, signal) => Promise<RpcResult>. */
+/** 哪吒 Agent rc.6 handler: (endpoint, payload, signal) => Promise<RpcResult>. */
 export function createFeishuRpcHandler(controller, { encodeQr = qrCodeDataUrl } = {}) {
   const diagnostics = controller.diagnostics ?? createConnectionDiagnostics({ channel: 'feishu' });
   assertController(controller);

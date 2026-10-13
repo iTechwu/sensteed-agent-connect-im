@@ -38,7 +38,7 @@ export class SlackController {
   }) {
     if (!credentials || typeof credentials.resolve !== 'function'
       || typeof credentials.set !== 'function' || typeof credentials.unset !== 'function') {
-      throw new TypeError('Slack requires the DSH credential provider');
+      throw new TypeError('Slack requires the 哪吒 Agent credential provider');
     }
     if (!configStore || typeof configStore.list !== 'function'
       || typeof configStore.save !== 'function' || typeof configStore.remove !== 'function') {
@@ -341,7 +341,7 @@ export class SlackController {
     const runtime = this.#runtimes.get(botId);
     this.#runtimes.delete(botId);
     await runtime?.stop().catch((error) => {
-      this.#logger.warn?.(`[dsh-im:slack] bot ${botId} failed to stop cleanly:`, extractConnectionEvidence(error).details);
+      this.#logger.warn?.(`[sensteed-im:slack] bot ${botId} failed to stop cleanly:`, extractConnectionEvidence(error).details);
     });
   }
 

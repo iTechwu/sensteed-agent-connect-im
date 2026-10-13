@@ -74,7 +74,7 @@ function turnFailure(reason) {
 }
 
 /**
- * Maps Harness progress updates to Feishu's native thinking-process events.
+ * Maps 哪吒 Agent progress updates to Feishu's native thinking-process events.
  * Process failures are contained here so they can never suppress the answer.
  */
 export class FeishuLiveCot {

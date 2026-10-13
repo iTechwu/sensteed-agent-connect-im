@@ -176,11 +176,11 @@ test('a stale login reported by the real monitor reaches the account card with i
   assert.doesNotMatch(JSON.stringify(fx.logs), /private-token/);
 });
 
-test('front-door Harness failure explains offline accounts without changing healthy ones', async t => {
+test('front-door Nezha Agent failure explains offline accounts without changing healthy ones', async t => {
   const fx = fixture({ configured: true });
   const controller = new WeixinController(fx.options);
   t.after(() => controller.close());
-  const error = Object.assign(new Error('private Harness detail'), { code: 'harness-api-not-found' });
+  const error = Object.assign(new Error('private Nezha Agent detail'), { code: 'harness-api-not-found' });
   controller.reportRestoreFailure(error);
   assert.equal(controller.status().bots[0].error.code, 'harness-api-not-found');
   await controller.initialize();

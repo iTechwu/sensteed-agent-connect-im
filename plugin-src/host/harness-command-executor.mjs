@@ -1,5 +1,5 @@
 /**
- * Adapt the Host's Typert command gateway to the channel Harness client.
+ * Adapt the Host's Typert command gateway to the channel 哪吒 Agent client.
  * Programmatic production fixtures may omit the gateway and exercise other assembly paths.
  */
 export function createHarnessCommandExecutor(ctx, provided) {
@@ -10,7 +10,7 @@ export function createHarnessCommandExecutor(ctx, provided) {
   const gateway = ctx?.typertGateway;
   if (!gateway) return undefined;
   if (typeof gateway.invoke !== 'function') {
-    throw new TypeError('dsh-im requires a callable ctx.typertGateway');
+    throw new TypeError('sensteed-im requires a callable ctx.typertGateway');
   }
   return async (sessionId, line, options = {}) => {
     const request = {

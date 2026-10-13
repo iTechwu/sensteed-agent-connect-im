@@ -22,7 +22,7 @@ function validatedSessionId(value) {
 function sessionWorkspace(sessionId, value) {
   if (!Array.isArray(value?.items) || !Array.isArray(value?.archivedSessionIds)
     || value.archivedSessionIds.some((id) => typeof id !== 'string' || !id)) {
-    throw new Error('Harness returned an invalid response for workspace.list');
+    throw new Error('哪吒 Agent returned an invalid response for workspace.list');
   }
 
   const owners = [];
@@ -31,7 +31,7 @@ function sessionWorkspace(sessionId, value) {
       || typeof workspace.path !== 'string' || !isAbsolute(workspace.path)
       || !Array.isArray(workspace.sessionIds)
       || workspace.sessionIds.some((id) => typeof id !== 'string' || !id)) {
-      throw new Error('Harness returned an invalid response for workspace.list');
+      throw new Error('哪吒 Agent returned an invalid response for workspace.list');
     }
     for (const accountedId of workspace.sessionIds) {
       if (accountedId === sessionId) owners.push(workspace);
@@ -41,11 +41,11 @@ function sessionWorkspace(sessionId, value) {
   if (owners.length > 1) {
     throw bindingError(
       'session-workspace-ambiguous',
-      'The session is registered to more than one Harness workspace',
+      'The session is registered to more than one 哪吒 Agent workspace',
     );
   }
   if (owners.length && UNSAFE_WORKSPACE_PATH.test(owners[0].path)) {
-    throw new Error('Harness returned an unsafe workspace path for the session');
+    throw new Error('哪吒 Agent returned an unsafe workspace path for the session');
   }
   return {
     workspace: owners[0],
@@ -56,14 +56,14 @@ function sessionWorkspace(sessionId, value) {
 function sessionSummary(sessionId, value) {
   if (!Array.isArray(value?.items)
     || value.items.some((item) => typeof item?.sessionId !== 'string' || !item.sessionId)) {
-    throw new Error('Harness returned an invalid response for session.list');
+    throw new Error('哪吒 Agent returned an invalid response for session.list');
   }
   const matches = value.items.filter((item) => item.sessionId === sessionId);
   if (matches.length === 0) {
-    throw bindingError('session-summary-unavailable', 'The session is no longer available from Harness');
+    throw bindingError('session-summary-unavailable', 'The session is no longer available from 哪吒 Agent');
   }
   if (matches.length !== 1) {
-    throw new Error('Harness returned duplicate session summaries for session.list');
+    throw new Error('哪吒 Agent returned duplicate session summaries for session.list');
   }
 
   const [summary] = matches;
@@ -74,11 +74,11 @@ function sessionSummary(sessionId, value) {
     );
   }
   if (summary.origin !== undefined) {
-    throw new Error('Harness returned an invalid session origin for session.list');
+    throw new Error('哪吒 Agent returned an invalid session origin for session.list');
   }
   const title = summary.projections?.values?.title;
   if (title !== undefined && title !== null && typeof title !== 'string') {
-    throw new Error('Harness returned an invalid session title for session.list');
+    throw new Error('哪吒 Agent returned an invalid session title for session.list');
   }
   return { cwd: summary.cwd, title: typeof title === 'string' ? title : null };
 }
@@ -96,7 +96,7 @@ export async function adoptRegisteredWorkspaceSession(client, value, options = {
     if (typeof summary.cwd !== 'string' || !isAbsolute(summary.cwd)
       || UNSAFE_WORKSPACE_PATH.test(summary.cwd)
       || !await client.isUngroupedWorkspace?.(summary.cwd)) {
-      throw bindingError('session-not-registered', 'The session is not registered to a Harness workspace');
+      throw bindingError('session-not-registered', 'The session is not registered to a 哪吒 Agent workspace');
     }
     workspace = { path: summary.cwd };
   }
@@ -108,7 +108,7 @@ export async function adoptRegisteredWorkspaceSession(client, value, options = {
     sessionId,
   }, timeoutMs, options);
   if (!adopted || adopted.sessionId !== sessionId) {
-    throw new Error('Harness returned an invalid response for session.create');
+    throw new Error('哪吒 Agent returned an invalid response for session.create');
   }
   return {
     sessionId,

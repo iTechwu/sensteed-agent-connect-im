@@ -46,6 +46,6 @@ export function installUpdateRpc(ctx, options = {}) {
   const dispose = registerManagementRpc(ctx, UPDATE_RPC_CHANNEL, createUpdateRpcHandler(service), {
     authority: 'loopback',
   });
-  ctx.effect(() => () => service.close(), 'dsh-im: close update installer');
+  ctx.effect(() => () => service.close(), 'sensteed-im: close update installer');
   return dispose;
 }

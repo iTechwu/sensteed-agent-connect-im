@@ -32,7 +32,7 @@ import {
 } from '../shared/access-policy-production.mjs';
 
 export async function createProductionController(ctx, config = {}, internals = {}) {
-  if (!ctx?.credentials) throw new TypeError('dsh-im slack requires ctx.credentials');
+  if (!ctx?.credentials) throw new TypeError('sensteed-im slack requires ctx.credentials');
   const connection = harnessConnection(ctx, config, { competitiveApprovals: true });
 
   const ResolvedConfigStore = internals.ConfigStore ?? SlackConfigStore;
@@ -42,7 +42,7 @@ export async function createProductionController(ctx, config = {}, internals = {
   const ResolvedRuntime = internals.Runtime ?? SlackRuntime;
   const createSupervisor = internals.createConnectionSupervisor ?? createTokenConnectionSupervisor;
   const logger = typeof ctx.logger === 'function'
-    ? ctx.logger('dsh-im:slack') : (ctx.logger ?? console);
+    ? ctx.logger('sensteed-im:slack') : (ctx.logger ?? console);
   const agentPresetCatalog = () => listAgentPresetCatalog(ctx);
   const paths = pluginPaths(config, 'slack');
   const configStore = await new ResolvedConfigStore(paths.config).load();

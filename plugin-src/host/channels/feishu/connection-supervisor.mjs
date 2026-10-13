@@ -23,7 +23,7 @@ function totals(status) {
 }
 
 /**
- * Starts bot connections only after the in-process Harness HTTP API is ready,
+ * Starts bot connections only after the in-process 哪吒 Agent HTTP API is ready,
  * then periodically reconciles failed/offline bots. Timers never keep the Host
  * alive on their own and shutdown waits for an in-flight reconciliation.
  */
@@ -58,7 +58,7 @@ export class ConnectionSupervisor {
       throw new TypeError('ConnectionSupervisor requires a controller');
     }
     if (!harness || typeof harness.ensureRunning !== 'function') {
-      throw new TypeError('ConnectionSupervisor requires a Harness client');
+      throw new TypeError('ConnectionSupervisor requires a 哪吒 Agent client');
     }
     this.#controller = controller;
     this.#harness = harness;
@@ -120,7 +120,7 @@ export class ConnectionSupervisor {
       await this.#harness.ensureRunning();
     } catch (error) {
       if (this.#closed) return;
-      this.#retry('Harness Host is not ready', error);
+      this.#retry('哪吒 Agent Host is not ready', error);
       return;
     }
     if (this.#closed) return;

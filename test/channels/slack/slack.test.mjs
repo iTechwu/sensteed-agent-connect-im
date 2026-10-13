@@ -95,7 +95,7 @@ test('Slack validates both tokens and inspects Bot and Socket Mode credentials',
       if (url.pathname.endsWith('/auth.test')) {
         return jsonResponse({
           ok: true,
-          team: 'Harness Lab',
+          team: 'Nezha Agent Lab',
           team_id: 'T12345678',
           user: 'deepseek-harness',
           user_id: 'U12345678',
@@ -110,7 +110,7 @@ test('Slack validates both tokens and inspects Bot and Socket Mode credentials',
     name: 'deepseek-harness',
     username: 'deepseek-harness',
     teamId: 'T12345678',
-    teamName: 'Harness Lab',
+    teamName: 'Nezha Agent Lab',
   });
   assert.equal(calls.find((call) => call.url.pathname.endsWith('/auth.test')).options.headers.authorization, `Bearer ${BOT_TOKEN}`);
   assert.equal(calls.find((call) => call.url.pathname.endsWith('/apps.connections.open')).options.headers.authorization, `Bearer ${APP_TOKEN}`);
@@ -742,10 +742,10 @@ test('Slack controller stores two protected credential references and exposes ne
     configStore,
     inspectCredentials: async () => ({
       platformId: 'T12345678:U12345678',
-      name: 'DeepSeek Harness',
+      name: '哪吒 Agent',
       username: 'deepseek-harness',
       teamId: 'T12345678',
-      teamName: 'Harness Lab',
+      teamName: 'Nezha Agent Lab',
     }),
     createRuntime: async () => ({
       status: {
@@ -765,8 +765,8 @@ test('Slack controller stores two protected credential references and exposes ne
   });
   const status = await controller.bindCredentials({ botToken: BOT_TOKEN, appToken: APP_TOKEN });
   assert.equal(status.totals.connected, 1);
-  assert.equal(status.bots[0].bot.name, 'DeepSeek Harness');
-  assert.equal(status.bots[0].bot.teamName, 'Harness Lab');
+  assert.equal(status.bots[0].bot.name, '哪吒 Agent');
+  assert.equal(status.bots[0].bot.teamName, 'Nezha Agent Lab');
   const identity = deriveSlackBotIdentity('T12345678:U12345678');
   assert.equal(credentialStore.values.get(identity.botTokenRef), BOT_TOKEN);
   assert.equal(credentialStore.values.get(identity.appTokenRef), APP_TOKEN);
@@ -774,7 +774,7 @@ test('Slack controller stores two protected credential references and exposes ne
   assert.doesNotMatch(stored, new RegExp(BOT_TOKEN));
   assert.doesNotMatch(stored, new RegExp(APP_TOKEN));
   await controller.sendConnectionTest(identity.botId);
-  assert.match(connectionTests[0], /DeepSeek Harness/);
+  assert.match(connectionTests[0], /哪吒 Agent/);
   assert.match(connectionTests[0], /T1234••• · U1234•••/);
   const target = { kind: 'conversation', route: { channelId: 'C12345678' } };
   assert.deepEqual(await controller.sendProactiveText(identity.botId, target, 'proactive-test'), {
@@ -1168,7 +1168,7 @@ test('Slack runtime forwards the live access policy provider into its shared bri
     config: {
       botId: 'slack_access',
       platformId: 'T12345678:U12345678',
-      name: 'DeepSeek Harness',
+      name: '哪吒 Agent',
     },
     botToken: BOT_TOKEN,
     appToken: APP_TOKEN,
@@ -1243,7 +1243,7 @@ test('Slack runtime opens Socket Mode, acknowledges envelopes, and becomes ready
     config: {
       botId: 'slack_test',
       platformId: 'T12345678:U12345678',
-      name: 'DeepSeek Harness',
+      name: '哪吒 Agent',
     },
     botToken: BOT_TOKEN,
     appToken: APP_TOKEN,

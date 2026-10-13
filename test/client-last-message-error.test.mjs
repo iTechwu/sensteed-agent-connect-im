@@ -81,7 +81,7 @@ function rawBot() {
     groupResponseMode: 'mention',
     accessPolicy: publicAccessPolicy,
     bot: {
-      name: 'Harness Bot',
+      name: 'Nezha Agent Bot',
       username: 'harness_bot',
       appIdMasked: 'app••••01',
       clientIdMasked: 'client••••01',

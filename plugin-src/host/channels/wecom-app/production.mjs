@@ -48,7 +48,7 @@ function normalizeOrigin(value) {
 }
 
 export async function createProductionController(ctx, config = {}, internals = {}) {
-  if (!ctx?.credentials) throw new TypeError('dsh-im Enterprise WeChat app requires ctx.credentials');
+  if (!ctx?.credentials) throw new TypeError('sensteed-im Enterprise WeChat app requires ctx.credentials');
   const connection = harnessConnection(ctx, config, { competitiveApprovals: true });
 
   const ConfigStore = internals.ConfigStore ?? WecomAppConfigStore;
@@ -58,15 +58,15 @@ export async function createProductionController(ctx, config = {}, internals = {
   const Runtime = internals.Runtime ?? WecomAppRuntime;
   const CallbackServer = internals.CallbackServer ?? WecomAppCallbackServer;
   const createSupervisor = internals.createConnectionSupervisor ?? createConnectionSupervisor;
-  const baseLogger = typeof ctx.logger === 'function' ? ctx.logger('dsh-im:wecom-app') : (ctx.logger ?? console);
+  const baseLogger = typeof ctx.logger === 'function' ? ctx.logger('sensteed-im:wecom-app') : (ctx.logger ?? console);
   // The cordis logger never surfaces in the web profile journal; tee every
   // level to the process console so callback verification attempts stay
   // observable (journald captures the dsh web process stdout).
   const logger = {
-    log: (...args) => { baseLogger.log?.(...args); console.log('[dsh-im:wecom-app]', ...args); },
-    info: (...args) => { baseLogger.info?.(...args); console.info('[dsh-im:wecom-app]', ...args); },
-    warn: (...args) => { baseLogger.warn?.(...args); console.warn('[dsh-im:wecom-app]', ...args); },
-    error: (...args) => { baseLogger.error?.(...args); console.error('[dsh-im:wecom-app]', ...args); },
+    log: (...args) => { baseLogger.log?.(...args); console.log('[sensteed-im:wecom-app]', ...args); },
+    info: (...args) => { baseLogger.info?.(...args); console.info('[sensteed-im:wecom-app]', ...args); },
+    warn: (...args) => { baseLogger.warn?.(...args); console.warn('[sensteed-im:wecom-app]', ...args); },
+    error: (...args) => { baseLogger.error?.(...args); console.error('[sensteed-im:wecom-app]', ...args); },
   };
   const agentPresetCatalog = () => listAgentPresetCatalog(ctx);
   const paths = pluginPaths(config);

@@ -167,7 +167,7 @@ export class WecomAppRuntime {
     this.#controller.abort(new DOMException('WecomAppRuntime stopped', 'AbortError'));
     if (this.#bridge) {
       await this.#bridge.close().catch((error) => {
-        this.#logger.warn?.('[dsh-im:wecom-app] bridge stop failed:', error);
+        this.#logger.warn?.('[sensteed-im:wecom-app] bridge stop failed:', error);
       });
     }
     this.#bridge = null;

@@ -41,7 +41,7 @@ test('Slack account card matches the unified compact layout', () => {
       botId: 'slack_test',
       connected: true,
       state: 'connected',
-      bot: { name: 'DeepSeek Harness', username: 'deepseek-harness', idMasked: 'T123•••' },
+      bot: { name: '哪吒 Agent', username: 'deepseek-harness', idMasked: 'T123•••' },
       health: { summary: 'Slack Socket Mode 长连接运行正常', lastCheckedAt: Date.now() },
       error: null,
     },

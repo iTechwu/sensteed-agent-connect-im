@@ -77,7 +77,7 @@ function stripBotMention(text, botId) {
 
 function cleanThreadName(message, botId) {
   const name = stripBotMention(message?.content ?? '', botId).replace(/\s+/g, ' ').trim()
-    || 'DeepSeek Harness';
+    || '哪吒 Agent';
   return [...name].slice(0, 100).join('');
 }
 
@@ -743,7 +743,7 @@ export class DiscordRuntime {
         try {
           packet = JSON.parse(raw);
         } catch {
-          this.#logger.warn?.('[dsh-im:discord] ignored malformed Gateway JSON');
+          this.#logger.warn?.('[sensteed-im:discord] ignored malformed Gateway JSON');
           return;
         }
         if (Number.isSafeInteger(packet.s)) this.#sequence = packet.s;
@@ -762,8 +762,8 @@ export class DiscordRuntime {
                 intents: DISCORD_GATEWAY_INTENTS,
                 properties: {
                   os: process.platform,
-                  browser: 'dsh-im',
-                  device: 'dsh-im',
+                  browser: 'sensteed-im',
+                  device: 'sensteed-im',
                 },
               },
             });
@@ -816,7 +816,7 @@ export class DiscordRuntime {
             void this.#acceptMessage(packet.d, bridge).catch((error) => {
               if (generation !== this.#generation || this.#stopped) return;
               this.#logger.error?.(
-                `[dsh-im:discord] bot ${this.#config.botId} message handling failed:`,
+                `[sensteed-im:discord] bot ${this.#config.botId} message handling failed:`,
                 extractConnectionEvidence(error).details,
               );
             });
@@ -963,7 +963,7 @@ export class DiscordRuntime {
       this.#reconnectTimer = null;
       void this.#openSocket(Boolean(this.#sessionId)).catch((error) => {
         if (this.#stopped) return;
-        this.#logger.warn?.('[dsh-im:discord] Gateway reconnect failed:', extractConnectionEvidence(error).details);
+        this.#logger.warn?.('[sensteed-im:discord] Gateway reconnect failed:', extractConnectionEvidence(error).details);
         this.#scheduleReconnect();
       });
     }, delay);
@@ -987,7 +987,7 @@ export class DiscordRuntime {
     try {
       if (socket && socket.readyState < 2) socket.close(1000, 'Plugin stopped');
     } catch (error) {
-      this.#logger.warn?.(`[dsh-im:discord] bot ${this.#config.botId} failed to close Gateway:`, extractConnectionEvidence(error).details);
+      this.#logger.warn?.(`[sensteed-im:discord] bot ${this.#config.botId} failed to close Gateway:`, extractConnectionEvidence(error).details);
     }
     await Promise.race([
       bridge?.waitForIdle() ?? Promise.resolve(),

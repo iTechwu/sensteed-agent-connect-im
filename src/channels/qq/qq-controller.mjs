@@ -64,7 +64,7 @@ export class QqController {
     if (!qrAuth || typeof qrAuth.start !== 'function') throw new TypeError('QQ QR auth is required');
     if (!credentials || typeof credentials.resolve !== 'function'
       || typeof credentials.set !== 'function' || typeof credentials.unset !== 'function') {
-      throw new TypeError('QqController requires the DSH credential provider');
+      throw new TypeError('QqController requires the 哪吒 Agent credential provider');
     }
     if (!configStore || typeof configStore.list !== 'function'
       || typeof configStore.save !== 'function' || typeof configStore.remove !== 'function') {
@@ -461,7 +461,7 @@ export class QqController {
             const removed = await atConnectionStage('account.remove', () => this.#configStore.remove(identity.botId), 'account-config').catch(() => null);
             if (removed) {
               await this.#deleteState({ botId: identity.botId, config }).catch((cleanupError) => {
-                this.#logger.warn?.('[dsh-im:qq] cancelled bot state cleanup failed:', extractConnectionEvidence(cleanupError).details);
+                this.#logger.warn?.('[sensteed-im:qq] cancelled bot state cleanup failed:', extractConnectionEvidence(cleanupError).details);
               });
             }
           }
@@ -498,7 +498,7 @@ export class QqController {
     const runtime = this.#runtimes.get(botId);
     this.#runtimes.delete(botId);
     await runtime?.stop().catch((error) => {
-      this.#logger.warn?.(`[dsh-im:qq] bot ${botId} failed to stop cleanly:`, extractConnectionEvidence(error).details);
+      this.#logger.warn?.(`[sensteed-im:qq] bot ${botId} failed to stop cleanly:`, extractConnectionEvidence(error).details);
     });
   }
 

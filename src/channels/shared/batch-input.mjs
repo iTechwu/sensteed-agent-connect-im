@@ -36,7 +36,7 @@ function submissionPrompt(messages) {
 /**
  * Session title for one submission.
  *
- * The submitted prompt is dsh-im's own composition -- a framing sentence plus
+ * The submitted prompt is sensteed-im's own composition -- a framing sentence plus
  * `[消息 N]` labels -- so using it as the conversation title would put plugin
  * text where the user's own words belong. The first collected message is what
  * the user actually said first.

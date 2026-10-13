@@ -500,7 +500,7 @@ export class WhatsappBotClient {
     try {
       chunks = chunkMarkdownText(markdownToWhatsapp(block.text), WHATSAPP_TEXT_LIMIT);
     } catch {
-      this.#logger.warn?.('[dsh-im:whatsapp] Markdown could not be prepared; sending plain text');
+      this.#logger.warn?.('[sensteed-im:whatsapp] Markdown could not be prepared; sending plain text');
       return this.sendText(target, block.text);
     }
     await this.#stopTyping(target.jid);
@@ -743,7 +743,7 @@ export class WhatsappRuntime {
     createSession = createWhatsappWebSession,
   }) {
     if (!config || !authDir || !harness || !state || typeof createSession !== 'function') {
-      throw new TypeError('WhatsappRuntime requires config, auth directory, Harness, state, and session factory');
+      throw new TypeError('WhatsappRuntime requires config, auth directory, harness, state, and session factory');
     }
     this.#config = config;
     this.#authDir = authDir;

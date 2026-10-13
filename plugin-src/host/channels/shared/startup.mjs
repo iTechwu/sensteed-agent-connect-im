@@ -18,11 +18,11 @@ function followHostLanguage(ctx, channel, controller, logger) {
     void Promise.resolve()
       .then(() => controller.refreshCommandMenus())
       .catch((error) => logger.warn?.(
-        `[dsh-im] failed to re-send the ${channel} command menu after a language change`,
+        `[sensteed-im] failed to re-send the ${channel} command menu after a language change`,
         error,
       ));
   });
-  ctx.effect(() => unsubscribe, `dsh-im: follow the host language for ${channel} command menus`);
+  ctx.effect(() => unsubscribe, `sensteed-im: follow the host language for ${channel} command menus`);
 }
 
 /** Mount the native management RPC before any fallible production initialization. */
@@ -31,7 +31,7 @@ export async function installProductionChannel(ctx, config, {
 }) {
   let startupError = publicChannelInitializing(channel);
   let handler = async () => ({ ok: false, error: startupError });
-  const logger = typeof ctx.logger === 'function' ? ctx.logger(`dsh-im:${channel}`) : (ctx.logger ?? console);
+  const logger = typeof ctx.logger === 'function' ? ctx.logger(`sensteed-im:${channel}`) : (ctx.logger ?? console);
   const diagnostics = createConnectionDiagnostics({ channel, logger });
   const disposeRpc = registerManagementRpc(ctx, rpcChannel, async (endpoint, payload, signal) => {
     if (signal?.aborted) {
@@ -58,7 +58,7 @@ export async function installProductionChannel(ctx, config, {
     unregisterDelivery = config.deliveryService && production.deliveryAdapter
       ? config.deliveryService.registerAdapter(production.deliveryAdapter) : undefined;
     const readyHandler = createHandler(production.controller);
-    ctx.effect(() => closeProduction, `dsh-im: close ${channel} connections`);
+    ctx.effect(() => closeProduction, `sensteed-im: close ${channel} connections`);
     followHostLanguage(ctx, channel, production.controller, logger);
     handler = readyHandler;
   } catch (error) {

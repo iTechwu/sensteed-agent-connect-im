@@ -15,7 +15,7 @@ function agentsFromContext(ctx) {
   }
   if (agents === undefined || agents === null) return undefined;
   if (typeof agents.get !== 'function') {
-    throw new TypeError('dsh-im requires a callable AgentRegistry when ctx.get("agents") is present');
+    throw new TypeError('sensteed-im requires a callable AgentRegistry when ctx.get("agents") is present');
   }
   return agents;
 }
@@ -90,7 +90,7 @@ function createControlExecutor(agents) {
       agent.inject(steeringMessage(text, inputRpcId));
       return true;
     }
-    throw new TypeError(`Unsupported Harness control action: ${String(action)}`);
+    throw new TypeError(`Unsupported 哪吒 Agent control action: ${String(action)}`);
   };
 }
 
@@ -126,7 +126,7 @@ function createFileIngressExecutor(agents, { inboundTtlService } = {}) {
     if (typeof exactWorkspace !== 'string' || !exactWorkspace) {
       throw new InboundFileError(
         'inbound-file-workspace-unavailable',
-        'The Harness Session workspace is unavailable for inbound files.',
+        'The Nezha Agent Session workspace is unavailable for inbound files.',
       );
     }
     const staged = stageInboundFiles({ files }, {

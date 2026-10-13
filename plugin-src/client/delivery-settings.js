@@ -11,8 +11,8 @@ import { h, isEnglish, localizeText } from './i18n.js';
 export const DELIVERY_RPC_CHANNEL = '/dsh-im-delivery';
 
 const DELIVERY_DOCS_URL = Object.freeze({
-  zh: 'https://github.com/xmanrui/dsh-im/blob/main/PROACTIVE_DELIVERY.md',
-  en: 'https://github.com/xmanrui/dsh-im/blob/main/PROACTIVE_DELIVERY.en.md',
+  zh: 'https://github.com/iTechwu/sensteed-agent-connect-im/blob/main/PROACTIVE_DELIVERY.md',
+  en: 'https://github.com/iTechwu/sensteed-agent-connect-im/blob/main/PROACTIVE_DELIVERY.en.md',
 });
 
 export const DELIVERY_ENDPOINTS = Object.freeze({
@@ -498,8 +498,8 @@ function TargetRow({ definition, target, botId, connected, rpcCall, onChanged, o
     : sessionSync.state === 'waiting'
       ? '等待该私聊建立新会话'
       : sessionSync.state === 'unavailable'
-        ? '仅支持已经聊过、已建立当前会话且使用当前 Host Harness 的私聊目标'
-        : '关闭时不发送 DSH 会话消息';
+        ? '仅支持已经聊过、已建立当前会话且使用当前 Host 哪吒 Agent 的私聊目标'
+        : '关闭时不发送 哪吒 Agent 会话消息';
   const testTarget = async () => {
     setAction('test');
     setTestState(null);
@@ -549,7 +549,7 @@ function TargetRow({ definition, target, botId, connected, rpcCall, onChanged, o
       setSyncFeedback({
         tone: 'error',
         message: error?.code === 'session-sync-unavailable'
-          ? '会话同步仅支持已经聊过、已建立当前会话且使用当前 Host Harness 的私聊目标。'
+          ? '会话同步仅支持已经聊过、已建立当前会话且使用当前 Host 哪吒 Agent 的私聊目标。'
           : presentError(error, '会话同步设置失败，请稍后重试。'),
       });
     } finally {

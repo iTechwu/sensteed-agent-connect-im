@@ -24,7 +24,7 @@ export const DSH_LOCALE_PREFERENCE_FIELD = 'preference';
  */
 export function interfaceLanguageSettingsPath(config = {}) {
   const dshHome = resolve(config.dshHome ?? process.env.DSH_HOME ?? join(homedir(), '.dsh'));
-  return resolve(dshHome, 'integrations', 'dsh-im', 'interface-language.json');
+  return resolve(dshHome, 'integrations', 'sensteed-im', 'interface-language.json');
 }
 
 /**
@@ -51,7 +51,7 @@ export function createHostLanguageController({
       return readPreference();
     } catch (error) {
       logger?.warn?.(
-        '[dsh-im] could not read the DSH interface language preference; using the mirrored language',
+        '[sensteed-im] could not read the 哪吒 Agent interface language preference; using the mirrored language',
         error,
       );
       return undefined;
@@ -107,16 +107,16 @@ export function createHostLanguageController({
 }
 
 /**
- * Bind the host message language to DSH's interface language.
+ * Bind the host message language to 哪吒 Agent's interface language.
  *
  * The plugin's own `language` option stays authoritative for operators who set
- * it. Otherwise the language follows DSH: the explicit Language-row selection
- * from the Host user-settings document, and — because DSH stores nothing for a
+ * it. Otherwise the language follows 哪吒 Agent: the explicit Language-row selection
+ * from the Host user-settings document, and — because 哪吒 Agent stores nothing for a
  * browser-derived locale — the language mirrored by the settings UI.
  */
 export function installHostLanguage(ctx, config = {}, internals = {}) {
   const logger = typeof ctx?.logger === 'function'
-    ? ctx.logger('dsh-im:language')
+    ? ctx.logger('sensteed-im:language')
     : (ctx?.logger ?? null);
   const store = internals.store
     ?? new InterfaceLanguageStore(interfaceLanguageSettingsPath(config));
@@ -148,7 +148,7 @@ export function installHostLanguage(ctx, config = {}, internals = {}) {
     .then(() => store.load?.())
     .then(() => controller.apply(), (error) => {
       logger?.error?.(
-        '[dsh-im] could not initialize the DSH interface language; falling back to the available language',
+        '[sensteed-im] could not initialize the 哪吒 Agent interface language; falling back to the available language',
         error,
       );
       return controller.snapshot();

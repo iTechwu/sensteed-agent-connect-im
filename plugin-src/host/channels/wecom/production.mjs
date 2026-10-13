@@ -43,7 +43,7 @@ function pluginPaths(config) {
 }
 
 export async function createProductionController(ctx, config = {}, internals = {}) {
-  if (!ctx?.credentials) throw new TypeError('dsh-im Enterprise WeChat requires ctx.credentials');
+  if (!ctx?.credentials) throw new TypeError('sensteed-im Enterprise WeChat requires ctx.credentials');
   const connection = harnessConnection(ctx, config, { competitiveApprovals: true });
 
   const ConfigStore = internals.ConfigStore ?? WecomConfigStore;
@@ -53,7 +53,7 @@ export async function createProductionController(ctx, config = {}, internals = {
   const Runtime = internals.Runtime ?? WecomRuntime;
   const QrAuth = internals.QrAuth ?? WecomQrAuth;
   const createSupervisor = internals.createConnectionSupervisor ?? createConnectionSupervisor;
-  const logger = typeof ctx.logger === 'function' ? ctx.logger('dsh-im:wecom') : (ctx.logger ?? console);
+  const logger = typeof ctx.logger === 'function' ? ctx.logger('sensteed-im:wecom') : (ctx.logger ?? console);
   const agentPresetCatalog = () => listAgentPresetCatalog(ctx);
   const paths = pluginPaths(config);
   const configStore = await new ConfigStore(paths.config).load();

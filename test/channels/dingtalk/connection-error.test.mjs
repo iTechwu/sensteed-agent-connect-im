@@ -36,7 +36,7 @@ test('connection diagnostics identify the pnpm mirror proxy dependency failure w
   assert.deepEqual(failure.publicError, {
     code: 'stream-proxy-dependency-incompatible',
     message: '钉钉 Stream 连接失败：检测到代理依赖 agent-base 6.0.0。',
-    hint: '请将 DSH profile 中的 agent-base@6 固定为 6.0.2 后重新安装依赖，或升级 pnpm 后重新解析 lockfile。',
+    hint: '请将 哪吒 Agent profile 中的 agent-base@6 固定为 6.0.2 后重新安装依赖，或升级 pnpm 后重新解析 lockfile。',
     referenceId: FIXED_REFERENCE,
   });
   assert.equal(failure.diagnostic.stage, 'dingtalk-stream-connect-failed');

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { promptContentForMessage } from '../../src/channels/shared/image-prompt.mjs';
 import { imageInputLimits } from '../../src/channels/shared/image-input-policy.mjs';
 
-// Channel-only tests use lightweight Harness doubles. Consume the newly deferred
+// Channel-only tests use lightweight Nezha Agent doubles. Consume the newly deferred
 // sources here so their transport, ordering and error assertions remain useful.
 // Real staging, compression and Host retries are covered by image-input tests.
 export async function loadDeferredImages(content, options = {}) {

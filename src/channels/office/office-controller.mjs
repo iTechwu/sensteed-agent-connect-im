@@ -23,7 +23,7 @@ export class OfficeController {
 
   constructor({ credentials, configStore, logger = console, createRuntime }) {
     if (!credentials?.resolve || !credentials?.set || !credentials?.unset) {
-      throw new TypeError('AI Office requires the Harness credential provider');
+      throw new TypeError('AI Office requires the 哪吒 Agent credential provider');
     }
     if (!configStore?.get || !configStore?.save || !configStore?.clear) {
       throw new TypeError('AI Office requires a config store');

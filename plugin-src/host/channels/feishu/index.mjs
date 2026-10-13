@@ -19,7 +19,7 @@ function controllerFrom(ctx, config) {
 }
 
 /**
- * Cordis/DSH Host plugin entry.  Production composition may supply an owned
+ * Cordis/哪吒 Agent Host plugin entry.  Production composition may supply an owned
  * controller service; tests and embedded distributions may inject one through
  * config without changing the Connection RPC boundary.
  */

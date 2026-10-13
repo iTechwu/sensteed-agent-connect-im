@@ -22,7 +22,7 @@ test('initial Session titles use original text instead of enhanced context', () 
   }), '帮我查询 今天的订单');
 });
 
-test('initial Session titles strip only leading dsh-im context from structured prompts', () => {
+test('initial Session titles strip only leading sensteed-im context from structured prompts', () => {
   const content = [
     {
       type: 'text',

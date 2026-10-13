@@ -27,7 +27,7 @@ function scheduler() {
   };
 }
 
-test('supervisor waits for the in-process Harness API and retries offline Weixin accounts', async () => {
+test('supervisor waits for the in-process Nezha Agent API and retries offline Weixin accounts', async () => {
   const timers = scheduler();
   let healthChecks = 0;
   let initializations = 0;

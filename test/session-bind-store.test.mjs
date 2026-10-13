@@ -245,7 +245,7 @@ test('a newly created enhanced Session is renamed from the first prompt before a
   ]);
 });
 
-test('an ordinary first prompt keeps DSH title handling while model switch shares its binding', async () => {
+test('an ordinary first prompt keeps Nezha Agent title handling while model switch shares its binding', async () => {
   const state = memoryState();
   const askStarted = deferred();
   const releaseAsk = deferred();

@@ -191,7 +191,7 @@ test('delivery HTTP installs one exact WebServer route with Cordis lifecycle own
   };
 
   assert.equal(installDeliveryHttp(ctx, service), dispose);
-  assert.deepEqual(effects, [`dsh-im: ${DELIVERY_HTTP_PATH}`]);
+  assert.deepEqual(effects, [`sensteed-im: ${DELIVERY_HTTP_PATH}`]);
   assert.equal(registrations.length, 1);
   assert.equal(registrations[0].kind, 'exact');
   assert.equal(registrations[0].path, DELIVERY_HTTP_PATH);

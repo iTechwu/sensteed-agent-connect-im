@@ -983,7 +983,7 @@ test('Telegram processing failure replaces its placeholder instead of leaving it
           createSession: async () => 'session-rich-error',
           ask: async () => {
             prompts += 1;
-            throw new Error('private Harness diagnostic');
+            throw new Error('private Nezha Agent diagnostic');
           },
         },
       });

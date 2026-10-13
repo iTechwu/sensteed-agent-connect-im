@@ -14,7 +14,7 @@ test('text DeliveryBlocks preserve explicit format and legacy strings default to
   const legacy = createTextDeliveryBlock('legacy *text*');
   const markdown = createTextDeliveryBlock({
     kind: 'text',
-    text: '# Harness answer',
+    text: '# Nezha Agent answer',
     format: 'markdown',
   });
 
@@ -25,7 +25,7 @@ test('text DeliveryBlocks preserve explicit format and legacy strings default to
   });
   assert.deepEqual(markdown, {
     kind: 'text',
-    text: '# Harness answer',
+    text: '# Nezha Agent answer',
     format: 'markdown',
   });
   assert.equal(Object.isFrozen(legacy), true);

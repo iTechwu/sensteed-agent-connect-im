@@ -9,7 +9,7 @@ import { ConversationStateStore } from '../shared/conversation-state-store.mjs';
  */
 const MAX_THREAD_IDS = 2_000;
 
-/** A conversation key that pins the chat to one existing Harness session. */
+/** A conversation key that pins the chat to one existing 哪吒 Agent session. */
 export const BOUND_KEY_PREFIX = 'bound:';
 
 export class EmailStateStore extends ConversationStateStore {

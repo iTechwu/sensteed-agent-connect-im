@@ -136,7 +136,7 @@ export function createImHostPlugin(internals = {}) {
       // callbacks must not return its controller object as an effect.
       installSessionTitlePrefix(titleCtx, {
         logger: typeof titleCtx?.logger === 'function'
-          ? titleCtx.logger('dsh-im:session-title') : (titleCtx?.logger ?? console),
+          ? titleCtx.logger('sensteed-im:session-title') : (titleCtx?.logger ?? console),
       });
     };
     if (typeof ctx?.inject === 'function') {
@@ -157,30 +157,30 @@ export function createImHostPlugin(internals = {}) {
     try {
       startInjectedContext(ctx, { logger });
     } catch (error) {
-      logger.error?.('[dsh-im] failed to activate injected-context pairing; prompts keep the inline prefix', error);
+      logger.error?.('[sensteed-im] failed to activate injected-context pairing; prompts keep the inline prefix', error);
     }
     if (ctx?.connection?.fetch) {
       if (hostLanguage) {
         try {
           startHostLanguageRpc(ctx, hostLanguage, config.rpcAuthority);
         } catch (error) {
-          logger.error?.('[dsh-im] failed to activate interface language mirroring; continuing with channels', error);
+          logger.error?.('[sensteed-im] failed to activate interface language mirroring; continuing with channels', error);
         }
       }
       try {
         startUpdate(ctx);
       } catch (error) {
-        logger.error?.('[dsh-im] failed to activate update management; continuing with channels', error);
+        logger.error?.('[sensteed-im] failed to activate update management; continuing with channels', error);
       }
       try {
         startInboundTtl(ctx, { config });
       } catch (error) {
-        logger.error?.('[dsh-im] failed to activate inbound TTL settings; continuing with channels', error);
+        logger.error?.('[sensteed-im] failed to activate inbound TTL settings; continuing with channels', error);
       }
       try {
         startDelivery(ctx, deliveryService, { authority: config.rpcAuthority });
       } catch (error) {
-        logger.error?.('[dsh-im] failed to activate delivery management; continuing with channels', error);
+        logger.error?.('[sensteed-im] failed to activate delivery management; continuing with channels', error);
       }
     }
     const failures = [];
@@ -191,11 +191,11 @@ export function createImHostPlugin(internals = {}) {
         await start(ctx, channelConfig(config, channel, deliveryService));
       } catch (error) {
         failures.push(error);
-        logger.error?.(`[dsh-im] failed to activate ${channel}; continuing with the remaining channels`, error);
+        logger.error?.(`[sensteed-im] failed to activate ${channel}; continuing with the remaining channels`, error);
       }
     }));
     if (failures.length === channels.length) {
-      throw new AggregateError(failures, 'dsh-im failed to activate every channel');
+      throw new AggregateError(failures, 'sensteed-im failed to activate every channel');
     }
     if (typeof ctx?.on === 'function') {
       try {
@@ -204,7 +204,7 @@ export function createImHostPlugin(internals = {}) {
           inputScope: ctx.root ?? ctx,
         });
       } catch (error) {
-        logger.error?.('[dsh-im] failed to activate Session sync; continuing with channels', error);
+        logger.error?.('[sensteed-im] failed to activate Session sync; continuing with channels', error);
       }
     }
   }

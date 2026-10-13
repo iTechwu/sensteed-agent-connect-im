@@ -1,12 +1,11 @@
 {
-  "name": "@xmanrui/dsh-im",
+  "name": "sensteed-im",
   "version": "4.38.2",
   "icon": "./assets/logo-plugin-message-link-gradient.webp",
-  "description": "把微信、飞书、企微、钉钉、QQ、Telegram、WhatsApp、Slack、Discord、Matrix接入DSH。 Connect Telegram, WhatsApp, Slack, Discord, Matrix, WeChat, Feishu, WeCom, DingTalk, and QQ to DSH.",
+  "description": "把微信、飞书、企微、钉钉、QQ、Matrix接入哪吒 Agent。 Connect WeChat, Feishu, WeCom, DingTalk, QQ, and Matrix to Nezha Agent.",
   "keywords": [
-    "deepseek-harness",
-    "dsh",
-    "dsh-plugin",
+    "sensteed-im",
+    "nezha-agent",
     "ai-agent",
     "im",
     "instant-messaging",
@@ -17,11 +16,6 @@
     "wecom",
     "dingtalk",
     "qq",
-    "slack",
-    "telegram",
-    "discord",
-    "whatsapp",
-    "imessage",
     "matrix",
     "ai-office"
   ],
@@ -30,17 +24,17 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xmanrui/dsh-im.git"
+    "url": "git+https://github.com/iTechwu/sensteed-agent-connect-im.git"
   },
-  "homepage": "https://github.com/xmanrui/dsh-im#readme",
+  "homepage": "https://github.com/iTechwu/sensteed-agent-connect-im#readme",
   "bugs": {
-    "url": "https://github.com/xmanrui/dsh-im/issues"
+    "url": "https://github.com/iTechwu/sensteed-agent-connect-im/issues"
   },
   "publishConfig": {
     "access": "public"
   },
   "bin": {
-    "dsh-im": "bin/dsh-im.mjs"
+    "sensteed-im": "bin/sensteed-im.mjs"
   },
   "main": "./lib/index.js",
   "exports": {

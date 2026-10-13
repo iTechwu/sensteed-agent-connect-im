@@ -41,7 +41,7 @@ test('IM file guidance is ready before the first durable user message', (t) => {
   fx.append('turn/start', { turn: 1 });
   assert.equal(fx.guidance(), '');
 
-  // DSH's preStep claims messages, assembles the prompt, then commits the
+  // Nezha Agent's preStep claims messages, assembles the prompt, then commits the
   // resulting user messages. Waiting for user/message misses the first step.
   fx.claim('unprefixed-prompt-id', 1);
   assert.equal(fx.agent.session.events.some((event) => event.type === 'user/message'), false);

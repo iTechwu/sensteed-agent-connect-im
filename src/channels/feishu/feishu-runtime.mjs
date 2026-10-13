@@ -104,7 +104,7 @@ export function createBridgeStatus({ allowedSenderCount = 1 } = {}) {
 
 /**
  * Owns one live Feishu long connection and the already-tested bridge stack.
- * The class intentionally receives the SDK and Harness dependencies so the
+ * The class intentionally receives the SDK and 哪吒 Agent dependencies so the
  * plugin can run it in-process while tests exercise the lifecycle without a
  * real Feishu tenant.
  */
@@ -195,7 +195,7 @@ export class FeishuRuntime {
     const allowedOwners = Array.isArray(ownerOpenIds) ? ownerOpenIds : [ownerOpenId];
     const normalizedOwners = [...new Set(allowedOwners.filter((value) => typeof value === 'string' && value))];
     if (normalizedOwners.length === 0) throw new Error('FeishuRuntime requires at least one owner open_id');
-    if (!harness) throw new Error('FeishuRuntime requires a Harness client');
+    if (!harness) throw new Error('FeishuRuntime requires a 哪吒 Agent client');
     if (!state) throw new Error('FeishuRuntime requires a state store');
     if (repair !== undefined && repair !== null && !nonEmptyString(botId)) {
       throw new TypeError('FeishuRuntime repair capability requires a botId');
@@ -361,7 +361,7 @@ export class FeishuRuntime {
       this.#client = client;
       const channel = new VerifiedFeishuChannel({
         client,
-        initialText: t('已连接 DeepSeek Harness，正在思考…'),
+        initialText: t('已连接 哪吒 Agent，正在思考…'),
       });
       const bridge = this.#consumerMode === 'external-consumer' ? null : new FeishuHarnessBridge({
         client,

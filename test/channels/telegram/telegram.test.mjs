@@ -148,14 +148,14 @@ test('Telegram API validates a Bot Token without exposing it in requests or erro
       return jsonResponse({ ok: true, result: {
         id: 123456789,
         is_bot: true,
-        first_name: 'Harness',
+        first_name: 'Nezha Agent',
         username: 'HarnessBot',
       } });
     },
   });
   assert.deepEqual(bot, {
     platformId: '123456789',
-    name: 'Harness',
+    name: 'Nezha Agent',
     username: 'HarnessBot',
   });
   assert.equal(calls.length, 1);
@@ -642,7 +642,7 @@ test('Telegram config and controller store only a credential reference in bot da
     credentials: credentialStore,
     configStore,
     inspectToken: async () => ({
-      platformId: '123456789', name: 'Harness Telegram', username: 'harness_bot',
+      platformId: '123456789', name: 'Nezha Agent Telegram', username: 'harness_bot',
     }),
     createRuntime: async () => {
       const runtime = {
@@ -667,7 +667,7 @@ test('Telegram config and controller store only a credential reference in bot da
 
   const status = await controller.bindCredentials({ token: TOKEN });
   assert.equal(status.totals.connected, 1);
-  assert.equal(status.bots[0].bot.name, 'Harness Telegram');
+  assert.equal(status.bots[0].bot.name, 'Nezha Agent Telegram');
   assert.equal(status.bots[0].bot.username, 'harness_bot');
   assert.deepEqual(status.bots[0].accessPolicy, {
     accessMode: TELEGRAM_ACCESS_MODES.compatible,
@@ -683,7 +683,7 @@ test('Telegram config and controller store only a credential reference in bot da
   await controller.reconnectBot(identity.botId);
   assert.equal(runtimes.length, 2);
   await controller.sendConnectionTest(identity.botId);
-  assert.match(connectionTests[0], /Harness Telegram/);
+  assert.match(connectionTests[0], /Nezha Agent Telegram/);
   assert.match(connectionTests[0], /123•••/);
   const target = { kind: 'chat', route: { chatId: '123456' } };
   assert.deepEqual(await controller.sendProactiveText(identity.botId, target, 'proactive-test'), {
@@ -835,7 +835,7 @@ test('Telegram policy update is serialized with deletion and cannot restore a de
     credentials: credentialStore,
     configStore,
     inspectToken: async () => ({
-      platformId: '123456789', name: 'Harness Telegram', username: 'harness_bot',
+      platformId: '123456789', name: 'Nezha Agent Telegram', username: 'harness_bot',
     }),
     createRuntime: async () => ({
       status: { ready: true, connectionState: 'connected', harnessReachable: true },
@@ -872,7 +872,7 @@ test('Telegram queued policy update cannot persist after controller close begins
     credentials: credentials(),
     configStore,
     inspectToken: async () => ({
-      platformId: '123456789', name: 'Harness Telegram', username: 'harness_bot',
+      platformId: '123456789', name: 'Nezha Agent Telegram', username: 'harness_bot',
     }),
     createRuntime: async () => {
       runtimeCount += 1;
@@ -1142,7 +1142,7 @@ test('Telegram maps one reply_to_message snapshot without expanding nested repli
       reply_to_message: {
         message_id: 7,
         chat: { id: -1001, type: 'supergroup' },
-        from: { id: 123456789, is_bot: true, first_name: 'Harness', last_name: 'Bot' },
+        from: { id: 123456789, is_bot: true, first_name: 'Nezha Agent', last_name: 'Bot' },
         caption: '第一层原文',
         photo: [{ file_id: 'photo-large', file_unique_id: 'quoted-photo', file_size: 2_000 }],
         reply_to_message: { message_id: 6, text: '不应递归进入 Prompt' },
@@ -1153,7 +1153,7 @@ test('Telegram maps one reply_to_message snapshot without expanding nested repli
   assert.deepEqual(replied.replyTo, {
     messageId: '7',
     authorId: '123456789',
-    authorName: 'Harness Bot',
+    authorName: 'Nezha Agent Bot',
     content: '第一层原文',
     attachments: [{ kind: 'image' }],
   });
@@ -1903,7 +1903,7 @@ for (const scenario of [
       assert.equal(settingsReads, 2, 'every received update captures its settings before the first cursor await');
       config = configFor(scenario.after, 'after cursor write');
       releaseFirstCursor.resolve();
-      await bounded(allPrompts.promise, 'both poll batches did not reach Harness', 5_000);
+      await bounded(allPrompts.promise, 'both poll batches did not reach Nezha Agent', 5_000);
       for (const [index, event] of [...firstBatch, ...nextBatch].entries()) {
         const expectedText = `message ${event.update_id}`;
         const content = asked.find((text) => text.endsWith(expectedText));
@@ -1930,7 +1930,7 @@ for (const scenario of [
   });
 }
 
-test('Telegram runtime keeps polling while a Harness question waits for its answer', async () => {
+test('Telegram runtime keeps polling while a Nezha Agent question waits for its answer', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-im-telegram-interaction-'));
   const state = await new TelegramStateStore(join(directory, 'state.json')).load();
   const questionSent = deferred();
@@ -2095,7 +2095,7 @@ test('Telegram runtime keeps polling while a Harness question waits for its answ
     assert.equal(state.hasSeen('11'), true);
 
     releaseTurn.resolve();
-    await bounded(finalReplySent.promise, 'the original Harness turn did not finish');
+    await bounded(finalReplySent.promise, 'the original Nezha Agent turn did not finish');
     await new Promise((resolve) => setTimeout(resolve, 20));
     assert.equal(originalTurnEnded, true);
     assert.deepEqual(asked, [{

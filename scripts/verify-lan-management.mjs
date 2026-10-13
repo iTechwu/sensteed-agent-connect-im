@@ -137,7 +137,7 @@ try {
   const packages = {
     '@deepseek-ai/dsh-base': resolve(harnessRoot, 'packages/bundle/base'),
     '@deepseek-ai/dsh-web-app': resolve(harnessRoot, 'packages/bundle/web-app'),
-    '@xmanrui/dsh-im': pluginRoot,
+    'sensteed-im': pluginRoot,
   };
   for (const [name, path] of Object.entries(packages)) {
     const target = join(profile, 'node_modules', name);
@@ -206,7 +206,7 @@ try {
     'dingtalk', 'connection.status', { origin: otherTrustedOrigin.origin }), 403);
 
   await stop();
-  await writeFile(join(profile, 'cordis.patch.yml'), '- id: xmanrui-dsh-im\n  config:\n    rpcAuthority: loopback\n');
+  await writeFile(join(profile, 'cordis.patch.yml'), '- id: sensteed-im\n  config:\n    rpcAuthority: loopback\n');
   const restrictedUrl = await start();
   expectStatus('Explicit loopback rejects LAN', await rpc(await login(restrictedUrl, lanIp)), 403);
   expectStatus('Explicit loopback accepts 127.0.0.1', await readyStatus(await login(restrictedUrl, '127.0.0.1')), 200, true);

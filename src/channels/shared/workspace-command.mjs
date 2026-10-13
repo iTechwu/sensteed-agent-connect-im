@@ -163,10 +163,10 @@ async function runWorkspaceListCommand(match, harness) {
   try {
     const { current, paths } = await workspacePathSnapshot(harness);
     if (paths.length === 0) {
-      return commandResult(t('当前 Harness Host 上没有仍然存在的已登记工作区。'));
+      return commandResult(t('当前 哪吒 Agent Host 上没有仍然存在的已登记工作区。'));
     }
     const lines = [
-      t('当前 Harness Host 上存在的工作区（{count}）：', { count: paths.length }),
+      t('当前 哪吒 Agent Host 上存在的工作区（{count}）：', { count: paths.length }),
       ...paths.map((workspace, index) => (
         `${index + 1}. ${workspace}${workspace === current ? t('（当前）') : ''}`
       )),
@@ -249,7 +249,7 @@ function formatSessionRelativeTime(value) {
 function sessionListMessage(workspace, sessions, { currentWorkspace = false } = {}) {
   const rows = sessions.map((session) => {
     const sessionId = safeDisplayText(session?.sessionId);
-    if (!sessionId) throw new TypeError('Harness returned an invalid session id');
+    if (!sessionId) throw new TypeError('哪吒 Agent returned an invalid session id');
     const title = session?.summaryAvailable === false
       ? t('标题暂不可用')
       : safeDisplayText(session?.title) || t('暂无标题');
@@ -292,7 +292,7 @@ async function runSessionListCommand(match, harness, conversationKey) {
     if (resolved.error) return commandResult(resolved.error);
     const listed = await harness.listWorkspaceSessions(resolved.workspace);
     if (!listed || !Array.isArray(listed.sessions)) {
-      throw new TypeError('Harness returned an invalid workspace session list');
+      throw new TypeError('哪吒 Agent returned an invalid workspace session list');
     }
     harness.assertWorkspaceScope?.();
     const workspace = normalizedWorkspacePath(listed.workspace) ?? resolved.workspace;
@@ -355,7 +355,7 @@ async function runSessionBindCommand(command, harness, conversationKey) {
       if (selected.error) return commandResult(selected.error);
       const listed = await harness.listWorkspaceSessions(selected.workspace);
       if (!listed || !Array.isArray(listed.sessions)) {
-        throw new TypeError('Harness returned an invalid workspace session list');
+        throw new TypeError('哪吒 Agent returned an invalid workspace session list');
       }
       harness.assertWorkspaceScope?.();
       const position = Number(sessionId);
@@ -365,7 +365,7 @@ async function runSessionBindCommand(command, harness, conversationKey) {
       }
       const selectedSessionId = listed.sessions[position - 1]?.sessionId;
       if (!validSessionId(selectedSessionId)) {
-        throw new TypeError('Harness returned an invalid session id');
+        throw new TypeError('哪吒 Agent returned an invalid session id');
       }
       sessionId = selectedSessionId;
     } catch (error) {
@@ -388,7 +388,7 @@ async function runSessionBindCommand(command, harness, conversationKey) {
     const workspace = normalizedWorkspacePath(bound?.workspace);
     const boundSessionId = safeDisplayText(bound?.sessionId);
     if (!workspace || !boundSessionId) {
-      throw new TypeError('Harness returned an invalid bound session');
+      throw new TypeError('哪吒 Agent returned an invalid bound session');
     }
     const title = safeDisplayText(bound?.title) || t('暂无标题');
     const message = [

@@ -37,14 +37,14 @@ function normalizeReasoning(value) {
   if (value === undefined) return undefined;
   if (!value || typeof value !== 'object'
     || !Array.isArray(value.efforts) || value.efforts.length === 0) {
-    throw new TypeError('Harness returned invalid model reasoning metadata');
+    throw new TypeError('哪吒 Agent returned invalid model reasoning metadata');
   }
   const efforts = value.efforts.map((effort) => {
     if (!effort || typeof effort !== 'object'
       || typeof effort.id !== 'string' || !effort.id
       || typeof effort.name !== 'string' || !effort.name
       || (effort.description !== undefined && typeof effort.description !== 'string')) {
-      throw new TypeError('Harness returned an invalid reasoning effort');
+      throw new TypeError('哪吒 Agent returned an invalid reasoning effort');
     }
     return {
       id: effort.id,
@@ -54,7 +54,7 @@ function normalizeReasoning(value) {
   });
   if (value.defaultEffort !== undefined
     && (typeof value.defaultEffort !== 'string' || !value.defaultEffort)) {
-    throw new TypeError('Harness returned an invalid default reasoning effort');
+    throw new TypeError('哪吒 Agent returned an invalid default reasoning effort');
   }
   return {
     efforts,
@@ -65,14 +65,14 @@ function normalizeReasoning(value) {
 function normalizeCatalog(value, { requireCurrent = false } = {}) {
   if (!value || typeof value !== 'object'
     || !Array.isArray(value.groups) || !Array.isArray(value.failures)) {
-    throw new TypeError('Harness returned an invalid model catalog');
+    throw new TypeError('哪吒 Agent returned an invalid model catalog');
   }
   const groups = value.groups.map((group) => {
     if (!group || typeof group !== 'object'
       || typeof group.id !== 'string' || !group.id
       || typeof group.name !== 'string' || !group.name
       || !Array.isArray(group.models)) {
-      throw new TypeError('Harness returned an invalid model provider group');
+      throw new TypeError('哪吒 Agent returned an invalid model provider group');
     }
     return {
       id: group.id,
@@ -82,7 +82,7 @@ function normalizeCatalog(value, { requireCurrent = false } = {}) {
           || typeof model.id !== 'string' || !model.id
           || typeof model.name !== 'string' || !model.name
           || (model.description !== undefined && typeof model.description !== 'string')) {
-          throw new TypeError('Harness returned an invalid model');
+          throw new TypeError('哪吒 Agent returned an invalid model');
         }
         return {
           id: model.id,
@@ -99,7 +99,7 @@ function normalizeCatalog(value, { requireCurrent = false } = {}) {
     if (!failure || typeof failure !== 'object'
       || typeof failure.id !== 'string' || !failure.id
       || typeof failure.name !== 'string' || !failure.name) {
-      throw new TypeError('Harness returned an invalid model provider failure');
+      throw new TypeError('哪吒 Agent returned an invalid model provider failure');
     }
     return { id: failure.id, name: failure.name };
   });
@@ -111,7 +111,7 @@ function normalizeCatalog(value, { requireCurrent = false } = {}) {
       || (value.current.reasoningEffort !== undefined
         && (typeof value.current.reasoningEffort !== 'string'
           || !value.current.reasoningEffort))) {
-      throw new TypeError('Harness returned an invalid current model');
+      throw new TypeError('哪吒 Agent returned an invalid current model');
     }
     current = {
       provider: value.current.provider,
@@ -121,7 +121,7 @@ function normalizeCatalog(value, { requireCurrent = false } = {}) {
         : { reasoningEffort: value.current.reasoningEffort }),
     };
   } else if (requireCurrent) {
-    throw new TypeError('Harness returned no current model');
+    throw new TypeError('哪吒 Agent returned no current model');
   }
   return { groups, failures, current };
 }
@@ -153,7 +153,7 @@ function selectionText(selection) {
 }
 
 function selectionMismatch(expected, actual, source) {
-  const error = new Error(`Harness ${source} did not confirm the selected model`);
+  const error = new Error(`哪吒 Agent ${source} did not confirm the selected model`);
   error.code = MODEL_SELECTION_MISMATCH;
   error.expected = expected;
   error.actual = actual;
@@ -420,7 +420,7 @@ function modelErrorMessage(error, action) {
         : 'selectModel.selected:';
       lines.push(`${label} ${safeDisplayText(selectionText(actual))}`);
     } else {
-      lines.push(`${error?.source ?? 'Harness'}: unconfirmed`);
+      lines.push(`${error?.source ?? '哪吒 Agent'}: unconfirmed`);
     }
     return lines.join('\n');
   }
@@ -441,11 +441,11 @@ async function boundSession(harness, state, key, options) {
   const sessionId = state.sessionFor(key);
   if (typeof sessionId !== 'string' || !sessionId) return null;
   if (typeof harness?.workspaceSession !== 'function') {
-    throw new TypeError('Harness does not support workspace sessions');
+    throw new TypeError('哪吒 Agent does not support workspace sessions');
   }
   const session = harness.workspaceSession(sessionId, key);
   if (!session || typeof session.sessionExists !== 'function') {
-    throw new TypeError('Harness returned an invalid workspace session');
+    throw new TypeError('哪吒 Agent returned an invalid workspace session');
   }
   if (await session.sessionExists(options)) return { sessionId, session };
   if (typeof state.clearSession === 'function' && state.sessionFor(key) === sessionId) {
@@ -457,7 +457,7 @@ async function boundSession(harness, state, key, options) {
 async function sessionIsBusy(session, control, options) {
   if (typeof session?.isRunning !== 'function'
     || typeof session?.hasActiveTurn !== 'function') {
-    throw new TypeError('Harness session does not expose run state');
+    throw new TypeError('哪吒 Agent session does not expose run state');
   }
   if (await session.isRunning(options)) return true;
   return Boolean(await session.hasActiveTurn(control, options));
@@ -465,21 +465,21 @@ async function sessionIsBusy(session, control, options) {
 
 async function listCatalog(harness, options) {
   if (typeof harness?.listModels !== 'function') {
-    throw new TypeError('Harness does not support listing models');
+    throw new TypeError('哪吒 Agent does not support listing models');
   }
   return normalizeCatalog(await harness.listModels(options));
 }
 
 async function sessionCatalog(session, options) {
   if (typeof session?.models !== 'function') {
-    throw new TypeError('Harness session does not support listing models');
+    throw new TypeError('哪吒 Agent session does not support listing models');
   }
   return normalizeCatalog(await session.models(options), { requireCurrent: true });
 }
 
 async function selectAndVerifyModel(session, selection, options) {
   if (typeof session?.selectModel !== 'function') {
-    throw new TypeError('Harness session does not support model selection');
+    throw new TypeError('哪吒 Agent session does not support model selection');
   }
   const selected = (await session.selectModel(selection, options))?.selected;
   if (!confirmsSelection(selected, selection)) {
@@ -702,14 +702,14 @@ export async function runModelCommand(text, harness, state, key, options = {}) {
           || typeof harness?.workspaceSession !== 'function'
           || typeof state?.sessionFor !== 'function'
           || typeof state?.setSession !== 'function') {
-          throw new TypeError('Harness cannot create a conversation session');
+          throw new TypeError('哪吒 Agent cannot create a conversation session');
         }
         // An explicit choice must remain usable even when the saved bot model expires.
         const sessionId = await harness.createSession({
           ...requestOptions, inheritBotModel: false, conversationKey: key,
         });
         if (typeof sessionId !== 'string' || !sessionId) {
-          throw new TypeError('Harness returned an invalid session id');
+          throw new TypeError('哪吒 Agent returned an invalid session id');
         }
         const session = harness.workspaceSession(sessionId, key);
         applied = await selectAndVerifyModel(session, selection, requestOptions);

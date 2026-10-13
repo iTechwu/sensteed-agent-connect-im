@@ -51,7 +51,7 @@ export async function fetchNpmRelease(fetchImpl = globalThis.fetch, timeoutMs = 
     const integrity = value.dist?.integrity;
     if (tarball.origin !== new URL(NPM_REGISTRY).origin || tarball.username || tarball.password
       || tarball.search || tarball.hash
-      || tarball.pathname !== `/@xmanrui/dsh-im/-/dsh-im-${version}.tgz`
+      || tarball.pathname !== `/sensteed-im/-/sensteed-im-${version}.tgz`
       || typeof integrity !== 'string' || !/^sha512-[A-Za-z0-9+/]{86}==$/.test(integrity)) {
       throw updateError('invalid-release');
     }
@@ -67,7 +67,7 @@ export async function fetchNpmRelease(fetchImpl = globalThis.fetch, timeoutMs = 
 function pathsFor(environment) {
   if (!isAbsolute(environment.homeDir ?? '') || !isAbsolute(environment.profileDir ?? '')) return null;
   const key = createHash('sha256').update(environment.profileDir).digest('hex').slice(0, 24);
-  const directory = join(environment.homeDir, 'updates', 'dsh-im', key);
+  const directory = join(environment.homeDir, 'updates', 'sensteed-im', key);
   return {
     directory,
     state: join(directory, 'state.json'),
@@ -206,6 +206,9 @@ export function createUpdateService({
       latestVersion: checked?.release.version ?? null,
       profileName: environment.profileName ?? null,
       environmentKind: environment.environmentKind ?? 'cli',
+      // The Host (harness) version, surfaced for the settings-page brand line;
+      // null when the running Host identity cannot be confirmed.
+      hostVersion: environment.hostVersion ?? null,
       // Preserve source protection even when restart/recovery takes status priority.
       sourceInstall: environment.sourceInstall === true || environment.blockedReason === 'source-install',
       canInstall,

@@ -79,7 +79,7 @@ const DEFAULT_FILE_UPLOAD_TIMEOUT_MS = 120_000;
 // Built lazily: t() must run after setImHostLanguage, not at import time.
 function helpText() {
   return [
-    t('企业微信机器人已连接 DeepSeek Harness。'),
+    t('企业微信机器人已连接 哪吒 Agent。'),
     '',
     t('直接发送文字、图片或文件即可继续当前会话。'),
     t('/menu 或 /m  打开可点击的功能菜单'),
@@ -617,7 +617,7 @@ export class WecomHarnessBridge {
     if (!client || typeof client.replyStream !== 'function' || typeof client.sendMessage !== 'function') {
       throw new TypeError('Enterprise WeChat client is required');
     }
-    if (!harness || !state) throw new TypeError('Harness client and state store are required');
+    if (!harness || !state) throw new TypeError('哪吒 Agent client and state store are required');
     if (!Number.isInteger(fileUploadTimeoutMs) || fileUploadTimeoutMs < 1) {
       throw new TypeError('fileUploadTimeoutMs must be a positive integer');
     }
@@ -722,7 +722,7 @@ export class WecomHarnessBridge {
       if (error.code !== 'channel-delivery-uncertain') this.#menus.delete(card.task_id);
       // Only a definite card rejection can safely fall back to text.
       if (error.code !== 'channel-delivery-failed' || error.providerCode === undefined) throw error;
-      this.#logger.warn?.('[dsh-im:wecom] menu delivery failed; using text:', wecomSendDiagnostic(error));
+      this.#logger.warn?.('[sensteed-im:wecom] menu delivery failed; using text:', wecomSendDiagnostic(error));
       await this.#sendImmediate(frame, chatId, wecomMenuText(menu));
     }
   }
@@ -741,7 +741,7 @@ export class WecomHarnessBridge {
       const failure = setLastMessageFailure(this.#status, error, {
         reason: error?.wecomOperation ? 'wecom-menu-delivery' : undefined,
       });
-      this.#logger.warn?.(`[dsh-im:wecom] menu event failed [${failure.referenceId}]`, wecomSendDiagnostic(error));
+      this.#logger.warn?.(`[sensteed-im:wecom] menu event failed [${failure.referenceId}]`, wecomSendDiagnostic(error));
     }).finally(() => {
       this.#eventIds.delete(id);
       this.#commandTasks.delete(task);
@@ -787,7 +787,7 @@ export class WecomHarnessBridge {
     await this.#client.updateTemplateCard(frame, wecomTemplateCard(acknowledgedMenu, callback.task_id), [senderId]).then(() => {
       this.#menus.set(callback.task_id, { ...entry, menu: acknowledgedMenu });
     }).catch((error) => {
-      this.#logger.warn?.('[dsh-im:wecom] menu acknowledgement failed:', error);
+      this.#logger.warn?.('[sensteed-im:wecom] menu acknowledgement failed:', error);
     });
     let commands = [choice[1]];
     if (choice[1] === 'apply' || choice[1].startsWith('select:')) {
@@ -882,7 +882,7 @@ export class WecomHarnessBridge {
     if (command === '/help') return { message: helpText() };
     if (command === '/status') {
       await this.#harness.ensureRunning(options);
-      return { message: t('企业微信机器人与 DeepSeek Harness 连接正常。') };
+      return { message: t('企业微信机器人与 哪吒 Agent 连接正常。') };
     }
     if (this.#queues.has(key) || this.#pendingInteractions.has(key) || this.#approvals.hasPending(key)
       || this.#batchInputs.status(key).phase !== 'idle') {
@@ -999,7 +999,7 @@ export class WecomHarnessBridge {
           reason: parseWecomMenu(commandText) && error?.wecomOperation ? 'wecom-menu-delivery' : undefined,
         });
         this.#logger.error?.(
-          `[dsh-im:wecom] failed to process a command [${failure.referenceId}]`,
+          `[sensteed-im:wecom] failed to process a command [${failure.referenceId}]`,
           wecomSendDiagnostic(error),
         );
         if (this.#cardFrames.has(frame) && error?.wecomOperation
@@ -1160,7 +1160,7 @@ export class WecomHarnessBridge {
       this.#status.lastError = error?.message ?? String(error);
       const failure = setLastMessageFailure(this.#status, error);
       this.#logger.error?.(
-        `[dsh-im:wecom] failed to process a batch input message [${failure.referenceId}]`,
+        `[sensteed-im:wecom] failed to process a batch input message [${failure.referenceId}]`,
       );
       await this.#sendImmediate(frame, chatId, messageFailureText(failure))
         .catch(() => undefined);
@@ -1191,7 +1191,7 @@ export class WecomHarnessBridge {
     }).catch((error) => {
       if (this.#signal?.aborted) return;
       this.#status.lastError = error?.message ?? String(error);
-      this.#logger.error?.('[dsh-im:wecom] failed to apply inbound access policy', error);
+      this.#logger.error?.('[sensteed-im:wecom] failed to apply inbound access policy', error);
     }).finally(() => {
       this.#acceptedMessageIds.delete(messageId);
       this.#commandTasks.delete(task);
@@ -1372,7 +1372,7 @@ export class WecomHarnessBridge {
       }
       if (!hasImages && !hasFiles && command === '/status') {
         await this.#harness.ensureRunning({ signal: this.#signal });
-        await this.#sendImmediate(frame, chatId, t('企业微信机器人与 DeepSeek Harness 连接正常。'));
+        await this.#sendImmediate(frame, chatId, t('企业微信机器人与 哪吒 Agent 连接正常。'));
         await this.#state.markSeen(messageId);
         return;
       }
@@ -1417,7 +1417,7 @@ export class WecomHarnessBridge {
         );
         streamStarted = true;
       } catch (error) {
-        this.#logger.warn?.('[dsh-im:wecom] unable to start a stream; using an active reply:', error);
+        this.#logger.warn?.('[sensteed-im:wecom] unable to start a stream; using an active reply:', error);
       }
 
       let content = hasImages || hasReply
@@ -1513,7 +1513,7 @@ export class WecomHarnessBridge {
               providerMessageIds,
             });
           } catch (error) {
-            this.#logger.warn?.('[dsh-im:wecom] stream finalization failed; using an active reply:', error);
+            this.#logger.warn?.('[sensteed-im:wecom] stream finalization failed; using an active reply:', error);
           }
         }
         if (!finalSent) {
@@ -1527,7 +1527,7 @@ export class WecomHarnessBridge {
       } catch (error) {
         textSendError = wecomSendError(error, 'sendMessage');
         this.#logger.warn?.(
-          '[dsh-im:wecom] final text delivery failed; continuing with result files:',
+          '[sensteed-im:wecom] final text delivery failed; continuing with result files:',
           error,
         );
       }
@@ -1581,7 +1581,7 @@ export class WecomHarnessBridge {
         reason: imagePromptDiagnostic(error)?.reason,
       });
       this.#logger.error?.(
-        `[dsh-im:wecom] failed to process an inbound message [${failure.referenceId}]`,
+        `[sensteed-im:wecom] failed to process an inbound message [${failure.referenceId}]`,
         wecomSendDiagnostic(error),
       );
       const errorText = messageFailureText(failure);
@@ -1601,7 +1601,7 @@ export class WecomHarnessBridge {
         }
         if (!promptRecorded) await this.#state.markSeen(messageId);
       } catch {
-        this.#logger.error?.('[dsh-im:wecom] failed to send the safe error reply');
+        this.#logger.error?.('[sensteed-im:wecom] failed to send the safe error reply');
       }
     } finally {
       await Promise.allSettled([
@@ -1658,7 +1658,7 @@ export class WecomHarnessBridge {
         await this.#presentInteraction(pending);
       } catch {
         this.#status.lastError = t('企业微信交互问题发送失败。');
-        this.#logger.error?.('[dsh-im:wecom] failed to retry an interaction question');
+        this.#logger.error?.('[sensteed-im:wecom] failed to retry an interaction question');
         pending.interaction.reconnect?.();
         return;
       }
@@ -1689,7 +1689,7 @@ export class WecomHarnessBridge {
         await this.#presentInteraction(pending);
       } catch {
         this.#status.lastError = t('企业微信交互问题发送失败。');
-        this.#logger.error?.('[dsh-im:wecom] failed to send the next interaction question');
+        this.#logger.error?.('[sensteed-im:wecom] failed to send the next interaction question');
         pending.interaction.reconnect?.();
       }
       return;
@@ -1721,7 +1721,7 @@ export class WecomHarnessBridge {
       pending.answers.pop();
       pending.index -= 1;
       this.#status.lastError = t('回答提交失败。');
-      this.#logger.error?.('[dsh-im:wecom] failed to answer a Harness interaction');
+      this.#logger.error?.('[sensteed-im:wecom] failed to answer a 哪吒 Agent interaction');
       await this.#sendImmediate(frame, chatId, t('回答提交失败，请重新发送当前问题的答案。'))
         .catch(() => undefined);
     }
@@ -1758,7 +1758,7 @@ export class WecomHarnessBridge {
       || !Array.isArray(questions)
       || questions.length === 0
       || questions.some((question) => !validHarnessQuestion(question))) {
-      this.#logger.warn?.('[dsh-im:wecom] ignored an invalid Harness question interaction');
+      this.#logger.warn?.('[sensteed-im:wecom] ignored an invalid 哪吒 Agent question interaction');
       return;
     }
 
@@ -1786,7 +1786,7 @@ export class WecomHarnessBridge {
     }
     if (this.#interactionKeys.has(interactionId)) return;
     if (existing) {
-      this.#logger.warn?.('[dsh-im:wecom] cancelled a second pending Harness question');
+      this.#logger.warn?.('[sensteed-im:wecom] cancelled a second pending 哪吒 Agent question');
       await interaction.respond({
         ok: false,
         error: {
@@ -1891,7 +1891,7 @@ export class WecomHarnessBridge {
       }, { signal: AbortSignal.timeout(5_000) });
     } catch (error) {
       if (error?.code !== 'interaction-not-pending') {
-        this.#logger.warn?.('[dsh-im:wecom] failed to cancel a pending Harness interaction');
+        this.#logger.warn?.('[sensteed-im:wecom] failed to cancel a pending 哪吒 Agent interaction');
       }
     }
   }

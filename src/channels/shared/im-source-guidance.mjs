@@ -8,7 +8,7 @@
 // exactly one, the same shape `outboundArtifactRegistry` uses.
 
 /** Prompt-context name the Host materializes this guidance under. */
-export const IM_SOURCE_GUIDANCE_CONTEXT = 'dsh-im:source-guidance';
+export const IM_SOURCE_GUIDANCE_CONTEXT = 'sensteed-im:source-guidance';
 
 /** Contexts are joined in ascending order; this one follows the policy facts. */
 export const IM_SOURCE_GUIDANCE_ORDER = 125;

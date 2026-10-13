@@ -72,14 +72,14 @@ export function normalizeConnectionError(value, fallbackCode = 'WEIXIN_ERROR', f
 
 export function managementRequestError(cause, operation) {
   if (cause?.name === 'AbortError') return cause;
-  const error = new Error('无法完成微信管理请求，请检查 DSH 连接后重新读取状态。');
+  const error = new Error('无法完成微信管理请求，请检查 哪吒 Agent 连接后重新读取状态。');
   error.code = 'weixin-management-unreachable';
   error.details = normalizeWeixinDiagnosticDetails({ operation, stage: 'management.request', occurredAt: new Date().toISOString() });
   return error;
 }
 
 function invalidResponse() {
-  const error = new Error('DSH 微信管理接口返回了无法识别的响应，请重新读取状态。');
+  const error = new Error('哪吒 Agent 微信管理接口返回了无法识别的响应，请重新读取状态。');
   error.code = 'weixin-management-invalid-response';
   error.details = { stage: 'management.request', occurredAt: new Date().toISOString() };
   return error;

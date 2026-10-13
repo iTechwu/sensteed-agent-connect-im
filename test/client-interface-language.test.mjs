@@ -90,7 +90,7 @@ test('the mirror reports the effective interface locale and follows every switch
   const dispose = installInterfaceLanguageMirror(ctx, { rpcCall });
   await flush();
 
-  // The browser-derived locale is the one DSH never stores, so it has to be
+  // The browser-derived locale is the one Nezha Agent never stores, so it has to be
   // reported explicitly for bot messages to follow the interface.
   assert.deepEqual(calls.map(({ endpoint, payload }) => [endpoint, payload]), [
     [HOST_LANGUAGE_ENDPOINTS.mirror, { locale: 'en' }],

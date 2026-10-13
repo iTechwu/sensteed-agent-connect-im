@@ -314,7 +314,7 @@ test('Feishu executes /compact for the bound Session without prompting the model
   assert.deepEqual(sent, ['暂无可压缩的历史记录。']);
 });
 
-test('Feishu rejects /clear with an embedded image before Harness execution', async () => {
+test('Feishu rejects /clear with an embedded image before Nezha Agent execution', async () => {
   const fixture = stateFixture([['p2p:ou_user', 'session-clear-image']]);
   const sent = [];
   let executed = 0;
@@ -551,7 +551,7 @@ test('Feishu batch input caps at ten, rejects non-text content, and can be cance
   assert.doesNotMatch(sent.at(-1), /丢弃 1 条/);
 });
 
-test('Feishu group batch commands follow the response policy but never reach Harness', async () => {
+test('Feishu group batch commands follow the response policy but never reach Nezha Agent', async () => {
   const fixture = stateFixture([['group:oc_batch_group', 'session-group-batch']]);
   const sent = [];
   let asks = 0;
@@ -710,7 +710,7 @@ test('Feishu retains a batch after an ask failure and retries the same snapshot'
   assert.match(sent.at(-1), /没有正在进行的批量输入/);
 });
 
-test('Feishu clears a submitted batch when the Harness turn is stopped', async () => {
+test('Feishu clears a submitted batch when the Nezha Agent turn is stopped', async () => {
   const fixture = stateFixture([['p2p:ou_user', 'session-batch-stopped']]);
   const sent = [];
   const bridge = new FeishuHarnessBridge({
@@ -738,7 +738,7 @@ test('Feishu clears a submitted batch when the Harness turn is stopped', async (
   assert.match(sent.at(-1), /没有正在进行的批量输入/);
 });
 
-test('bridge maps a Feishu conversation to a persistent Harness session and replies', async () => {
+test('bridge maps a Feishu conversation to a persistent Nezha Agent session and replies', async () => {
   const sent = [];
   const reactions = [];
   const removedReactions = [];
@@ -775,8 +775,8 @@ test('bridge maps a Feishu conversation to a persistent Harness session and repl
     createSession: async () => 'session-test',
     ask: async (sessionId, text, options) => {
       asked.push({ sessionId, text });
-      await options.onUpdate({ type: 'text', text: 'Harness' });
-      return 'Harness reply';
+      await options.onUpdate({ type: 'text', text: 'Nezha Agent' });
+      return 'Nezha Agent reply';
     },
   };
   const state = {
@@ -812,7 +812,7 @@ test('bridge maps a Feishu conversation to a persistent Harness session and repl
   assert.deepEqual(streamed, [{
     chatId: 'oc_chat',
     options: { replyTo: 'om_1' },
-    updates: ['Harness', 'Harness reply'],
+    updates: ['Nezha Agent', 'Nezha Agent reply'],
   }]);
   assert.deepEqual(reactions, [
     { messageId: 'om_1', emojiType: 'OnIt' },
@@ -950,7 +950,7 @@ for (const groupResponseMode of ['mention', 'all']) {
       const bridge = new FeishuHarnessBridge({
         client: textClient(async () => assert.fail(`unexpected reply: ${name}`)),
         channel: {},
-        harness: { ensureRunning: async () => assert.fail(`unexpected Harness work: ${name}`) },
+        harness: { ensureRunning: async () => assert.fail(`unexpected Nezha Agent work: ${name}`) },
         state: fixture.state,
         status,
         allowedSenderOpenIds: new Set(['*']),
@@ -1036,7 +1036,7 @@ test('bot group mentions still obey the legacy sender allowlist', async () => {
   assert.equal(status.messagesRejected, 1);
 });
 
-test('bridge downloads an inbound Feishu image once and submits structured Harness content', async () => {
+test('bridge downloads an inbound Feishu image once and submits structured Nezha Agent content', async () => {
   const fixture = stateFixture([['p2p:ou_user', 'session-image']]);
   const downloaded = [];
   const asked = [];
@@ -1231,7 +1231,7 @@ test('Feishu does not query quoted messages for rejected, local-command, or batc
   assert.match(sent.join('\n'), /图片、文件或引用消息/);
 });
 
-test('Feishu applies the unified access policy before attachments or Harness work', async () => {
+test('Feishu applies the unified access policy before attachments or Nezha Agent work', async () => {
   const fixture = stateFixture([['p2p:ou_member', 'session-member']]);
   let downloads = 0;
   const harnessCalls = [];
@@ -1327,7 +1327,7 @@ test('Feishu applies the unified access policy before attachments or Harness wor
   });
 });
 
-test('bridge hands a native Feishu file source to the current Harness turn', async () => {
+test('bridge hands a native Feishu file source to the current Nezha Agent turn', async () => {
   const fixture = stateFixture([['p2p:ou_user', 'session-file']]);
   const bytes = Buffer.from('feishu-native-file');
   const downloads = [];
@@ -1546,7 +1546,7 @@ test('a single-text-paragraph Feishu post is treated as a command like a text me
   assert.deepEqual(asked, []);
 });
 
-test('a threaded Feishu reply answers a pending Harness question before the original turn queue', async () => {
+test('a threaded Feishu reply answers a pending Nezha Agent question before the original turn queue', async () => {
   const sent = [];
   const streamed = [];
   const asked = [];
@@ -1631,7 +1631,7 @@ test('a threaded Feishu reply answers a pending Harness question before the orig
   bridge.accept(event('om_prompt', '请先调用 ask_user_question'));
   await eventually(
     () => [...sent, ...streamed].some((text) => text.includes('请选择测试环境')),
-    'the Harness question was not presented in Feishu',
+    'the Nezha Agent question was not presented in Feishu',
   );
 
   bridge.accept(event('om_answer', '1', {
@@ -1674,13 +1674,13 @@ test('a threaded Feishu reply answers a pending Harness question before the orig
   assert.deepEqual(asked, [{
     sessionId: 'session-question',
     text: '请先调用 ask_user_question',
-  }], 'the answer and /status must not become new Harness prompts');
+  }], 'the answer and /status must not become new Nezha Agent prompts');
   assert.deepEqual([...seen].sort(), ['om_answer', 'om_prompt', 'om_status']);
   assert.equal(status.messagesReceived, 3);
   assert.equal(status.messagesReplied, 1);
 });
 
-test('a Harness question is presented as a threaded reply inside a topic group', async () => {
+test('a Nezha Agent question is presented as a threaded reply inside a topic group', async () => {
   const sent = [];
   const replied = [];
   const streamed = [];
@@ -1975,7 +1975,7 @@ test('watch completion pushes are threaded to the message that created the watch
   );
 });
 
-test('pending Harness questions are isolated by Feishu conversation', async () => {
+test('pending Nezha Agent questions are isolated by Feishu conversation', async () => {
   const fixture = stateFixture([
     ['p2p:ou_a', 'session-a'],
     ['p2p:ou_b', 'session-b'],
@@ -4761,7 +4761,7 @@ async function runIssue86Scenario({ bridge, timeline, submitStarted, answerAccep
   bridge.accept(event('om-86-prompt', '请先调用 ask_user_question'));
   await eventually(
     () => timeline.some((entry) => entry.kind === 'text-message' && entry.text.includes('请选择测试环境')),
-    'the Harness question was not presented in Feishu',
+    'the Nezha Agent question was not presented in Feishu',
   );
 
   const questionIndex = timeline.findIndex(
@@ -4775,7 +4775,7 @@ async function runIssue86Scenario({ bridge, timeline, submitStarted, answerAccep
   await Promise.race([
     submitStarted.promise,
     new Promise((_, reject) => setTimeout(
-      () => reject(new Error('the question reply never reached the Harness interaction')),
+      () => reject(new Error('the question reply never reached the Nezha Agent interaction')),
       1_000,
     )),
   ]);
@@ -5012,7 +5012,7 @@ async function bridge_accept_and_answer({ bridge, timeline, submitStarted, answe
   const turn = bridge.accept(event('om-86-prompt', '请先调用 ask_user_question'));
   await eventually(
     () => timeline.some((entry) => entry.kind === 'text-message' && entry.text.includes('请选择测试环境')),
-    'the Harness question was not presented in Feishu',
+    'the Nezha Agent question was not presented in Feishu',
   );
   const questionIndex = timeline.findIndex(
     (entry) => entry.kind === 'text-message' && entry.text.includes('请选择测试环境'),
@@ -5025,7 +5025,7 @@ async function bridge_accept_and_answer({ bridge, timeline, submitStarted, answe
   await Promise.race([
     submitStarted.promise,
     new Promise((_, reject) => setTimeout(
-      () => reject(new Error('the question reply never reached the Harness interaction')),
+      () => reject(new Error('the question reply never reached the Nezha Agent interaction')),
       1_000,
     )),
   ]);
@@ -5059,7 +5059,7 @@ async function settleAnswer(context, { waitFinal = true } = {}) {
   await Promise.race([
     context.submitStarted.promise,
     new Promise((_, reject) => setTimeout(
-      () => reject(new Error('the card answer never reached the Harness interaction')),
+      () => reject(new Error('the card answer never reached the Nezha Agent interaction')),
       1_000,
     )),
   ]);
@@ -5102,7 +5102,7 @@ async function bridge_answer_by_text(context, text) {
   await Promise.race([
     context.submitStarted.promise,
     new Promise((_, reject) => setTimeout(
-      () => reject(new Error('the text answer never reached the Harness interaction')),
+      () => reject(new Error('the text answer never reached the Nezha Agent interaction')),
       1_000,
     )),
   ]);
@@ -5749,7 +5749,7 @@ test('numeric new-session clears an idle binding without starting a turn', async
   assert.equal(fixture.state.sessionFor('p2p:ou_user'), null);
   assert.equal(askCalls, 0);
   const replies = sent.filter(({ msgType }) => msgType === 'text').map(({ content }) => JSON.parse(content).text);
-  assert.ok(replies.includes('已开启全新 Harness 会话。'));
+  assert.ok(replies.includes('已开启全新 哪吒 Agent 会话。'));
   assert.equal(replies.some((text) => text.includes('当前任务仍在运行')), false);
 });
 
@@ -5807,7 +5807,7 @@ for (const withFollowingMessage of [false, true]) {
       : ['ask:session-existing', 'finished', 'clear']);
     assert.equal(fixture.state.sessionFor('p2p:ou_user'), withFollowingMessage ? 'session-new' : null);
     const replies = sent.filter(({ msgType }) => msgType === 'text').map(({ content }) => JSON.parse(content).text);
-    assert.ok(replies.includes('已开启全新 Harness 会话。'));
+    assert.ok(replies.includes('已开启全新 哪吒 Agent 会话。'));
     assert.equal(replies.some((text) => text.includes('当前任务仍在运行')), false);
   });
 }
@@ -5859,7 +5859,7 @@ test('numeric question reply takes precedence over the new-session menu choice',
     value: { sessionId: 'session-question', answer: { answers: [{ id: 'language', selected: ['English'] }] } },
   });
   assert.equal(fixture.state.sessionFor('p2p:ou_user'), 'session-question');
-  assert.equal(sent.some(({ content }) => JSON.stringify(content).includes('已开启全新 Harness 会话')), false);
+  assert.equal(sent.some(({ content }) => JSON.stringify(content).includes('已开启全新 哪吒 Agent 会话')), false);
 });
 
 test('/new menu shows processing and success on the original card and consumes duplicate clicks', async () => {
@@ -6372,7 +6372,7 @@ test('card callback dedupe keeps two allowed operators isolated', async () => {
 
 test('single-select workspace ids preserve commas', async () => {
   const fixture = stateFixture();
-  const workspace = join(tmpdir(), `dsh-im,workspace-${Math.random().toString(36).slice(2)}`);
+  const workspace = join(tmpdir(), `sensteed-im,workspace-${Math.random().toString(36).slice(2)}`);
   mkdirSync(workspace, { recursive: true });
   const selected = [];
   const harness = {
@@ -6983,7 +6983,7 @@ function repairBridge({
   };
 }
 
-test('/repair sends a validated ordinary SDK link without prompting Harness', async () => {
+test('/repair sends a validated ordinary SDK link without prompting Nezha Agent', async () => {
   const repair = repairCapability();
   const fx = repairBridge({ capability: repair.capability });
 
@@ -9224,7 +9224,7 @@ function replyTimeoutHarness({ historyEvents }) {
       workspaceSession: () => ({
         async sessionExists() { return true; },
         async ask() {
-          const error = new Error('Harness stalled');
+          const error = new Error('Nezha Agent stalled');
           error.code = 'harness-reply-timeout';
           error.details = { turn: 3, lastSeq: 6 };
           throw error;
@@ -12862,7 +12862,7 @@ test('plain IM replies (stepPush off) register the in-flight turn and never open
   assert.ok(streamCalls.length >= 1, 'the plain reply still delivers via the stream channel');
 });
 
-// Topic deduplication must follow the real Harness session, not message parsing.
+// Topic deduplication must follow the real Nezha Agent session, not message parsing.
 function topicAnchorFixture({ mode = 'text', ...options } = {}) {
   const fixture = stateFixture();
   const asked = [];

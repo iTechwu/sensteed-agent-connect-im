@@ -98,7 +98,7 @@ test('QQ full group mentions still enforce access before commands and attachment
   const bridge = new QqHarnessBridge({
     bot: { sendText: async (_target, text) => sent.push(text) },
     ownerUserOpenid: '*', state: fixture.state, accessPolicy: policy,
-    harness: { ensureRunning: async () => assert.fail('denied command reached Harness') },
+    harness: { ensureRunning: async () => assert.fail('denied command reached Nezha Agent') },
     fetchImpl: async () => assert.fail('denied attachment was downloaded'),
   });
   const fullGroup = (overrides) => message({
@@ -141,7 +141,7 @@ test('QQ maps msgElements quote snapshots and prefers voice ASR text', () => {
   });
 });
 
-test('QQ sends quote context to Harness but does not execute quoted commands', async () => {
+test('QQ sends quote context to Nezha Agent but does not execute quoted commands', async () => {
   const fixture = stateFixture([['c2c:owner-openid', 'session-quote']]);
   let clears = 0;
   let prompt;
@@ -432,7 +432,7 @@ test('QQ does not duplicate image attachments in ordinary files', () => {
   assert.deepEqual(inbound.files, []);
 });
 
-test('QQ bridge hands a native non-image attachment to the current Harness turn', async () => {
+test('QQ bridge hands a native non-image attachment to the current Nezha Agent turn', async () => {
   const fixture = stateFixture([['c2c:owner-openid', 'session-native-file']]);
   const bytes = Buffer.from('qq-bridge-file');
   const downloads = [];
@@ -518,12 +518,12 @@ test('QQ starts an ordinary-file download before an earlier queued turn finishes
   }));
 
   await eventually(() => downloads === 1, 'queued QQ file did not start downloading');
-  assert.equal(asks, 1, 'the second Harness turn must remain queued');
+  assert.equal(asks, 1, 'the second Nezha Agent turn must remain queued');
   firstTurn.resolve('第一条完成');
   await Promise.all([first, second]);
 });
 
-test('QQ sends image-only attachments to Harness and accepts the SDK file MIME fallback', async () => {
+test('QQ sends image-only attachments to Nezha Agent and accepts the SDK file MIME fallback', async () => {
   const fixture = stateFixture([['c2c:owner-openid', 'session-image']]);
   const prompts = [];
   const downloads = [];
@@ -610,7 +610,7 @@ test('QQ checks sender and group mention before downloading image attachments', 
   assert.equal(asks, 0);
 });
 
-test('QQ applies the unified access policy before attachments or Harness work', async () => {
+test('QQ applies the unified access policy before attachments or Nezha Agent work', async () => {
   const fixture = stateFixture([['c2c:member-openid', 'session-member']]);
   let downloads = 0;
   const harnessCalls = [];
@@ -801,7 +801,7 @@ test('QQ does not submit a redelivered message twice when the safe failure reply
   assert.equal(fixture.seen.has(inbound.messageId), true);
 });
 
-test('QQ does not use an image caption as a pending Harness answer', async () => {
+test('QQ does not use an image caption as a pending Nezha Agent answer', async () => {
   const fixture = stateFixture([['c2c:owner-openid', 'session-question-image']]);
   const sent = [];
   const answered = deferred();
@@ -1085,7 +1085,7 @@ test('QQ group messages suppress every successful progress update', async () => 
       ask: async (_session, _text, { onUpdate, finalAnswerOnly }) => {
         assert.equal(finalAnswerOnly, true);
         await onUpdate({ type: 'tool', name: 'bash' });
-        // 工具结束后 Harness 客户端会下发 status 帧“正在整理结果…”。
+        // 工具结束后 哪吒 Agent 客户端会下发 status 帧“正在整理结果…”。
         await onUpdate({ type: 'status', text: '正在整理结果…', toolName: 'bash' });
         await onUpdate({ type: 'tool', name: 'read' });
         await onUpdate({ type: 'status', text: '正在整理结果…', toolName: 'read' });
@@ -2662,7 +2662,7 @@ test('QQ private batch input submits once, cancels cleanly, and restores normal 
   assert.equal(sent.at(-1), '普通完成');
 });
 
-test('QQ retains a private batch after Harness ask fails and lets /send retry it', async () => {
+test('QQ retains a private batch after Nezha Agent ask fails and lets /send retry it', async () => {
   const fixture = stateFixture();
   const asked = [];
   const sent = [];
@@ -2674,7 +2674,7 @@ test('QQ retains a private batch after Harness ask fails and lets /send retry it
       sessionExists: async () => true,
       ask: async (_sessionId, prompt) => {
         asked.push(prompt);
-        if (asked.length === 1) throw new Error('temporary Harness failure');
+        if (asked.length === 1) throw new Error('temporary Nezha Agent failure');
         return '重试成功';
       },
     },
@@ -2742,7 +2742,7 @@ test('QQ clears a private batch after turn-stopped without suggesting a batch re
   assert.match(sent.at(-1), /当前没有待提交的批量内容/);
 });
 
-test('QQ group batch commands are rejected without reaching Harness', async () => {
+test('QQ group batch commands are rejected without reaching Nezha Agent', async () => {
   const fixture = stateFixture();
   const sent = [];
   let asks = 0;

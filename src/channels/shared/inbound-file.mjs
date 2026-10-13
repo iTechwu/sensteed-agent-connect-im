@@ -143,7 +143,7 @@ export async function stageInboundFiles(message, {
   if (typeof workspace !== 'string' || !isAbsolute(workspace)) {
     throw new InboundFileError(
       'inbound-file-workspace-unavailable',
-      'The Harness Session workspace is unavailable for inbound files.',
+      'The Nezha Agent Session workspace is unavailable for inbound files.',
     );
   }
 
@@ -206,7 +206,7 @@ export async function stageInboundFiles(message, {
       if (!relativePath || relativePath.startsWith('..') || isAbsolute(relativePath)) {
         throw new InboundFileError(
           'inbound-file-path-invalid',
-          'The staged inbound file escaped the Harness Session workspace.',
+          'The staged inbound file escaped the Nezha Agent Session workspace.',
         );
       }
       files.push(Object.freeze({
@@ -267,7 +267,7 @@ export async function sweepInboundAttachments(workspace, ttlHours, {
   if (!rootInWorkspace || rootInWorkspace.startsWith('..') || isAbsolute(rootInWorkspace)) {
     throw new InboundFileError(
       'inbound-file-root-outside-workspace',
-      'The inbound attachment directory does not resolve inside the Harness Session workspace.',
+      'The inbound attachment directory does not resolve inside the Nezha Agent Session workspace.',
     );
   }
   let entries;
@@ -307,7 +307,7 @@ export function appendInboundFilesToPrompt(prompt, staged) {
   const manifest = [
     '<dsh_im_files>',
     JSON.stringify({
-      description: 'Files uploaded with this user message. Paths are relative to the current Harness workspace.',
+      description: 'Files uploaded with this user message. Paths are relative to the current Nezha Agent workspace.',
       files: staged.files,
     }),
     '</dsh_im_files>',

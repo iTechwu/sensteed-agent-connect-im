@@ -38,7 +38,7 @@ export function createDeferredDeliveryCoordinator({
     patchDeferred: (id, patch) => state.patchDeferred(id, patch),
     removeDeferred: (id) => state.removeDeferred(id),
   }, { logger });
-  const warn = (error) => { if (!activeSignal.aborted) logger.warn?.('[dsh-im] deferred delivery:', error?.message ?? String(error)); };
+  const warn = (error) => { if (!activeSignal.aborted) logger.warn?.('[sensteed-im] deferred delivery:', error?.message ?? String(error)); };
   const pending = async (id) => (await registry.allPending()).find((entry) => entry.id === id);
   const bound = (entry) => !activeSignal.aborted && state.sessionFor(entry.key) === entry.sessionId;
   function enqueue(sessionId, operation) {

@@ -6,7 +6,7 @@ const DEFAULT_DB_PATH = `${process.env.HOME ?? ''}/Library/Messages/chat.db`;
 const DEFAULT_TIMEOUT_MS = 15_000;
 // Self-chat has no separate bot sender. Keep the reply marker in Messages itself
 // so echoes are still recognizable after a Host restart or iCloud resync.
-export const IMESSAGE_BOT_REPLY_PREFIX = '🤖 DSH\n';
+export const IMESSAGE_BOT_REPLY_PREFIX = '🤖 哪吒 Agent\n';
 
 function cleanString(value) {
   return typeof value === 'string' && value.trim() ? value.trim() : null;
@@ -144,7 +144,7 @@ export class MacOSMessagesApi {
       return decodeRows(stdout);
     } catch (error) {
       if (/authorization denied|not authorized|unable to open database/i.test(String(error?.stderr ?? error))) {
-        throw permissionError('messages-database-permission-required', '请在系统设置中授予 DeepSeek Harness 完全磁盘访问权限。', error);
+        throw permissionError('messages-database-permission-required', '请在系统设置中授予 哪吒 Agent 完全磁盘访问权限。', error);
       }
       throw error;
     }
@@ -184,7 +184,7 @@ export class MacOSMessagesApi {
       return { sent: true };
     } catch (error) {
       if (/not authorized|(-1743)|assistive/i.test(String(error?.stderr ?? error))) {
-        throw permissionError('messages-automation-permission-required', '请在系统设置中允许 DeepSeek Harness 自动化控制 Messages。', error);
+        throw permissionError('messages-automation-permission-required', '请在系统设置中允许 哪吒 Agent 自动化控制 Messages。', error);
       }
       throw error;
     }

@@ -15,16 +15,16 @@ installWeixinStyles();
 installImStyles();
 const botId = 'wx_0123456789abcdef01234567';
 const error = scenario === 'startup' ? {
-  code: 'weixin-startup-config-invalid', message: '微信配置格式错误：workspaces.json。请查看诊断详情，修复后重启 DSH。',
+  code: 'weixin-startup-config-invalid', message: '微信配置格式错误：workspaces.json。请查看诊断详情，修复后重启 哪吒 Agent。',
   details: { operation: 'startup', stage: 'startup.load', reason: 'invalid-config', resource: 'workspace-config',
     file: 'workspaces.json', field: 'workspaces[0].value', issue: 'invalid-workspace-path',
-    hint: '工作区路径必须是当前操作系统的绝对路径。 请检查微信渠道数据目录中的 workspaces.json，修复后重启 DSH；“重新读取”不会重新加载配置。 字段位置中的序号从 0 开始，按文件中的条目顺序计数，不包含真实账号标识。' },
+    hint: '工作区路径必须是当前操作系统的绝对路径。 请检查微信渠道数据目录中的 workspaces.json，修复后重启 哪吒 Agent；“重新读取”不会重新加载配置。 字段位置中的序号从 0 开始，按文件中的条目顺序计数，不包含真实账号标识。' },
 } : scenario === 'qr' ? {
   code: 'network-error', message: '暂时无法访问微信服务。',
   details: { operation: 'provision.begin', stage: 'qr.begin', reason: 'ENOTFOUND',
-    hint: '微信服务域名解析失败，请检查运行 DSH 的机器的网络和 DNS 设置后重试。' },
+    hint: '微信服务域名解析失败，请检查运行 哪吒 Agent 的机器的网络和 DNS 设置后重试。' },
 } : scenario === 'delete' ? {
-  code: 'credential-remove-failed', message: '无法从 DSH 凭据存储移除微信登录凭据。',
+  code: 'credential-remove-failed', message: '无法从 哪吒 Agent 凭据存储移除微信登录凭据。',
   details: { operation: 'bot.delete', stage: 'credential.remove', reason: 'EACCES', rollback: 'succeeded',
     hint: '操作未完成，已恢复之前的本机状态。请处理上述问题后重试。' },
 } : {
@@ -64,10 +64,10 @@ async function until(predicate, message) {
 }
 const button = label => [...document.querySelectorAll('button')].find(el => el.textContent === localizeText(label));
 async function run() {
-  await until(() => button('扫码接入机器人'), 'Page did not mount');
+  await until(() => button('生成微信二维码') || button('扫码接入机器人'), 'Page did not mount');
   const collapse = document.querySelector('[aria-expanded="false"]');
   if (collapse) collapse.click();
-  if (scenario === 'qr') button('扫码接入机器人').click();
+  if (scenario === 'qr') button('生成微信二维码').click();
   if (scenario === 'delete') {
     await until(() => button('移除接入'), 'Remove action did not mount');
     button('移除接入').click();

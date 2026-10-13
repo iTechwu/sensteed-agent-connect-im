@@ -1,8 +1,8 @@
 export const SLACK_APP_MANIFEST_YAML = `_metadata:
   major_version: 1
 display_information:
-  name: DeepSeek Harness
-  description: Connect Slack conversations to a local DeepSeek Harness agent.
+  name: 哪吒 Agent
+  description: Connect Slack conversations to a local 哪吒 Agent agent.
   background_color: "#4A154B"
 features:
   app_home:
@@ -10,7 +10,7 @@ features:
     messages_tab_enabled: true
     messages_tab_read_only_enabled: false
   bot_user:
-    display_name: DeepSeek Harness
+    display_name: 哪吒 Agent
     always_online: false
 oauth_config:
   scopes:

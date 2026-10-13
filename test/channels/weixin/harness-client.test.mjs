@@ -13,7 +13,7 @@ import {
 import { HarnessClient, HarnessReplyTracker } from '../../../src/channels/weixin/harness-client.mjs';
 import { WhatsappHarnessClient } from '../../../src/channels/whatsapp/harness-client.mjs';
 
-test('all legacy channel clients now use the shared Harness RPC transport', async () => {
+test('all legacy channel clients now use the shared Nezha Agent RPC transport', async () => {
   const channelClients = [
     [HarnessClient, 'weixin'],
     [WecomHarnessClient, 'wecom'],
@@ -49,7 +49,7 @@ test('all legacy channel clients now use the shared Harness RPC transport', asyn
   }
 });
 
-test('shared Harness health checks expose precise safe availability codes', async () => {
+test('shared Nezha Agent health checks expose precise safe availability codes', async () => {
   const clientWithFetch = (fetchImpl, baseUrl = 'http://127.0.0.1:3080') => new HarnessClient({
     baseUrl,
     workspace: '/tmp/default-workspace',
@@ -500,7 +500,7 @@ test('HarnessClient safely rejects invalid, unregistered, ambiguous, and subagen
   assert.equal(createCalls, 1);
 });
 
-test('reply tracker associates only the Harness turn created by the Weixin prompt RPC', () => {
+test('reply tracker associates only the Nezha Agent turn created by the Weixin prompt RPC', () => {
   const tracker = new HarnessReplyTracker({ promptRpcId: 'weixin-prompt', afterSeq: 2 });
   const first = tracker.consume([
     { event: { seq: 3, type: 'turn/start', data: { turn: 9 } } },

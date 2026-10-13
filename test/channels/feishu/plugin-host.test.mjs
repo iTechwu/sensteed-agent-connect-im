@@ -1296,7 +1296,7 @@ test('provisioning callback stores credentials and connects before connected is 
   assert.equal(configured, false);
 });
 
-test('DSH credential adapter stores refs off the browser plane and clears them', async () => {
+test('Nezha Agent credential adapter stores refs off the browser plane and clears them', async () => {
   const values = new Map();
   const provider = {
     async resolve(ref) {

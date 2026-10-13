@@ -75,7 +75,7 @@ test('startup config diagnostics identify files and fields without revealing fil
     assert.equal(result.details.field, field);
     assert.equal(result.details.issue, issue);
     assert.ok(result.message.includes(file));
-    assert.match(result.details.hint, /重启 DSH/);
+    assert.match(result.details.hint, /重启 哪吒 Agent/);
     assert.equal(await readFile(path, 'utf8'), raw);
     const record = JSON.parse(logs[0].slice('[dsh-weixin] '.length));
     for (const key of ['file', 'resource', 'reason', 'field', 'issue', 'referenceId']) {
@@ -142,7 +142,7 @@ test('startup file guidance is translated in English', async t => {
     }).publicError;
     assert.match(result.message, /workspaces\.json/);
     assert.match(result.details.hint, /absolute on the current operating system/);
-    assert.match(result.details.hint, /restart DSH/);
+    assert.match(result.details.hint, /restart Nezha Agent/);
     assert.doesNotMatch(JSON.stringify(result), /[\p{Script=Han}]/u);
     return true;
   });

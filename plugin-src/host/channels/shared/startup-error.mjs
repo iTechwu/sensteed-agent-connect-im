@@ -13,11 +13,11 @@ const INVALID_CONFIG_MESSAGES = new Set([
   'dsh-feishu config is incomplete or invalid',
   'dsh-dingtalk config contains invalid bot data',
   ...['Enterprise WeChat', 'Enterprise WeChat app', 'QQ', 'Slack', 'Telegram', 'Discord', 'Email']
-    .map(channel => `dsh-im ${channel} config contains invalid bot data`),
-  'dsh-im WhatsApp config contains invalid account data',
-  'dsh-im Matrix config contains invalid bot data',
-  'dsh-im AI Office config is invalid',
-  'dsh-im workspace config is invalid',
+    .map(channel => `sensteed-im ${channel} config contains invalid bot data`),
+  'sensteed-im WhatsApp config contains invalid account data',
+  'sensteed-im Matrix config contains invalid bot data',
+  'sensteed-im AI Office config is invalid',
+  'sensteed-im workspace config is invalid',
 ]);
 
 export function publicChannelInitializing(channel) {
@@ -35,21 +35,21 @@ export function publicChannelStartupError(channel, error) {
     return {
       code: `${channel}-startup-config-invalid`,
       message: channel === 'office'
-        ? t('{channel}配置格式错误。请检查其数据目录中的 config.json，修复后重启 DSH。详细原因请查看启动日志。', params)
-        : t('{channel}配置格式错误。请检查其数据目录中的 config.json 和 workspaces.json，修复后重启 DSH。详细原因请查看启动日志。', params),
+        ? t('{channel}配置格式错误。请检查其数据目录中的 config.json，修复后重启 哪吒 Agent。详细原因请查看启动日志。', params)
+        : t('{channel}配置格式错误。请检查其数据目录中的 config.json 和 workspaces.json，修复后重启 哪吒 Agent。详细原因请查看启动日志。', params),
       details: {},
     };
   }
   if (error?.code === 'EACCES' || error?.code === 'EPERM') {
     return {
       code: `${channel}-startup-permission-denied`,
-      message: t('无法读取或写入{channel}配置。请检查其数据目录的访问权限，修复后重启 DSH。详细原因请查看启动日志。', params),
+      message: t('无法读取或写入{channel}配置。请检查其数据目录的访问权限，修复后重启 哪吒 Agent。详细原因请查看启动日志。', params),
       details: {},
     };
   }
   return {
     code: `${channel}-startup-failed`,
-    message: t('{channel}初始化失败。请展开诊断详情，并通过参考号查找 DSH 启动日志，修复后重启 DSH。', params),
+    message: t('{channel}初始化失败。请展开诊断详情，并通过参考号查找 哪吒 Agent 启动日志，修复后重启 哪吒 Agent。', params),
     details: {},
   };
 }

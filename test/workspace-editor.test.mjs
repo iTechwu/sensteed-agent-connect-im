@@ -99,7 +99,7 @@ function discordSnapshot(workspace) {
       connected: true,
       state: 'connected',
       workspace,
-      bot: { name: 'Harness Bot', username: 'HarnessBot', idMasked: '123•••' },
+      bot: { name: 'Nezha Agent Bot', username: 'HarnessBot', idMasked: '123•••' },
       health: { summary: 'Discord Gateway 长连接运行正常', lastCheckedAt: Date.now() },
       error: null,
     }],

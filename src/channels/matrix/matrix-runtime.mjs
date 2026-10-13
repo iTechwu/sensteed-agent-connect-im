@@ -636,11 +636,11 @@ export class MatrixRuntime {
           this.#status.connectionState = 'failed';
           this.#status.harnessReachable = false;
           this.#status.lastError = safeErrorInfo(error);
-          this.#logger.warn?.('[dsh-im:matrix] sync loop stopped on a permanent auth error; reconnecting', error);
+          this.#logger.warn?.('[sensteed-im:matrix] sync loop stopped on a permanent auth error; reconnecting', error);
           this.#scheduleReconnect(generation);
           return;
         }
-        this.#logger.warn?.('[dsh-im:matrix] sync loop error; retrying', error);
+        this.#logger.warn?.('[sensteed-im:matrix] sync loop error; retrying', error);
         await new Promise((resolve) => setTimeout(resolve, SYNC_RETRY_DELAY_MS).unref?.());
       }
     }
@@ -655,7 +655,7 @@ export class MatrixRuntime {
       if (this.#stopped || generation !== this.#generation) return;
       this.#status.connectionState = 'connecting';
       void this.start().catch((error) => {
-        this.#logger.warn?.('[dsh-im:matrix] reconnect attempt failed; the supervisor will retry', error);
+        this.#logger.warn?.('[sensteed-im:matrix] reconnect attempt failed; the supervisor will retry', error);
       });
     }, delayMs);
     this.#reconnectTimer.unref?.();
@@ -778,7 +778,7 @@ export class MatrixRuntime {
       }
     }
     void Promise.resolve(this.#bridge?.accept(message)).catch((error) => {
-      this.#logger.warn?.('[dsh-im:matrix] inbound message handling failed:', error?.message ?? error);
+      this.#logger.warn?.('[sensteed-im:matrix] inbound message handling failed:', error?.message ?? error);
     });
     if (message.addressed) {
       void this.#api?.setTyping(message.roomId, { typing: true, timeoutMs: 20_000 }).catch(() => undefined);
@@ -1253,7 +1253,7 @@ export class MatrixRuntime {
     if (this.#notifiedEncryptedRooms.has(roomId)) return;
     this.#notifiedEncryptedRooms.add(roomId);
     this.#logger.warn?.(
-      `[dsh-im:matrix] ${roomId} ${t('端到端加密未启用或不可用，加密房间 {room} 的密文会被明确降级跳过。', { room: roomId })}`,
+      `[sensteed-im:matrix] ${roomId} ${t('端到端加密未启用或不可用，加密房间 {room} 的密文会被明确降级跳过。', { room: roomId })}`,
     );
   }
 
@@ -1300,7 +1300,7 @@ export class MatrixRuntime {
         }
         return;
       }
-      this.#logger.warn?.('[dsh-im:matrix] invite join failed; sync will reconcile again:', error?.message ?? error);
+      this.#logger.warn?.('[sensteed-im:matrix] invite join failed; sync will reconcile again:', error?.message ?? error);
     }
   }
 
@@ -1478,7 +1478,7 @@ export class MatrixRuntime {
         });
         sentBody = typeof content.body === 'string' && content.body ? content.body : chunk.plain;
       } catch {
-        this.#logger.warn?.('[dsh-im:matrix] Rich text could not be prepared; sending plain text');
+        this.#logger.warn?.('[sensteed-im:matrix] Rich text could not be prepared; sending plain text');
         if (!chunk.plain) continue;
         content = { msgtype: 'm.text', body: chunk.plain };
         sentBody = chunk.plain;

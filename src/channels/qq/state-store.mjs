@@ -65,7 +65,7 @@ export class QqStateStore {
       }
       this.#state = structuredClone(EMPTY_STATE);
       await this.#persist();
-      this.#logger.warn?.(`[dsh-im:qq] state-recovered: ${this.#path}; backup: ${backup}; conversation mappings, message deduplication and deferred deliveries have been reset.`);
+      this.#logger.warn?.(`[sensteed-im:qq] state-recovered: ${this.#path}; backup: ${backup}; conversation mappings, message deduplication and deferred deliveries have been reset.`);
       return this;
     }
     this.#state = normalizeState(parsed);

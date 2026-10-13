@@ -177,7 +177,7 @@ export class MatrixCryptoEngine {
           session.unpickle(this.#passphrase, entry.pickle);
           this.#inbound.set(key, { session, lastUsedAt: entry.lastUsedAt || this.#now(), meta: entry });
         } catch (error) {
-          this.#logger.warn?.('[dsh-im:matrix] an inbound group session failed to restore and was dropped:', error?.message ?? error);
+          this.#logger.warn?.('[sensteed-im:matrix] an inbound group session failed to restore and was dropped:', error?.message ?? error);
         }
       }
       for (const [roomId, entry] of Object.entries(snapshot.groupOutbound)) {
@@ -197,7 +197,7 @@ export class MatrixCryptoEngine {
             needsRotation: false,
           });
         } catch (error) {
-          this.#logger.warn?.('[dsh-im:matrix] an outbound group session failed to restore and will rotate fresh:', error?.message ?? error);
+          this.#logger.warn?.('[sensteed-im:matrix] an outbound group session failed to restore and will rotate fresh:', error?.message ?? error);
         }
       }
       for (const [key, state] of Object.entries(snapshot.requestState ?? {})) {
@@ -310,7 +310,7 @@ export class MatrixCryptoEngine {
       ciphertext = entry.session.encrypt(plaintext);
     } catch (error) {
       // A corrupted or stale session must rotate instead of poisoning the room timeline.
-      this.#logger.warn?.('[dsh-im:matrix] outbound group session failed; rotating before retry:', error?.message ?? error);
+      this.#logger.warn?.('[sensteed-im:matrix] outbound group session failed; rotating before retry:', error?.message ?? error);
       this.#rotateOutbound(roomId);
       const fresh = await this.#getOutbound(roomId);
       await this.#shareRoomKey(roomId, fresh, recipients);
@@ -399,7 +399,7 @@ export class MatrixCryptoEngine {
         pkg = pkEncryption.encrypt(payload);
       } catch (error) {
         this.#stats.shareFailures += 1;
-        this.#logger.warn?.('[dsh-im:matrix] room key pk-encryption failed for one device:', error?.message ?? error);
+        this.#logger.warn?.('[sensteed-im:matrix] room key pk-encryption failed for one device:', error?.message ?? error);
         continue;
       }
       const perUser = (messages[device.userId] ??= {});
@@ -422,7 +422,7 @@ export class MatrixCryptoEngine {
       } catch (error) {
         // Do not claim delivery the messages did not get; the next send retries the share.
         this.#stats.shareFailures += 1;
-        this.#logger.warn?.('[dsh-im:matrix] to-device room key submission failed; it will be retried:', error?.message ?? error);
+        this.#logger.warn?.('[sensteed-im:matrix] to-device room key submission failed; it will be retried:', error?.message ?? error);
         return;
       }
     }
@@ -477,7 +477,7 @@ export class MatrixCryptoEngine {
         if (!curve || !ed || !pkEncryptionKey) continue;
         const verified = this.#verifyDeviceSignature(userId, deviceId, entry);
         if (!verified) {
-          this.#logger.warn?.(`[dsh-im:matrix] device ${deviceId} of ${userId} failed signature verification and was skipped`);
+          this.#logger.warn?.(`[sensteed-im:matrix] device ${deviceId} of ${userId} failed signature verification and was skipped`);
           continue;
         }
         devices.set(deviceId, {
@@ -528,7 +528,7 @@ export class MatrixCryptoEngine {
         else if (type === 'm.forwarded_room_key') await this.#handleForwardedRoomKeyEvent(event);
         else if (type === 'm.room_key_request') await this.#handleRoomKeyRequest(event);
       } catch (error) {
-        this.#logger.warn?.('[dsh-im:matrix] a to-device crypto event could not be processed:', error?.message ?? error);
+        this.#logger.warn?.('[sensteed-im:matrix] a to-device crypto event could not be processed:', error?.message ?? error);
       }
     }
   }
@@ -640,7 +640,7 @@ export class MatrixCryptoEngine {
     const trusted = this.#inbound.has(`${roomId}|${senderKey}|${sessionId}`)
       || this.#inbound.has(`${roomId}|${forwardingKey ?? ''}|${sessionId}`);
     if (!trusted) {
-      this.#logger.warn?.('[dsh-im:matrix] a forwarded room key from an unknown forwarding device was rejected');
+      this.#logger.warn?.('[sensteed-im:matrix] a forwarded room key from an unknown forwarding device was rejected');
       return;
     }
     await this.#importInbound(roomId, senderKey, sessionId, sessionKey, { forwarded: true });
@@ -730,7 +730,7 @@ export class MatrixCryptoEngine {
       this.#stats.undecryptable += 1;
       this.#pendingEvents.set(`${key}|${event?.event_id ?? 'x'}`, { roomId, event, at: this.#now() });
       void this.#trackTask(this.#requestRoomKey(roomId, event).catch((error) => {
-        this.#logger.warn?.('[dsh-im:matrix] a room key request failed:', error?.message ?? error);
+        this.#logger.warn?.('[sensteed-im:matrix] a room key request failed:', error?.message ?? error);
       }));
       return null;
     }
@@ -858,7 +858,7 @@ export class MatrixCryptoEngine {
         session.import_session(sessionKey);
       } catch (error) {
         session.free?.();
-        this.#logger.warn?.('[dsh-im:matrix] an incoming room key could not be imported:', error?.message ?? error);
+        this.#logger.warn?.('[sensteed-im:matrix] an incoming room key could not be imported:', error?.message ?? error);
         return;
       }
     }
@@ -892,7 +892,7 @@ export class MatrixCryptoEngine {
       try {
         await this.#onPendingMessage(pending.roomId, pending.event);
       } catch (error) {
-        this.#logger.warn?.('[dsh-im:matrix] a late-decrypted message could not be dispatched:', error?.message ?? error);
+        this.#logger.warn?.('[sensteed-im:matrix] a late-decrypted message could not be dispatched:', error?.message ?? error);
       }
     }
     // Keep the buffer bounded even when no handler drains it.

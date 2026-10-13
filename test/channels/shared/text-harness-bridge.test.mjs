@@ -348,7 +348,7 @@ test('all four shared text channels enforce fail-closed live access before side 
       }],
     }));
     assert.equal(imageLoads, 0, `${name} authorizes before downloading attachments`);
-    assert.deepEqual(asks, [], `${name} fail-closed denial never reaches Harness`);
+    assert.deepEqual(asks, [], `${name} fail-closed denial never reaches Nezha Agent`);
     assert.equal(fixture.seen.has(`access-blocked-${name}`), true,
       `${name} records a denial for replay suppression`);
 
@@ -366,7 +366,7 @@ test('all four shared text channels enforce fail-closed live access before side 
     assert.equal(sent.at(-1), `${name} allowed reply`, `${name} keeps the normal reply path`);
 
     await bridge.accept(message(`access-command-denied-${name}`, '/new'));
-    assert.equal(asks.length, 1, `${name} denied command never reaches Harness`);
+    assert.equal(asks.length, 1, `${name} denied command never reaches Nezha Agent`);
     assert.equal(sessionClears, 0, `${name} denied command has no command side effect`);
     assert.equal(sent.at(-1), COMMAND_PERMISSION_DENIED_MESSAGE, `${name} explains command denial`);
 
@@ -864,7 +864,7 @@ test('private batch input enforces text-only collection, command blocking, the l
   await bridge.accept(message('limited-item-10', 'item 10 replay'));
   await bridge.accept(message('limited-cancel', '/cancel'));
 
-  assert.equal(asks, 0, 'collection and cancellation never call Harness');
+  assert.equal(asks, 0, 'collection and cancellation never call Nezha Agent');
   assert.equal(replyLoads, 0, 'batch collection never resolves quoted content');
   assert.equal(sent.filter((text) => text.includes('目前仅支持文字')).length, 4);
   assert.equal(sent.some((text) => text.includes('先发送 /send 提交或 /cancel 取消')), true);
@@ -877,7 +877,7 @@ test('private batch input enforces text-only collection, command blocking, the l
   assert.equal(asks, 1, 'cancel restores the ordinary prompt path');
 });
 
-test('batch commands cannot answer a pending Harness question or approval', async () => {
+test('batch commands cannot answer a pending Nezha Agent question or approval', async () => {
   for (const interactionKind of ['question', 'approval']) {
     const fixture = stateFixture();
     const sent = [];
@@ -1009,7 +1009,7 @@ test('a failed batch submission is retained with an explicit retry and can be se
       ask: async (_sessionId, text) => {
         asks.push(text);
         attempt += 1;
-        if (attempt === 1) throw new Error('transient Harness failure');
+        if (attempt === 1) throw new Error('transient Nezha Agent failure');
         return 'retry complete';
       },
     },
@@ -1076,7 +1076,7 @@ test('shared text bridge passes a file-only message through askOptions.files', a
       createSession: async () => 'session-file-only-inbound',
       ask: async (sessionId, text, options) => {
         asks.push({ sessionId, text, files: options.files });
-        return '文件已交给 Harness。';
+        return '文件已交给 哪吒 Agent。';
       },
     },
   });
@@ -1088,10 +1088,10 @@ test('shared text bridge passes a file-only message through askOptions.files', a
     text: '',
     files: [source],
   }]);
-  assert.deepEqual(sent, ['文件已交给 Harness。']);
+  assert.deepEqual(sent, ['文件已交给 哪吒 Agent。']);
 });
 
-test('shared text bridge keeps caption and native files in one Harness ask', async () => {
+test('shared text bridge keeps caption and native files in one Nezha Agent ask', async () => {
   const fixture = stateFixture();
   const sources = [
     { name: 'one.txt', data: Buffer.from('one') },
@@ -1119,7 +1119,7 @@ test('shared text bridge keeps caption and native files in one Harness ask', asy
   }]);
 });
 
-test('a command-looking file caption is an ordinary Harness prompt, not a bridge command', async () => {
+test('a command-looking file caption is an ordinary Nezha Agent prompt, not a bridge command', async () => {
   const fixture = stateFixture({ 'direct:chat-a': 'session-existing' });
   const source = { name: 'new.txt', data: Buffer.from('not a command') };
   const asks = [];
@@ -1147,7 +1147,7 @@ test('a command-looking file caption is an ordinary Harness prompt, not a bridge
   assert.deepEqual(sent, ['附件消息已处理']);
 });
 
-test('an inbound file cannot claim a pending Harness interaction answer', async () => {
+test('an inbound file cannot claim a pending Nezha Agent interaction answer', async () => {
   const fixture = stateFixture();
   const sent = [];
   const questionAnswered = deferred();
@@ -1318,7 +1318,7 @@ test('all four shared text channels list models and presets locally and advertis
   }
 });
 
-test('/version uses the shared command fast lane without accessing Harness', async () => {
+test('/version uses the shared command fast lane without accessing Nezha Agent', async () => {
   const fixture = stateFixture();
   const sent = [];
   const bridge = createBridge({
@@ -1329,7 +1329,7 @@ test('/version uses the shared command fast lane without accessing Harness', asy
 
   await bridge.accept(message('plugin-version', '/version'));
 
-  assert.deepEqual(sent, [`dsh-im v${manifest.version}`]);
+  assert.deepEqual(sent, [`sensteed-im v${manifest.version}`]);
   assert.equal(fixture.sessions.size, 0);
 });
 
@@ -2088,7 +2088,7 @@ test('all four shared text channel bridges inherit the approval fast lane', asyn
   }
 });
 
-test('keeps an imprecise approval reply out of the Harness prompt queue', async () => {
+test('keeps an imprecise approval reply out of the Nezha Agent prompt queue', async () => {
   const fixture = stateFixture();
   const sent = [];
   const asked = [];
@@ -2820,7 +2820,7 @@ test('discards an answer already received when a later question resolves during 
   assert.equal(sent.some(({ text }) => text.includes('已在其他客户端处理')), true);
 });
 
-test('passes the runtime signal to Harness and safely cancels a pending question on abort', async () => {
+test('passes the runtime signal to Nezha Agent and safely cancels a pending question on abort', async () => {
   const controller = new AbortController();
   const fixture = stateFixture({ 'direct:chat-a': 'stale-session' });
   const sent = [];
@@ -3270,7 +3270,7 @@ test('a decorated body still has its command gated by canExecuteCommands', async
 
   // Seed a session so a denied `/new` would have something to clear.
   await bridge.accept(emailMessage('header-ordinary', '你好'));
-  assert.equal(asks.length, 1, 'an ordinary decorated message still reaches Harness');
+  assert.equal(asks.length, 1, 'an ordinary decorated message still reaches Nezha Agent');
 
   await bridge.accept(emailMessage('header-command-denied', '/new'));
   assert.equal(sessionClears, 0,
@@ -3345,7 +3345,7 @@ test('a failed delivery is retried on the next poll instead of being dropped', a
         asks.push(text);
         if (failFirst) {
           failFirst = false;
-          throw new Error('transient Harness outage');
+          throw new Error('transient Nezha Agent outage');
         }
         return '恢复后的答复';
       },
@@ -3400,7 +3400,7 @@ test('a permanently failing delivery stops retrying after a bounded number of at
       sessionExists: async () => true,
       ask: async (_sessionId, text) => {
         asks.push(text);
-        throw new Error('permanent Harness outage');
+        throw new Error('permanent Nezha Agent outage');
       },
     },
   });

@@ -7,7 +7,7 @@ export const name = 'dsh-im-email-host';
 export const inject = ['connection', 'credentials', 'typertGateway'];
 
 /**
- * Cordis/DSH Host plugin entry. The management RPC is mounted before the
+ * Cordis/哪吒 Agent Host plugin entry. The management RPC is mounted before the
  * fallible production initialization so the channel's settings page stays
  * reachable (and can report why the mailbox failed) even when startup throws.
  * Tests and embedded distributions may inject a controller through config.

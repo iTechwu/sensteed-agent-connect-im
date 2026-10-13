@@ -39,7 +39,7 @@ export class ConnectionSupervisor {
       throw new TypeError('ConnectionSupervisor requires a controller');
     }
     if (!harness || typeof harness.ensureRunning !== 'function') {
-      throw new TypeError('ConnectionSupervisor requires a Harness client');
+      throw new TypeError('ConnectionSupervisor requires a 哪吒 Agent client');
     }
     this.#controller = controller;
     this.#harness = harness;
