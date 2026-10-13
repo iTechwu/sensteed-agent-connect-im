@@ -50,7 +50,8 @@ const Button = React.forwardRef(function Button(
   }, children);
 });
 
-function Heading({ totals, adding, busy, onAdd, addButtonRef }) {
+function Heading({ totals, adding, busy, onAdd, addButtonRef, empty }) {
+  if (empty) return null;
   return h('div', { className: 'dxw-heading' },
     h('div', { className: 'dxw-tools' },
       h(Button, {
@@ -75,17 +76,24 @@ function LoadingView() {
     h('span', null, '正在读取微信连接状态…'));
 }
 
-function EmptyView({ onStart, busy }) {
+function EmptyView({ onStart, busy, addButtonRef }) {
   return h('div', { className: 'dxw-card dim-surfaceCard' },
     h('div', { className: 'dxw-cardBody dxw-empty dim-surfaceBody dim-emptyView' },
       h('div', { className: 'dim-emptyCopy' },
         h('div', { className: 'dxw-stateLabel dim-stateLabel' },
           h('span', { className: 'dxw-dot dim-stateDot' }), h('span', null, '尚未绑定微信')),
-        h('h3', null, '扫一次码，就能在微信里使用 哪吒 Agent'),
-        h('p', null, '二维码由腾讯微信 iLink 服务签发。用手机微信扫描并确认后，账号凭据会直接写入 哪吒 Agent Host，浏览器不会收到 bot_token。'),
+        h('h3', null, '把哪吒 Agent 带到微信'),
+        h('p', null, '扫码并在手机上确认后，即可在微信中发送任务、接收回复。'),
+        h('ol', { className: 'dim-connectSteps', 'aria-label': '微信接入步骤' },
+          h('li', null, h('span', { 'aria-hidden': 'true' }, '1'), '生成二维码'),
+          h('li', null, h('span', { 'aria-hidden': 'true' }, '2'), '微信扫码确认'),
+          h('li', null, h('span', { 'aria-hidden': 'true' }, '3'), '开始聊天')),
         h('div', { className: 'dxw-actions dim-viewActions' },
-          h(Button, { kind: 'primary', onClick: onStart, disabled: busy },
-            busy ? '正在生成二维码…' : '生成微信二维码')),
+          h(Button, { kind: 'primary', ref: addButtonRef, onClick: onStart, disabled: busy },
+            h(QrActionIcon), busy ? '正在生成二维码…' : '生成微信二维码')),
+        h('details', { className: 'dim-setupDetails' },
+          h('summary', null, '连接说明'),
+          h('p', null, '连接由腾讯微信 iLink 服务提供。授权信息保存在运行哪吒 Agent 的设备上。连接后请保持哪吒 Agent 运行，以便收发消息。')),
       ),
       h('div', { className: 'dxw-logo dim-emptyBrand', 'aria-hidden': 'true' }, h(WeixinLogoGlyph, { size: 64 })),
     ));
@@ -126,9 +134,9 @@ function QrPanel({ provision, now, busy, onRefresh, onCancel }) {
         h('h3', null, expired ? '二维码已失效' : '使用手机微信扫描二维码'),
         h('p', null, '请在手机上核对并确认授权。部分账号会额外显示一个配对数字，页面会在需要时提示输入。'),
         h('ol', { className: 'dxw-steps dim-steps' },
-          h('li', null, '打开手机微信并扫描左侧二维码'),
+          h('li', null, '打开手机微信并扫描二维码'),
           h('li', null, '在微信中确认连接该机器人'),
-          h('li', null, '保持本页打开，等待消息长轮询变为在线')),
+          h('li', null, '等待本页显示已连接，即可开始聊天')),
         h('div', { className: 'dxw-actions dim-viewActions' },
           expired
             ? h(Button, { kind: 'primary', onClick: onRefresh, disabled: busy }, '重新生成二维码')
@@ -364,6 +372,7 @@ export function WeixinSettingsTab({ rpcCall }) {
   const [operationWarnings, setOperationWarnings] = React.useState([]);
   const [now, setNow] = React.useState(() => Date.now());
   const addButtonRef = React.useRef(null);
+  const focusAfterCancel = React.useRef(false);
   const mountedRef = React.useRef(true);
   const workspaceFence = useWorkspaceSnapshotFence();
   const scheduleAnimationFrame = useAnimationFrameScheduler();
@@ -372,6 +381,14 @@ export function WeixinSettingsTab({ rpcCall }) {
     mountedRef.current = true;
     return () => { mountedRef.current = false; };
   }, []);
+
+  React.useEffect(() => {
+    if (provision || busy || !focusAfterCancel.current) return;
+    // Cancellation replaces the toolbar action with the empty-state action.
+    // Focus after that commit, once the new button is mounted and enabled.
+    focusAfterCancel.current = false;
+    addButtonRef.current?.focus();
+  }, [provision, busy]);
 
   const announce = React.useCallback((value) => {
     setNotice('');
@@ -486,15 +503,15 @@ export function WeixinSettingsTab({ rpcCall }) {
       if (provision?.attemptId && !['failed', 'expired', 'cancelled'].includes(provision.status)) {
         await invoke(WEIXIN_ENDPOINTS.cancelProvisioning, { attemptId: provision.attemptId });
       }
+      focusAfterCancel.current = true;
       setProvision(null);
       announce('已取消微信绑定。');
-      scheduleAnimationFrame(() => addButtonRef.current?.focus(), 'focus');
     } catch (error) {
       setProvision((current) => ({ ...current, status: 'failed', error: presentError(error) }));
     } finally {
       setBusy(false);
     }
-  }, [announce, invoke, provision?.attemptId, provision?.status, scheduleAnimationFrame]);
+  }, [announce, invoke, provision?.attemptId, provision?.status]);
 
   const submitVerification = React.useCallback(async (verifyCode) => {
     if (!provision?.attemptId) return;
@@ -752,6 +769,7 @@ export function WeixinSettingsTab({ rpcCall }) {
       busy,
       onAdd: () => void startProvisioning(),
       addButtonRef,
+      empty: model.phase === 'ready' && model.bots.length === 0 && !provision,
     }),
     h('div', { className: 'dxw-visuallyHidden', role: 'status', 'aria-live': 'polite' }, notice),
     ...operationWarnings.map((error, index) => h(WeixinConnectionError, { key: error.details?.referenceId ?? index, error, warning: true })),
@@ -770,7 +788,7 @@ export function WeixinSettingsTab({ rpcCall }) {
         : h(React.Fragment, null,
             provisionView,
             model.bots.length === 0 && !provision
-              ? h(EmptyView, { onStart: () => void startProvisioning(), busy })
+              ? h(EmptyView, { onStart: () => void startProvisioning(), busy, addButtonRef })
               : null,
             model.bots.length > 0
               ? h(AccountList, {

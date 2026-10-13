@@ -64,10 +64,10 @@ async function until(predicate, message) {
 }
 const button = label => [...document.querySelectorAll('button')].find(el => el.textContent === localizeText(label));
 async function run() {
-  await until(() => button('扫码接入机器人'), 'Page did not mount');
+  await until(() => button('生成微信二维码') || button('扫码接入机器人'), 'Page did not mount');
   const collapse = document.querySelector('[aria-expanded="false"]');
   if (collapse) collapse.click();
-  if (scenario === 'qr') button('扫码接入机器人').click();
+  if (scenario === 'qr') button('生成微信二维码').click();
   if (scenario === 'delete') {
     await until(() => button('移除接入'), 'Remove action did not mount');
     button('移除接入').click();

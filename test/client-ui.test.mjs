@@ -214,7 +214,7 @@ test('IM settings renders the retained IM channels plus the AI Office connector'
   }));
 
   assert.match(markup, /IM机器人/);
-  assert.match(markup, /让哪吒与 im深度链接，触手可及。/);
+  assert.match(markup, /把哪吒 Agent 接入常用消息平台/);
   assert.match(markup, /class="dim-brand"/);
   assert.equal(IM_PLUGIN_VERSION, packageVersion);
   // Static rendering never runs the update-status effect, so the brand line
@@ -237,8 +237,8 @@ test('IM settings renders the retained IM channels plus the AI Office connector'
     /<button[^>]*id="dim-general-settings-trigger"[^>]*>(.*?)<\/button>/,
   )?.[1] ?? '';
   assert.match(settingsButtonMarkup, /data-im-icon="global-settings"/);
-  assert.doesNotMatch(settingsButtonMarkup, /通用设置/);
-  assert.match(styles, /\.dim-title \{[^}]*margin: 0 0 18px;/);
+  assert.match(settingsButtonMarkup, /<span>通用设置<\/span>/);
+  assert.match(styles, /\.dim-title \{[^}]*margin: 0 0 24px;/);
   assert.match(styles, /\.dim-title p \{[^}]*color: var\(--dsw-alias-label-secondary, #646a73\);[^}]*font-size: 12px;[^}]*font-weight: 500;/);
   assert.match(styles, /\.dim-brand \{[^}]*display: flex;[^}]*flex-direction: column;[^}]*align-items: flex-start;[^}]*gap: 1px;/);
   assert.match(styles, /\.dim-brandHeading \{[^}]*display: flex;[^}]*align-items: baseline;[^}]*gap: 8px;[^}]*white-space: nowrap;/);
@@ -247,7 +247,7 @@ test('IM settings renders the retained IM channels plus the AI Office connector'
   assert.doesNotMatch(styles, /dim-versionTooltip|\.dim-brand:focus-visible/);
   assert.doesNotMatch(styles, /\.dim-brandLogo/);
   assert.doesNotMatch(styles, /dim-github/);
-  assert.match(styles, /\.dim-generalSettingsButton \{[^}]*width: 30px;[^}]*height: 30px;[^}]*display: grid;[^}]*border: 1px solid var\(--dsw-alias-border-l2, #dfe1e5\);/);
+  assert.match(styles, /\.dim-generalSettingsButton \{[^}]*min-height: 36px;[^}]*display: inline-flex;[^}]*border: 1px solid var\(--dsw-alias-border-l2, #dfe1e5\);/);
   assert.match(styles, /\.dim-generalSettingsTooltip \{[^}]*top: calc\(100% \+ 8px\);[^}]*transform: translateY\(-3px\);/);
   assert.match(styles, /\.dim-generalSettingsAction:hover \.dim-generalSettingsTooltip, \.dim-generalSettingsButton:focus-visible \+ \.dim-generalSettingsTooltip \{[^}]*opacity: 1;[^}]*visibility: visible;/);
   assert.match(styles, /\.dim-generalSettingsButton\[aria-current="page"\] \+ \.dim-generalSettingsTooltip \{[^}]*opacity: 0;[^}]*visibility: hidden;/);
@@ -265,22 +265,22 @@ test('IM settings renders the retained IM channels plus the AI Office connector'
   assert.match(markup, />企业微信应用</);
   assert.match(markup, />QQ</);
   assert.doesNotMatch(markup, />Slack<|>Telegram<|>Discord<|>WhatsApp<|>iMessage</);
-  assert.match(markup, />Matrix</);
-  assert.match(markup, />AI Office<\/strong><small class="dim-channelNote">（实验功能）<\/small>/);
+  assert.doesNotMatch(markup, />Matrix</);
+  assert.match(markup, />AI Office<\/strong><small class="dim-channelNote">实验功能<\/small>/);
   assert.match(markup, /dim-logoWeixin/);
   assert.match(markup, /dim-logoFeishu/);
   assert.match(markup, /dim-logoDingtalk/);
   assert.match(markup, /dim-logoWecom/);
   assert.match(markup, /dim-logoQq/);
   assert.doesNotMatch(markup, /dim-logoSlack|dim-logoTelegram|dim-logoDiscord|dim-logoWhatsapp|dim-logoIMessage/);
-  assert.match(markup, /dim-logoMatrix/);
+  assert.doesNotMatch(markup, /dim-logoMatrix/);
   assert.match(markup, /dim-logoOffice/);
   assert.match(styles, /\.dim-logoFeishu svg \{ width: 28px; height: 28px; \}/);
-  // Slack, Telegram, Discord, WhatsApp and iMessage stay out of the rail while
+  // Overseas IM channels, including Matrix, stay out of the rail while
   // their Host services remain available. This render's `emailRpcCall` never
   // reports the channel as enabled either, so the mailbox entry point is
-  // omitted: eight rail entries. The email tab is covered separately below.
-  assert.equal((markup.match(/role="tab"/g) ?? []).length, 8);
+  // omitted: seven rail entries. The email tab is covered separately below.
+  assert.equal((markup.match(/role="tab"/g) ?? []).length, 7);
   assert.equal((markup.match(/aria-selected="true"/g) ?? []).length, 1);
   assert.doesNotMatch(markup, /role="switch"|type="checkbox"/);
   assert.doesNotMatch(markup, /dim-chevron|扫码绑定<\/small>|扫码接入<\/small>/);
@@ -890,7 +890,7 @@ test('scan actions align left while online totals align right in every channel',
   }
   assert.doesNotMatch(weixinHeading, /dxw-dot/);
   assert.doesNotMatch(dingtalkHeading, /ddt-dot/);
-  assert.match(imStyles, /\.dim-panel \.bxf-headingTools \.dim-scanButton,[^}]*border: 1px solid #1677ff;[^}]*border-radius: 8px;[^}]*background: #1677ff;[^}]*box-shadow: none;/);
+  assert.match(imStyles, /\.dim-panel \.bxf-headingTools \.dim-scanButton,[^}]*border: 1px solid var\(--dim-action-primary, #1763db\);[^}]*border-radius: 8px;[^}]*background: var\(--dim-action-primary, #1763db\);[^}]*box-shadow: none;/);
   assert.match(imStyles, /\.dim-panel \.bxf-headingTools \.dim-onlineBadge,[^}]*border-radius: 999px;[^}]*background: var\(--dsw-alias-bg-module-platform, #f2f3f5\);[^}]*font-size: 12px;/);
 });
 
@@ -1366,13 +1366,13 @@ test('client registers one top-level bilingual IM settings section with a direct
     disposeMirror();
     assert.equal(localeListeners.size, 0);
 
-    assert.match(markup, /Deep-link Nezha Agent with your IM, at your fingertips./);
+    assert.match(markup, /Connect Nezha Agent to your everyday messaging apps/);
     assert.match(markup, /class="dim-brandVersion">v0\.0\.1<\/span>/);
     assert.doesNotMatch(markup, /Open GitHub|dim-github/);
     assert.match(markup, /General settings/);
     assert.match(markup, />WeChat<|>Feishu<|>DingTalk<|>WeCom</);
     assert.doesNotMatch(markup, />Slack<|>Telegram<|>Discord<|>WhatsApp<|>iMessage</);
-    assert.match(markup, />AI Office<\/strong><small class="dim-channelNote">\(Experimental\)<\/small>/);
+    assert.match(markup, />AI Office<\/strong><small class="dim-channelNote">Experimental<\/small>/);
     assert.doesNotMatch(markup, /[\p{Script=Han}]/u);
   } finally {
     setImTranslator(null);
@@ -1559,7 +1559,7 @@ test('every channel tab receives its RPC call from the settings render site', as
   // page mounted without an RPC call and rendered "missing RPC connection".
   const source = await readFile(new URL('index.js', CLIENT_SOURCE_DIRECTORY_URL), 'utf8');
   const tabIds = [...source.matchAll(/\{\s*id:\s*'([a-zA-Z]+)',\s*label:/g)].map(m => m[1]);
-  assert.ok(tabIds.length >= 9, `expected the channel tab list, found ${tabIds.length}`);
+  assert.equal(tabIds.length, 8, `expected the channel tab list, found ${tabIds.length}`);
 
   // Parse the dependency block that feeds IMSettingsTab. Upstream (#231)
   // refactored the render site into a reusable panel, so the props now come

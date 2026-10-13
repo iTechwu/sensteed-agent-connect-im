@@ -4,24 +4,16 @@ import manifest from '../../package.json' with { type: 'json' };
 
 import {
   DingtalkLogoGlyph,
-  DiscordLogoGlyph,
   FeishuLogoGlyph,
   OfficeLogoGlyph,
   QqLogoGlyph,
-  SlackLogoGlyph,
-  TelegramLogoGlyph,
   WecomLogoGlyph,
   WeixinLogoGlyph,
-  WhatsappLogoGlyph,
-  IMessageLogoGlyph,
   EmailLogoGlyph,
-  MatrixLogoGlyph,
 } from './channel-logos.js';
 import { DINGTALK_RPC_CHANNEL } from './channels/dingtalk/api.js';
 import { DingtalkSettingsTab } from './channels/dingtalk/index.js';
 import { DISCORD_RPC_CHANNEL } from './channels/discord/api.js';
-import { DiscordSettingsTab } from './channels/discord/index.js';
-import { installDiscordStyles } from './channels/discord/styles.js';
 import { FeishuSettingsTab } from './channels/feishu/index.js';
 import { FEISHU_RPC_CHANNEL } from './channels/feishu/api.js';
 import { installFeishuStyles } from './channels/feishu/styles.js';
@@ -32,11 +24,7 @@ import { OFFICE_RPC_CHANNEL } from './channels/office/api.js';
 import { OfficeSettingsTab } from './channels/office/index.js';
 import { installOfficeStyles } from './channels/office/styles.js';
 import { SLACK_RPC_CHANNEL } from './channels/slack/api.js';
-import { SlackSettingsTab } from './channels/slack/index.js';
-import { installSlackStyles } from './channels/slack/styles.js';
 import { TELEGRAM_RPC_CHANNEL } from './channels/telegram/api.js';
-import { TelegramSettingsTab } from './channels/telegram/index.js';
-import { installTelegramStyles } from './channels/telegram/styles.js';
 import { WECOM_RPC_CHANNEL } from './channels/wecom/api.js';
 import { WecomSettingsTab } from './channels/wecom/index.js';
 import { installWecomStyles } from './channels/wecom/styles.js';
@@ -47,17 +35,11 @@ import { WeixinSettingsTab } from './channels/weixin/index.js';
 import { WEIXIN_RPC_CHANNEL } from './channels/weixin/api.js';
 import { installWeixinStyles } from './channels/weixin/styles.js';
 import { WHATSAPP_RPC_CHANNEL } from './channels/whatsapp/api.js';
-import { WhatsappSettingsTab } from './channels/whatsapp/index.js';
-import { installWhatsappStyles } from './channels/whatsapp/styles.js';
 import { IMESSAGE_RPC_CHANNEL } from './channels/imessage/api.js';
 import { EMAIL_RPC_CHANNEL } from './channels/email/api.js';
-import { IMessageSettingsTab } from './channels/imessage/index.js';
 import { EmailSettingsTab, useEmailChannelEnabled } from './channels/email/index.js';
-import { installIMessageStyles } from './channels/imessage/styles.js';
 import { installEmailStyles } from './channels/email/styles.js';
 import { MATRIX_RPC_CHANNEL } from './channels/matrix/api.js';
-import { MatrixSettingsTab } from './channels/matrix/index.js';
-import { installMatrixStyles } from './channels/matrix/styles.js';
 import { en, h, IM_LOCALE_NAMESPACE, setImTranslator, zh } from './i18n.js';
 import {
   HOST_LANGUAGE_RPC_CHANNEL,
@@ -99,20 +81,17 @@ function callWorkspaceDirectoryApi(ctx, method, ...args) {
   return service[method](...args);
 }
 
-// Slack, Telegram, Discord, WhatsApp and iMessage stay wired below (RPC
-// factories, panels, styles) but are intentionally left out of the rail:
-// their Host services keep running, and re-adding one entry here restores
-// the settings tab.
+// Only domestic IM and office extensions have settings entries. Legacy RPC
+// callers remain compatible with embedded clients and existing Host services.
 const CHANNELS = Object.freeze([
-  { id: 'weixin', label: '微信' },
-  { id: 'feishu', label: '飞书' },
-  { id: 'dingtalk', label: '钉钉' },
-  { id: 'wecom', label: '企业微信' },
-  { id: 'qq', label: 'QQ' },
-  { id: 'wecomApp', label: '企业微信应用', note: '（实验功能）' },
-  { id: 'email', label: '邮箱', note: '（实验功能）' },
-  { id: 'matrix', label: 'Matrix', note: '（实验功能）' },
-  { id: 'office', label: 'AI Office', note: '（实验功能）' },
+  { id: 'weixin', label: '微信', description: '在微信私聊中向哪吒 Agent 发起任务。' },
+  { id: 'feishu', label: '飞书', description: '在飞书私聊和群聊中，与哪吒 Agent 协作。' },
+  { id: 'dingtalk', label: '钉钉', description: '把哪吒 Agent 带入钉钉，随时处理工作任务。' },
+  { id: 'wecom', label: '企业微信', description: '通过企业微信机器人连接团队与哪吒 Agent。' },
+  { id: 'qq', label: 'QQ', description: '在 QQ 私聊和群聊中使用哪吒 Agent。' },
+  { id: 'wecomApp', label: '企业微信应用', note: '实验功能', extended: true, description: '通过企业自建应用接入，适合有应用管理权限的团队。' },
+  { id: 'email', label: '邮箱', note: '实验功能', extended: true, description: '用邮件提交任务，并通过回信接收处理结果。' },
+  { id: 'office', label: 'AI Office', note: '实验功能', extended: true, description: '连接办公系统，配置任务接收与结果回传。' },
 ]);
 
 function WeixinLogo() {
@@ -142,39 +121,9 @@ function WecomAppLogo() {
   return h('span', { className: 'dim-logo dim-logoWecomApp', 'aria-hidden': 'true' }, h(WecomLogoGlyph));
 }
 
-function TelegramLogo() {
-  return h('span', { className: 'dim-logo dim-logoTelegram', 'aria-hidden': 'true' },
-    h(TelegramLogoGlyph));
-}
-
-function SlackLogo() {
-  return h('span', { className: 'dim-logo dim-logoSlack', 'aria-hidden': 'true' },
-    h(SlackLogoGlyph));
-}
-
-function DiscordLogo() {
-  return h('span', { className: 'dim-logo dim-logoDiscord', 'aria-hidden': 'true' },
-    h(DiscordLogoGlyph));
-}
-
-function WhatsappLogo() {
-  return h('span', { className: 'dim-logo dim-logoWhatsapp', 'aria-hidden': 'true' },
-    h(WhatsappLogoGlyph));
-}
-
-function IMessageLogo() {
-  return h('span', { className: 'dim-logo dim-logoIMessage', 'aria-hidden': 'true' },
-    h(IMessageLogoGlyph));
-}
-
 function EmailLogo() {
   return h('span', { className: 'dim-logo dim-logoEmail', 'aria-hidden': 'true' },
     h(EmailLogoGlyph));
-}
-
-function MatrixLogo() {
-  return h('span', { className: 'dim-logo dim-logoMatrix', 'aria-hidden': 'true' },
-    h(MatrixLogoGlyph));
 }
 
 function OfficeLogo() {
@@ -189,13 +138,7 @@ function ChannelLogo({ channel }) {
   if (channel === 'wecom') return h(WecomLogo);
   if (channel === 'wecomApp') return h(WecomAppLogo);
   if (channel === 'qq') return h(QqLogo);
-  if (channel === 'slack') return h(SlackLogo);
-  if (channel === 'telegram') return h(TelegramLogo);
-  if (channel === 'discord') return h(DiscordLogo);
-  if (channel === 'whatsapp') return h(WhatsappLogo);
-  if (channel === 'imessage') return h(IMessageLogo);
   if (channel === 'email') return h(EmailLogo);
-  if (channel === 'matrix') return h(MatrixLogo);
   return h(OfficeLogo);
 }
 
@@ -271,6 +214,25 @@ export function IMSettingsTab({
   const reportUpdateStatus = React.useCallback((snapshot) => {
     setHostVersion(typeof snapshot.hostVersion === 'string' ? snapshot.hostVersion : null);
   }, []);
+  const railRef = React.useRef(null);
+  const selectChannel = React.useCallback((channelId) => {
+    setSelected(channelId);
+    setDeliverySettings(null);
+  }, []);
+  const handleChannelKeyDown = React.useCallback((event, channelId) => {
+    const currentIndex = visibleChannels.findIndex((channel) => channel.id === channelId);
+    if (currentIndex < 0) return;
+    let nextIndex;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') nextIndex = currentIndex + 1;
+    else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') nextIndex = currentIndex - 1;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = visibleChannels.length - 1;
+    else return;
+    event.preventDefault();
+    const nextChannel = visibleChannels[(nextIndex + visibleChannels.length) % visibleChannels.length];
+    selectChannel(nextChannel.id);
+    railRef.current?.querySelector(`[id="dim-tab-${nextChannel.id}"]`)?.focus();
+  }, [selectChannel, visibleChannels]);
   const rpcCalls = React.useMemo(() => createLoopbackAwareRpcCalls({
     dingtalkRpcCall,
     discordRpcCall,
@@ -323,7 +285,7 @@ export function IMSettingsTab({
         h('div', { className: 'dim-brandHeading' },
           h('strong', { className: 'dim-brandName' }, 'sensteed-im'),
           h('span', { className: 'dim-brandVersion' }, `v${hostVersion ?? '0.0.1'}`)),
-        h('p', null, '让哪吒与 im深度链接，触手可及。')),
+        h('p', null, '把哪吒 Agent 接入常用消息平台')),
       h('div', { className: 'dim-titleActions' },
         h(UpdatePanel, {
           rpcCall: rpcCalls.updateRpcCall,
@@ -343,7 +305,7 @@ export function IMSettingsTab({
             setSelected(GLOBAL_SETTINGS_TAB_ID);
             setDeliverySettings(null);
           },
-        }, h(GlobalSettingsLogoGlyph, { size: 17 })),
+        }, h(GlobalSettingsLogoGlyph, { size: 17 }), h('span', null, '通用设置')),
         h('span', {
           id: generalSettingsTooltipId,
           className: 'dim-generalSettingsTooltip',
@@ -351,8 +313,12 @@ export function IMSettingsTab({
         }, '通用设置'))),
     ),
     h('div', { className: 'dim-layout' },
-      h('nav', { className: 'dim-rail', role: 'tablist', 'aria-label': 'IM 设置导航' },
-        visibleChannels.map((channel) => h('button', {
+      h('nav', { ref: railRef, className: 'dim-rail', role: 'tablist', 'aria-label': 'IM 设置导航' },
+        visibleChannels.map((channel, index) => h(React.Fragment, { key: channel.id },
+          index === 0 || channel.extended && !visibleChannels[index - 1]?.extended
+            ? h('div', { className: 'dim-railHeading', role: 'presentation' }, channel.extended ? '扩展接入' : '常用 IM')
+            : null,
+          h('button', {
           key: channel.id,
           type: 'button',
           role: 'tab',
@@ -360,23 +326,30 @@ export function IMSettingsTab({
           className: 'dim-channel',
           'aria-selected': !globalSettingsSelected && channel.id === active.id,
           'aria-controls': `dim-panel-${channel.id}`,
-          onClick: () => {
-            setSelected(channel.id);
-            setDeliverySettings(null);
-          },
+          tabIndex: channel.id === active.id ? 0 : -1,
+          onClick: () => selectChannel(channel.id),
+          onKeyDown: (event) => handleChannelKeyDown(event, channel.id),
         },
         h(ChannelLogo, { channel: channel.id }),
         h('span', { className: 'dim-channelCopy' },
           h('strong', null, channel.label),
           channel.note ? h('small', { className: 'dim-channelNote' }, channel.note) : null,
-        )))),
+        ))))),
       h('div', { className: 'dim-divider', 'aria-hidden': 'true' }),
       h('main', {
         className: 'dim-panel',
         role: 'tabpanel',
         id: activePanelId,
         'aria-labelledby': activeTabId,
+        tabIndex: 0,
       },
+      !globalSettingsSelected && !deliverySettings ? h('header', { className: 'dim-panelHeading' },
+        h(ChannelLogo, { channel: active.id }),
+        h('div', { className: 'dim-panelHeadingCopy' },
+          h('div', { className: 'dim-panelHeadingTitle' },
+            h('h2', null, active.label),
+            active.note ? h('span', { className: 'dim-experimentalBadge' }, active.note) : null),
+          h('p', null, active.description))) : null,
       loopbackRecovery
         ? h(LoopbackRecoveryNotice, {
             recovery: loopbackRecovery,
@@ -406,21 +379,9 @@ export function IMSettingsTab({
                   ? h(WecomAppSettingsTab, { rpcCall: rpcCalls.wecomAppRpcCall })
                   : active.id === 'qq'
                     ? h(QqSettingsTab, { rpcCall: rpcCalls.qqRpcCall })
-                    : active.id === 'slack'
-                      ? h(SlackSettingsTab, { rpcCall: rpcCalls.slackRpcCall })
-                    : active.id === 'telegram'
-                      ? h(TelegramSettingsTab, { rpcCall: rpcCalls.telegramRpcCall })
-                      : active.id === 'discord'
-                        ? h(DiscordSettingsTab, { rpcCall: rpcCalls.discordRpcCall })
-                        : active.id === 'whatsapp'
-                          ? h(WhatsappSettingsTab, { rpcCall: rpcCalls.whatsappRpcCall })
-                          : active.id === 'imessage'
-                            ? h(IMessageSettingsTab, { rpcCall: rpcCalls.imessageRpcCall })
-                          : active.id === 'email'
-                            ? h(EmailSettingsTab, { rpcCall: rpcCalls.emailRpcCall })
-                          : active.id === 'matrix'
-                            ? h(MatrixSettingsTab, { rpcCall: rpcCalls.matrixRpcCall })
-                          : h(OfficeSettingsTab, { rpcCall: rpcCalls.officeRpcCall }))),
+                    : active.id === 'email'
+                      ? h(EmailSettingsTab, { rpcCall: rpcCalls.emailRpcCall })
+                      : h(OfficeSettingsTab, { rpcCall: rpcCalls.officeRpcCall }))),
     ),
   ));
 }
@@ -453,13 +414,7 @@ export function apply(ctx) {
       installWecomStyles(),
       installWecomAppStyles(),
       installQqStyles(),
-      installSlackStyles(),
-      installTelegramStyles(),
-      installDiscordStyles(),
-      installWhatsappStyles(),
-      installIMessageStyles(),
       installEmailStyles(),
-      installMatrixStyles(),
       installOfficeStyles(),
       installImStyles(),
     ];
